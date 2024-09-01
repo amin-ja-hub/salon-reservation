@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Barchasb{% endblock %}
+
+{% block body %}
+    <h1>Edit Barchasb</h1>
+
+    {{ include('barchasb/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_barchasb_index') }}">back to list</a>
+
+    {{ include('barchasb/_delete_form.html.twig') }}
+{% endblock %}

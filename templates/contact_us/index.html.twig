@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContactUs index{% endblock %}
+
+{% block body %}
+    <h1>ContactUs index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FullName</th>
+                <th>Text</th>
+                <th>Cdate</th>
+                <th>Published</th>
+                <th>Type</th>
+                <th>Subject</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Remove</th>
+                <th>Udate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contact_u in contactuses %}
+            <tr>
+                <td>{{ contact_u.id }}</td>
+                <td>{{ contact_u.fullName }}</td>
+                <td>{{ contact_u.text }}</td>
+                <td>{{ contact_u.cdate ? contact_u.cdate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ contact_u.published }}</td>
+                <td>{{ contact_u.type }}</td>
+                <td>{{ contact_u.subject }}</td>
+                <td>{{ contact_u.mobile }}</td>
+                <td>{{ contact_u.email }}</td>
+                <td>{{ contact_u.remove }}</td>
+                <td>{{ contact_u.udate ? contact_u.udate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_contact_us_show', {'id': contact_u.id}) }}">show</a>
+                    <a href="{{ path('app_contact_us_edit', {'id': contact_u.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_contact_us_new') }}">Create new</a>
+{% endblock %}

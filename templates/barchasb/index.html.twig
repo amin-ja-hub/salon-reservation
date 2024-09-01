@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Barchasb index{% endblock %}
+
+{% block body %}
+    <h1>Barchasb index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Cdate</th>
+                <th>Published</th>
+                <th>Type</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for barchasb in barchasbs %}
+            <tr>
+                <td>{{ barchasb.id }}</td>
+                <td>{{ barchasb.title }}</td>
+                <td>{{ barchasb.cdate ? barchasb.cdate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ barchasb.published }}</td>
+                <td>{{ barchasb.type }}</td>
+                <td>
+                    <a href="{{ path('app_barchasb_show', {'id': barchasb.id}) }}">show</a>
+                    <a href="{{ path('app_barchasb_edit', {'id': barchasb.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_barchasb_new') }}">Create new</a>
+{% endblock %}
