@@ -1,0 +1,5 @@
+categoty type = [article = 1 ,faq = 2]	
+barchasb type =>  [article = 1 ,category = 2] 
+user role => [ROLE_USER =0 , ROLE_ADMIN = 1]
+contactus type => [main = 1,faq = 2]
+commetns type => [article = 1 ]

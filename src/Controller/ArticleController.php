@@ -12,105 +12,65 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Barchasb;
 use App\Service\Service;
 
-#[Route('/admin/article')]
+#[Route('/admin')]
 class ArticleController extends AbstractController
 {
-    #[Route('/', name: 'app_article_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/article/', name: 'app_article_index', methods: ['GET'])]
+    public function Articleindex(EntityManagerInterface $entityManager): Response
     {
+        // Fetch all articles with type = 1
         $articles = $entityManager
             ->getRepository(Article::class)
-            ->findAll();
+            ->findBy(['type' => 1]);
 
-        return $this->render('article/index.html.twig', [
+        return $this->render('article-service/article/index.html.twig', [
             'articles' => $articles,
         ]);
     }
 
-    #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,Service $service): Response
+    #[Route('/Services/', name: 'app_service_index', methods: ['GET'])]
+    public function Serviceindex(EntityManagerInterface $entityManager): Response
+    {
+        // Fetch all articles with type = 1
+        $articles = $entityManager
+            ->getRepository(Article::class)
+            ->findBy(['type' => 2]);
+
+        return $this->render('article-service/service/index.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
+    
+
+    #[Route('/article/new', name: 'app_article_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, Service $service): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
-        // Initialize $barchasbs variable
-        $barchasbs = [];
-
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $request->request->all();
+            $this->setArticleFields($article, $formData);
+            $this->handleCategory($article, $formData['category'] ?? null, $entityManager);
+            $this->handleTags($article, $formData['keywords'] ?? [], $entityManager,1);
 
-            // Handle required fields like title, publish, metadesc, text, etc.
-            $article->setTitle($formData['title']);
-            $article->setMetadesc($formData['metadesc']);
-            $article->setText($formData['text']);
-            $article->setCdate(new \DateTime());
-            $article->setType('1');
-            $article->setUrl($formData['url']);
-
-            // Handle optional fields like category
-            if (isset($formData['category'])) {
-                $category = $entityManager->getRepository('App\Entity\Category')->find($formData['category']);
-                $article->setCategory($category);
-            }
-
-            // Check if 'keywords' exists in $formData
-            if (isset($formData['keywords'])) {
-                $tags = $formData['keywords'];
-
-                // Handle tags (keywords)
-                foreach ($tags as $tagName) {
-                    $barchasbRepository = $entityManager->getRepository(Barchasb::class);
-                    $barchasb = $barchasbRepository->findOneBy(['title' => $tagName]);
-
-                    if (!$barchasb) {
-                        $barchasb = new Barchasb();
-                        $barchasb->setTitle($tagName);
-                        $barchasb->setCdate(new \DateTime());
-                        $barchasb->setPublished(1);
-                        $barchasb->setType(2);
-                        $entityManager->persist($barchasb);
-                    }
-
-                    $article->addBarchasb($barchasb);
-                }
-            }
-
-            // Persist the article entity after handling keywords and file upload
             $entityManager->persist($article);
             $entityManager->flush();
-            $entityId = $article->getId();
-            if ($request->files->get('file') != null) {
-                $file = $request->files->get('file');
-                $fileId = $service->uploadFile(1, $file, $entityId, 'mainpic');
-                $file = $entityManager->getRepository('App\Entity\File')->find($fileId);
-                $article->setImage($file);
-                $entityManager->persist($article);
-                $entityManager->flush();
-            }
+
+            $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
 
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        // Fetch Barchasb entities where type = 1
-        $barchasbs = $entityManager->getRepository(Barchasb::class)->findBy(['type' => 1]);
-
-        return $this->render('article/new.html.twig', [
+        return $this->render('article-service/article/new.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
-            'barchasbs' => $barchasbs,
+            'barchasbs' => $this->getBarchasbs($entityManager, 1),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
-    public function show(Article $article): Response
-    {
-        return $this->render('article/show.html.twig', [
-            'article' => $article,
-        ]);
-    }
-
-    #[Route('/edit/{id}', name: 'app_article_edit', methods: ['GET', 'POST'])]
+    #[Route('/article/edit/{id}', name: 'app_article_edit', methods: ['GET', 'POST'])]
     public function edit(Article $article, Request $request, EntityManagerInterface $entityManager, Service $service): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
@@ -118,76 +78,146 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $request->request->all();
+            $this->setArticleFields($article, $formData);
+            $this->handleCategory($article, $formData['category'] ?? null, $entityManager);
+            $this->handleTags($article, $formData['keywords'] ?? [], $entityManager,1);
 
-            // Handle required fields like title, publish, metadesc, text, etc.
-            $article->setTitle($formData['title']);
-            $article->setMetadesc($formData['metadesc']);
-            $article->setText($formData['text']);
-            $article->setUrl($formData['url']);
-
-            // Handle optional fields like category
-            if (isset($formData['category'])) {
-                $category = $entityManager->getRepository('App\Entity\Category')->find($formData['category']);
-                $article->setCategory($category);
-            } else {
-                $article->setCategory(null); // Clear category if none selected
-            }
-
-            // Handle tags (keywords)
-            if (isset($formData['keywords'])) {
-                $tags = $formData['keywords'];
-
-                // Clear existing tags to replace with new ones
-                foreach ($article->getBarchasbs() as $barchasb) {
-                    $article->removeBarchasb($barchasb);
-                }
-
-                foreach ($tags as $tagName) {
-                    $barchasbRepository = $entityManager->getRepository(Barchasb::class);
-                    $barchasb = $barchasbRepository->findOneBy(['title' => $tagName]);
-
-                    if (!$barchasb) {
-                        $barchasb = new Barchasb();
-                        $barchasb->setTitle($tagName);
-                        $barchasb->setCdate(new \DateTime());
-                        $barchasb->setPublished(1);
-                        $barchasb->setType(2);
-                        $entityManager->persist($barchasb);
-                    }
-
-                    $article->addBarchasb($barchasb);
-                }
-            } else {
-                // Clear all tags if none provided
-                foreach ($article->getBarchasbs() as $barchasb) {
-                    $article->removeBarchasb($barchasb);
-                }
-            }
-
-            // Handle file upload if a new file is provided
-            if ($request->files->get('file') != null) {
-                $file = $request->files->get('file');
-                $fileId = $service->uploadFile(1, $file, $article->getId(), 'mainpic');
-                $fileEntity = $entityManager->getRepository('App\Entity\File')->find($fileId);
-                $article->setImage($fileEntity);
-            }
+            $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
 
             $entityManager->flush();
 
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        // Fetch Barchasb entities where type = 1
-        $barchasbs = $entityManager->getRepository(Barchasb::class)->findBy(['type' => 2]);
-
-        return $this->render('article/edit.html.twig', [
+        return $this->render('article-service/article/edit.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
-            'barchasbs' => $barchasbs,
+            'barchasbs' => $this->getBarchasbs($entityManager, 1),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
+    #[Route('/service/new', name: 'app_service_new', methods: ['GET', 'POST'])]
+    public function servicenew(Request $request, EntityManagerInterface $entityManager, Service $service): Response
+    {
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $request->request->all();
+            $this->setArticleFields($article, $formData, '2');
+            $this->handleCategory($article, $formData['category'] ?? null, $entityManager);
+            $this->handleTags($article, $formData['keywords'] ?? [], $entityManager,2);
+
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
+
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('article-service/service/new.html.twig', [
+            'article' => $article,
+            'form' => $form->createView(),
+            'barchasbs' => $this->getBarchasbs($entityManager, 2),
+        ]);
+    }
+
+    #[Route('/service/edit/{id}', name: 'app_service_edit', methods: ['GET', 'POST'])]
+    public function serviceedit(Article $article, Request $request, EntityManagerInterface $entityManager, Service $service): Response
+    {
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $request->request->all();
+            $this->setArticleFields($article, $formData, '2');
+            $this->handleCategory($article, $formData['category'] ?? null, $entityManager);
+            $this->handleTags($article, $formData['keywords'] ?? [], $entityManager,2);
+
+            $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('article-service/service/edit.html.twig', [
+            'article' => $article,
+            'form' => $form->createView(),
+            'barchasbs' => $this->getBarchasbs($entityManager, 2),
+        ]);
+    }
+
+    // Private methods
+
+    private function setArticleFields(Article $article, array $formData, string $type = '1'): void
+    {
+        $article->setTitle($formData['title']);
+        $article->setMetadesc($formData['metadesc']);
+        $article->setText($formData['text']);
+        $article->setUrl($formData['url']);
+        $article->setCdate(new \DateTime());
+        $article->setType($type);
+    }
+
+    private function handleCategory(Article $article, ?string $categoryId, EntityManagerInterface $entityManager): void
+    {
+        if ($categoryId) {
+            $category = $entityManager->getRepository('App\Entity\Category')->find($categoryId);
+            $article->setCategory($category);
+        } else {
+            $article->setCategory(null);
+        }
+    }
+
+    private function handleTags(Article $article, array $tags, EntityManagerInterface $entityManager,$type): void
+    {
+        // Clear existing tags
+        foreach ($article->getBarchasbs() as $barchasb) {
+            $article->removeBarchasb($barchasb);
+        }
+
+        foreach ($tags as $tagName) {
+            $barchasb = $entityManager->getRepository(Barchasb::class)->findOneBy(['title' => $tagName]);
+
+            if (!$barchasb) {
+                $barchasb = new Barchasb();
+                $barchasb->setTitle($tagName);
+                $barchasb->setCdate(new \DateTime());
+                $barchasb->setPublished(1);
+                $barchasb->setType($type);
+                $entityManager->persist($barchasb);
+            }
+
+            $article->addBarchasb($barchasb);
+        }
+    }
+
+    private function handleFileUpload(Article $article, ?UploadedFile $file, Service $service, EntityManagerInterface $entityManager): void
+    {
+        if ($file !== null) {
+            $fileId = $service->uploadFile(1, $file, $article->getId(), 'mainpic');
+            $fileEntity = $entityManager->getRepository('App\Entity\File')->find($fileId);
+            $article->setImage($fileEntity);
+        }
+    }
+
+    private function getBarchasbs(EntityManagerInterface $entityManager, int $type): array
+    {
+        return $entityManager->getRepository(Barchasb::class)->findBy(['type' => $type]);
+    }     
+    
+    #[Route('/article/{id}', name: 'app_article_show', methods: ['GET'])]
+    public function show(Article $article): Response
+    {
+        return $this->render('article/show.html.twig', [
+            'article' => $article,
+        ]);
+    }
+
+    #[Route('/article/{id}', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->getPayload()->getString('_token'))) {
