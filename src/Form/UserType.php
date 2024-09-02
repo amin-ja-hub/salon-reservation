@@ -14,22 +14,18 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('fullName')
-            ->add('username')
-            ->add('plainPassword')
-            ->add('password')
-            ->add('cdate', null, [
+            ->remove('fullName')
+            ->remove('username')
+            ->remove('cdate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('udate', null, [
+            ->remove('udate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('published')
-            ->add('role')
-            ->add('remove')
-            ->add('mobile')
-            ->add('email')
-            ->add('image', EntityType::class, [
+            ->remove('published')
+            ->remove('role')
+            ->remove('remove')
+            ->remove('image', EntityType::class, [
                 'class' => File::class,
                 'choice_label' => 'id',
             ])

@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Barchasb;
 use App\Entity\Category;
 use App\Entity\File;
 use App\Entity\User;
@@ -16,33 +15,28 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('url')
-            ->add('cdate', null, [
+            ->remove('title')
+            ->remove('url')
+            ->remove('cdate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('udate', null, [
+            ->remove('udate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('published')
-            ->add('type')
-            ->add('metaKey')
-            ->add('metadesc')
-            ->add('remove')
-            ->add('barchasbs', EntityType::class, [
-                'class' => Barchasb::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('parent', EntityType::class, [
+            ->remove('published')
+            ->remove('type')
+            ->remove('metaKey')
+            ->remove('metadesc')
+            ->remove('remove')
+            ->remove('parent', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'id',
             ])
-            ->add('user', EntityType::class, [
+            ->remove('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
             ])
-            ->add('image', EntityType::class, [
+            ->remove('image', EntityType::class, [
                 'class' => File::class,
                 'choice_label' => 'id',
             ])

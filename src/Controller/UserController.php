@@ -9,11 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\Service;
 
-#[Route('/user')]
-final class UserController extends AbstractController
+#[Route('/admin/user')]
+class UserController extends AbstractController
 {
-    #[Route(name: 'app_user_index', methods: ['GET'])]
+    #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $users = $entityManager
@@ -54,12 +55,30 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager,Service $service): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $request->request->all();
+            $plainPassword = $formData['pass'];
+
+            // Handle required fields like title, publish, metadesc, text, etc.
+            $user->setFullName($formData['name']);
+            $user->setEmail($formData['email']);
+            $user->setMobile($formData['mobile']);
+            $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
+            $user->setPassword($hashedPassword);
+            $user->setPlainPassword($plainPassword);
+            // Handle file upload if a new file is provided
+            if ($request->files->get('file') != null) {
+                $file = $request->files->get('file');
+                $fileId = $service->uploadFile(4, $file, $user->getId(), 'mainpic');
+                $fileEntity = $entityManager->getRepository('App\Entity\File')->find($fileId);
+                $user->setImage($fileEntity);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);

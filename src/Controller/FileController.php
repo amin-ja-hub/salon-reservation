@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/file')]
-final class FileController extends AbstractController
+#[Route('/admin/file')]
+class FileController extends AbstractController
 {
-    #[Route(name: 'app_file_index', methods: ['GET'])]
+    #[Route('/', name: 'app_file_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $files = $entityManager

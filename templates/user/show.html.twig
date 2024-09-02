@@ -20,14 +20,6 @@
                 <td>{{ user.username }}</td>
             </tr>
             <tr>
-                <th>PlainPassword</th>
-                <td>{{ user.plainPassword }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
                 <th>Cdate</th>
                 <td>{{ user.cdate ? user.cdate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
@@ -41,19 +33,11 @@
             </tr>
             <tr>
                 <th>Role</th>
-                <td>{{ user.role }}</td>
+                <td>{{ user.role ? user.role|json_encode : '' }}</td>
             </tr>
             <tr>
                 <th>Remove</th>
                 <td>{{ user.remove }}</td>
-            </tr>
-            <tr>
-                <th>Mobile</th>
-                <td>{{ user.mobile }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
             </tr>
         </tbody>
     </table>

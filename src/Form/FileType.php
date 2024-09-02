@@ -24,9 +24,6 @@ class FileType extends AbstractType
             ->add('format')
             ->add('path')
             ->add('remove')
-            ->add('udate', null, [
-                'widget' => 'single_text',
-            ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',

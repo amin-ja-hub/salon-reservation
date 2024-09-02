@@ -3,79 +3,96 @@
 namespace App\Controller;
 
 use App\Entity\Faq;
+use App\Entity\Category;
 use App\Form\FaqType;
-use App\Repository\FaqEntryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-#[Route('/faq')]
-final class FaqController extends AbstractController
+#[Route('/admin/faq')]
+class FaqController extends AbstractController
 {
-    #[Route(name: 'app_faq_index', methods: ['GET'])]
-    public function index(FaqEntryRepository $faqEntryRepository): Response
-    {
-        return $this->render('faq/index.html.twig', [
-            'faqs' => $faqEntryRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_faq_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/', name: 'app_faq_index', methods: ['GET', 'POST'])]
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         $faq = new Faq();
         $form = $this->createForm(FaqType::class, $faq);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $faq->setCdate(new \DateTime());
+
             $entityManager->persist($faq);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_faq_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_faq_index');
         }
 
-        return $this->render('faq/new.html.twig', [
-            'faq' => $faq,
-            'form' => $form,
+        if ($request->isMethod('POST') && isset($request->request->all()['update'])) {
+            $data = $request->request->all();
+            $faqId = $data['id'] ?? null;
+            $categoryId = $data['category'] ?? null;
+
+            if ($faqId) {
+                $faq = $entityManager->getRepository(Faq::class)->find($faqId);
+
+                if ($faq) {
+                    $faq->setQuestion($data['question'] ?? $faq->getQuestion());
+                    $faq->setAnswer($data['answer'] ?? $faq->getAnswer());
+                    $faq->setUdate(new \DateTime());
+                    if ($categoryId) {
+                        $category = $entityManager->getRepository(Category::class)->find($categoryId);
+                        if ($category) {
+                            $faq->setCategory($category);
+                        } else {
+                            $this->addFlash('error', 'Category not found.');
+                        }
+                    }
+
+                    $entityManager->flush();
+                }
+            }
+        }
+
+        $faqs = $entityManager->getRepository(Faq::class)->findAll();
+
+        return $this->render('faq/index.html.twig', [
+            'faqs' => $faqs,
+            'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_faq_show', methods: ['GET'])]
-    public function show(Faq $faq): Response
+    #[Route('/categories', name: 'api_categories', methods: ['GET'])]
+    public function getCategories(EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->render('faq/show.html.twig', [
-            'faq' => $faq,
-        ]);
-    }
+        try {
+            $categories = $entityManager->getRepository(Category::class)->findBy([
+                'published' => 1
+            ]);
 
-    #[Route('/{id}/edit', name: 'app_faq_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Faq $faq, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(FaqType::class, $faq);
-        $form->handleRequest($request);
+            $categoryData = array_map(function (Category $category) {
+                return [
+                    'id' => $category->getId(),
+                    'name' => $category->getTitle(), // Ensure this method exists
+                ];
+            }, $categories);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_faq_index', [], Response::HTTP_SEE_OTHER);
+            return new JsonResponse($categoryData);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'An error occurred'], 500);
         }
-
-        return $this->render('faq/edit.html.twig', [
-            'faq' => $faq,
-            'form' => $form,
-        ]);
     }
 
     #[Route('/{id}', name: 'app_faq_delete', methods: ['POST'])]
     public function delete(Request $request, Faq $faq, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$faq->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$faq->getId(), $request->request->get('_token'))) {
             $entityManager->remove($faq);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_faq_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_faq_index');
     }
 }
