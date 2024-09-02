@@ -1,0 +1,603 @@
+body {
+  direction: rtl;
+  text-align: right;
+}
+
+.form-control {
+  text-align: right !important;
+}
+
+.header-area .right {
+  text-align: left;
+}
+.header-area .right ul li {
+  margin-right: 0;
+  margin-left: 15px;
+}
+.header-area .right ul li:last-child {
+  margin-left: 0;
+}
+.header-area .right ul li .current {
+  padding-left: 10px;
+}
+.header-area .right ul li span {
+  margin-right: 0;
+  margin-left: 3px;
+}
+.header-area .right ul li a:before {
+  left: unset;
+  right: 0;
+}
+.header-area .right ul li .nice-select {
+  padding-left: 70px;
+  padding-right: 0;
+  float: unset;
+}
+.header-area .right ul li .nice-select ul {
+  left: 15px;
+}
+.header-area .right ul li .nice-select ul li {
+  margin-left: 0;
+  padding-left: 29px;
+  padding-right: 18px;
+}
+.header-area .right ul li .nice-select:after {
+  left: 0 !important;
+}
+.header-area .left ul li {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+.buy-now-btn {
+  left: 20px;
+  right: auto;
+}
+
+.switch-box {
+  left: 120px;
+  right: auto;
+}
+
+.navbar-light .navbar-brand {
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+.main-nav nav .navbar-nav .nav-item a:before {
+  left: unset;
+  right: 0;
+}
+.main-nav nav .navbar-nav .nav-item .dropdown-menu {
+  text-align: right;
+  left: unset;
+  right: 0;
+}
+.main-nav nav .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
+  left: -100%;
+  right: unset;
+}
+
+.side-nav .nav-search {
+  margin-right: 0;
+  margin-left: 15px;
+}
+.side-nav .nav-search #close-btn {
+  right: unset;
+  left: 20px;
+}
+.side-nav .nav-search .centered #search-box form .form-control {
+  padding-left: 10px;
+  padding-right: 20px;
+}
+.side-nav .nav-search .centered #search-box form .btn {
+  right: unset;
+  left: 0;
+  border-radius: 5px 0 5px 0;
+}
+.side-nav .cart {
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+.banner-content .banner-btn-area .banner-btn {
+  margin-left: 0;
+  margin-right: 15px;
+}
+
+.banner-area {
+  overflow: hidden;
+}
+.banner-area .banner-shape img:nth-child(2) {
+  left: unset;
+  right: 0;
+}
+.banner-area .banner-shape img:nth-child(3) {
+  left: unset;
+  right: 40%;
+}
+.banner-area .banner-shape img:nth-child(4) {
+  left: unset;
+  right: 0;
+}
+.banner-area .banner-shape img:nth-child(5) {
+  left: unset;
+  right: 35%;
+}
+
+.best-area {
+  overflow: hidden;
+}
+.best-area .best-shape img {
+  right: unset;
+  left: 0;
+}
+
+.faq-item .section-title {
+  text-align: right;
+}
+.faq-item .accordion li .faq-head {
+  padding: 18px 18px 18px 35px;
+}
+.faq-item .accordion li .faq-head:after {
+  right: unset;
+  left: 20px;
+}
+.faq-item .accordion li .faq-content {
+  padding: 20px 20px 15px 45px;
+}
+
+.reviews-area .nav-pills .nav-link.active:before, .reviews-area .nav-pills .show > .nav-link:before {
+  left: unset;
+  right: -42px;
+  transform: rotate(-90deg);
+}
+
+.skin-area .skin-content {
+  margin-left: 0;
+  margin-right: auto;
+}
+.skin-area .skin-content .section-title {
+  text-align: right;
+}
+
+.blog-item .top span {
+  left: unset;
+  right: 15px;
+}
+.blog-item .bottom .blog-btn:before {
+  left: unset;
+  right: 0;
+}
+
+.blog-area {
+  overflow: hidden;
+}
+.blog-area .blog-shape img {
+  right: unset;
+  left: 40px;
+}
+
+.footer-item .footer-contact .social li {
+  margin-right: 0;
+  margin-left: 3px;
+}
+.footer-item .footer-contact .info li a:before {
+  left: unset;
+  right: 0;
+}
+.footer-item .footer-hours .right ul li span {
+  right: unset;
+  left: 0;
+}
+
+.know-area .know-shape img:nth-child(3) {
+  right: unset;
+  left: 100px;
+}
+.know-area .know-content .section-title {
+  text-align: right;
+}
+.know-area .know-content ul li {
+  padding: 25px 110px 25px 25px;
+}
+.know-area .know-content ul li img {
+  left: unset;
+  right: 25px;
+}
+
+.blog-area.two .blog-right-item .inner .right {
+  margin-left: 0;
+  margin-right: 10px;
+}
+.blog-area.two .blog-right-item .inner .left span {
+  left: unset;
+  right: 15px;
+}
+
+.skin-area.two .skin-shape img {
+  left: unset;
+  right: 100px;
+}
+
+.pricing-area .pricing-content {
+  margin-left: 0;
+  margin-right: -60px;
+}
+.pricing-area .pricing-content .bottom ul li:before {
+  left: -220px;
+  right: 0;
+}
+.pricing-area .pricing-content .bottom ul li span {
+  right: unset;
+  left: 0;
+}
+.pricing-area .pricing-content.two {
+  margin-left: -60px;
+  margin-right: auto;
+}
+
+.page-title-area .title-content ul li:before {
+  right: unset;
+  left: -14px;
+}
+
+.nice-select span {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+.nice-select:after {
+  right: unset;
+  left: 12px;
+}
+.nice-select .list li {
+  text-align: right;
+}
+
+.blog-details-area .details-head .left ul li {
+  margin-right: 0;
+  margin-left: 10px;
+}
+.blog-details-area .details-head .left ul li:before {
+  right: unset;
+  left: -11px;
+}
+.blog-details-area .details-head .right {
+  text-align: left;
+}
+.blog-details-area .details-head .right ul li {
+  margin-right: 0;
+  margin-left: 10px;
+}
+.blog-details-area .details-head .right ul li:before {
+  right: unset;
+  left: -11px;
+}
+.blog-details-area .details-head .right ul li:last-child {
+  margin-left: 0;
+}
+.blog-details-area .details-text blockquote i {
+  left: unset;
+  right: 47px;
+}
+.blog-details-area .details-list ul li {
+  padding-left: 0;
+  padding-right: 20px;
+}
+.blog-details-area .details-list ul li:before {
+  left: unset;
+  right: 0;
+}
+.blog-details-area .details-tag .right {
+  text-align: left;
+}
+.blog-details-area .details-comment ul li {
+  padding-left: 0;
+  padding-right: 115px;
+}
+.blog-details-area .details-comment ul li img {
+  left: unset;
+  right: 0;
+}
+.blog-details-area .details-comment ul li a {
+  right: unset;
+  left: 0;
+}
+
+.widget-area .search form .btn {
+  right: unset;
+  left: 1px;
+}
+.widget-area .articles .inner ul li:nth-child(2) {
+  margin-left: 0;
+  margin-right: 10px;
+}
+.widget-area .categories ul li a span {
+  right: unset;
+  left: 10px;
+}
+.widget-area .tags ul li {
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+.cart-area .table-cart ul li .left form .form-control {
+  padding-left: 10px;
+  padding-right: 20px;
+}
+.cart-area .table-cart ul li .left form .btn {
+  right: unset;
+  left: 5px;
+}
+.cart-area .table-cart ul li .right {
+  text-align: left;
+}
+.cart-area .cart-total .inner h3 span {
+  text-align: left;
+  right: unset;
+  left: 0;
+}
+.cart-area .cart-total .inner ul li {
+  padding-left: 0;
+  padding-right: 18px;
+}
+.cart-area .cart-total .inner ul li:before {
+  left: unset;
+  right: 0;
+}
+.cart-area .cart-total .inner ul li span {
+  right: unset;
+  left: 0;
+}
+.cart-area .cart-total .inner h4 span {
+  right: unset;
+  left: 0;
+}
+
+.checkout-area .checkout-item .checkout-billing .form-group .form-control {
+  padding-left: 10px;
+  padding-right: 20px;
+}
+.checkout-area .checkout-item .checkout-total h3 span {
+  right: unset;
+  left: 0;
+}
+.checkout-area .checkout-item .checkout-total ul li span {
+  right: unset;
+  left: 0;
+}
+
+.form-check-input {
+  margin-left: 0;
+}
+
+.form-check-label {
+  padding-right: 20px;
+}
+
+.service-details-area .details-items .left ul li {
+  padding-left: 0;
+  padding-right: 20px;
+}
+.service-details-area .details-items .left ul li:before {
+  left: unset;
+  right: 0;
+}
+
+.shop-page-area .shop-result .form-group .btn {
+  right: unset;
+  left: 10px;
+}
+
+.user-area .user-item form .form-group {
+  text-align: right;
+}
+.user-area .user-item form h4 {
+  text-align: right;
+}
+
+.product-details-area .shop-details .cart li .number {
+  margin-left: auto;
+  margin-right: 0;
+}
+.product-details-area .send-review-area .tab-content .describe-item ul li {
+  padding-left: 0;
+  padding-right: 20px;
+}
+.product-details-area .send-review-area .tab-content .describe-item ul li:before {
+  left: unset;
+  right: 0;
+}
+.product-details-area .send-review-area .tab-content .review-item li {
+  padding-left: 0;
+  padding-right: 140px;
+}
+.product-details-area .send-review-area .tab-content .review-item li img {
+  left: unset;
+  right: 0;
+}
+.product-details-area .send-review-area .tab-content .review-item li .reviews {
+  left: 0;
+  right: unset;
+}
+
+.shop-area.two .section-title {
+  text-align: right;
+}
+
+.wishlist-area .preview-page {
+  text-align: left;
+}
+
+.go-top {
+  right: unset;
+  left: 15px;
+}
+
+@media only screen and (max-width: 767px) {
+  .header-area .left ul li {
+    margin-right: 3px;
+    margin-left: 3px;
+  }
+  .header-area .right {
+    text-align: center;
+  }
+  .faq-item .section-title {
+    text-align: center;
+  }
+  .faq-item .accordion {
+    text-align: right;
+  }
+  .reviews-area .nav-pills .nav-link.active:before, .reviews-area .nav-pills .show > .nav-link:before {
+    top: -25px;
+    left: 0;
+    right: 0;
+    max-width: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid #fff;
+    transform: rotate(180deg);
+  }
+  .skin-area .skin-content .section-title {
+    text-align: center;
+  }
+  .footer-item .footer-hours .right {
+    text-align: right;
+  }
+  .know-area .know-content .section-title {
+    text-align: center;
+  }
+  .know-area .know-content ul li {
+    padding: 25px 25px 25px 25px;
+  }
+  .know-area .know-content ul li img {
+    right: 0;
+  }
+  .pricing-area .pricing-content {
+    margin-right: 0;
+  }
+  .pricing-area .pricing-content.two {
+    margin-left: 0;
+  }
+  .blog-details-area .details-head .right {
+    text-align: center;
+  }
+  .blog-details-area .details-tag .right {
+    text-align: right;
+  }
+  .cart-area .table-cart ul li .right {
+    text-align: center;
+  }
+  .wishlist-area .preview-page {
+    text-align: center;
+  }
+  .product-details-area .shop-details .cart li .number {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .shop-area.two .section-title {
+    text-align: center;
+  }
+  .faq-item .accordion li .faq-content {
+    padding: 20px 20px 15px 20px;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .faq-item .section-title {
+    text-align: center;
+  }
+  .faq-item .accordion {
+    text-align: right;
+  }
+  .reviews-area .nav-pills .nav-link.active:before, .reviews-area .nav-pills .show > .nav-link:before {
+    top: -25px;
+    left: 0;
+    right: 0;
+    max-width: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid #fff;
+    transform: rotate(180deg);
+  }
+  .skin-area .skin-content {
+    margin-left: auto;
+  }
+  .skin-area .skin-content .section-title {
+    text-align: center;
+  }
+  .offset-sm-3 {
+    margin-left: 0%;
+    margin-right: 25%;
+  }
+  .footer-item .footer-hours .right {
+    text-align: right;
+  }
+  .know-area .know-content .section-title {
+    text-align: center;
+  }
+  .know-area .know-content ul li {
+    padding: 25px 25px 25px 25px;
+  }
+  .know-area .know-content ul li img {
+    right: 0;
+  }
+  .pricing-area .pricing-content {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .pricing-area .pricing-content.two {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .wishlist-area .preview-page {
+    text-align: center;
+  }
+  .shop-area.two .section-title {
+    text-align: center;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .side-nav .nav-search {
+    margin-left: 5px;
+  }
+  .side-nav .cart {
+    margin-left: 10px;
+  }
+}
+@media only screen and (max-width: 991px) {
+  .mobile-nav .logo {
+    left: auto !important;
+    right: 15px !important;
+  }
+  .mean-container a.meanmenu-reveal {
+    padding: 15px 0 0 15px;
+    right: auto !important;
+    left: 0 !important;
+  }
+  .mean-container .mean-nav ul li a {
+    float: right !important;
+    text-align: right !important;
+  }
+  .mean-container .mean-nav ul li a.mean-expand {
+    text-align: left !important;
+    left: 0;
+    right: auto;
+  }
+  .side-nav {
+    right: unset;
+    left: 65px;
+  }
+}
+@media only screen and (min-width: 1800px) {
+  .skin-area.two .skin-shape img {
+    right: 500px;
+  }
+}
+.banner-area-three {
+  direction: ltr;
+}/*# sourceMappingURL=rtl.css.map */
