@@ -24,5 +24,7 @@
 ###< symfony/asset-mapper ###
 
 /nbproject/private/
-/var/www/html/www/salon/public/uploads
+
+# Ignore the uploads directory
+/public/uploads/
 
