@@ -42,7 +42,6 @@ class CategoryController extends AbstractController
 
             // Handle required fields like title, publish, metadesc, text, etc.
             $category->setTitle($formData['title']);
-            $category->setPublished($formData['publish']);
             $category->setMetadesc($formData['metadesc']);
             $category->setCdate(new \DateTime());
             $category->setType($formData['categorytype']);

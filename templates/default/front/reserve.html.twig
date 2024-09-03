@@ -1,0 +1,169 @@
+{% extends "base.front.twig" %}
+{% block body %}
+    <div style="height: 50px;"></div>
+    <div class="container mt-5">
+        <!-- Steps List as Accordion -->
+        <div class="accordion" id="reservationAccordion">
+            
+            <!-- Step 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#step1Content" aria-expanded="true">
+                        1. Select Main Service
+                    </button>
+                </h2>
+                <div id="step1Content" class="accordion-collapse collapse show" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>Select Main Service</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="radio" id="service1" name="mainService" value="Hair" class="form-check-input" required>
+                                    <label for="service1" class="form-check-label">Hair Services</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="radio" id="service2" name="mainService" value="Nails" class="form-check-input" required>
+                                    <label for="service2" class="form-check-label">Nail Services</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step2Content" aria-expanded="false">
+                        2. Select Child Service
+                    </button>
+                </h2>
+                <div id="step2Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>Select a Service</h2>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="radio" id="service3" name="childService" value="Haircut" class="form-check-input" required>
+                                    <label for="service3" class="form-check-label">Haircut</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="radio" id="service4" name="childService" value="Manicure" class="form-check-input" required>
+                                    <label for="service4" class="form-check-label">Manicure</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step3Content" aria-expanded="false">
+                        3. Select Personal
+                    </button>
+                </h2>
+                <div id="step3Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>Select Personal</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="radio" id="personal1" name="personal" value="Stylist 1" class="form-check-input" required>
+                                    <label for="personal1" class="form-check-label">Stylist 1</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="radio" id="personal2" name="personal" value="Stylist 2" class="form-check-input" required>
+                                    <label for="personal2" class="form-check-label">Stylist 2</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step4Content" aria-expanded="false">
+                        4. Select Date
+                    </button>
+                </h2>
+                <div id="step4Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>Select Date</h2>
+                        <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step5Content" aria-expanded="false">
+                        5. Select Hour
+                    </button>
+                </h2>
+                <div id="step5Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>Select Hour</h2>
+                        <input type="time" id="appointmentTime" name="appointmentTime" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step6Content" aria-expanded="false">
+                        6. User Information
+                    </button>
+                </h2>
+                <div id="step6Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>User Information</h2>
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Name</label>
+                            <input type="text" id="userName" name="userName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userEmail" class="form-label">Email</label>
+                            <input type="email" id="userEmail" name="userEmail" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userPhone" class="form-label">Phone Number</label>
+                            <input type="tel" id="userPhone" name="userPhone" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 7 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step7Content" aria-expanded="false">
+                        7. Agreement and Final Review
+                    </button>
+                </h2>
+                <div id="step7Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                    <div class="accordion-body">
+                        <h2>Agreement and Final Review</h2>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="agreement" name="agreement" class="form-check-input" required>
+                            <label for="agreement" class="form-check-label">I agree to the terms and conditions.</label>
+                        </div>
+                        <button class="btn btn-success mt-3">Confirm Booking</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -56,7 +56,7 @@ class SecurityController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-$targetPath = $request->getSession()->get('_security.main.target_path');
+            $targetPath = $request->getSession()->get('_security.main.target_path');
 
 
     return $this->redirect($targetPath);

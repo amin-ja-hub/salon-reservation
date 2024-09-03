@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Barchasb;
 use App\Service\Service;
+use Symfony\Component\HttpFoundation\File\UploadedFile; // Add this at the top of your controller if not already present
 
 #[Route('/admin')]
 class ArticleController extends AbstractController
@@ -114,7 +115,7 @@ class ArticleController extends AbstractController
 
             $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
 
-            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_service_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('article-service/service/new.html.twig', [
@@ -140,7 +141,7 @@ class ArticleController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_service_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('article-service/service/edit.html.twig', [
@@ -200,7 +201,11 @@ class ArticleController extends AbstractController
         if ($file !== null) {
             $fileId = $service->uploadFile(1, $file, $article->getId(), 'mainpic');
             $fileEntity = $entityManager->getRepository('App\Entity\File')->find($fileId);
-            $article->setImage($fileEntity);
+            var_dump($fileId);
+            $article->setImage($fileEntity);            
+            $entityManager->persist($article);
+            $entityManager->flush();
+            
         }
     }
 

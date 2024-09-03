@@ -29,19 +29,28 @@ This files table contents are outlined below>>>>>
 ** - Go Top CSS
 ** - Preloader CSS
 */
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@font-face {
+    font-family: 'irnasance'; /* The name you'll use in your CSS */
+    font-weight: 400;
+    font-style: normal;
+    src: url(../fonts/irnasance.eot);
+    src: url(../fonts/irnasance.eot?#iefix) format('embedded-opentype'), 
+         url(../fonts/irnasance.woff2) format('woff2'),
+         url(../fonts/irnasance.woff) format('woff'), 
+         url(../fonts/irnasance.ttf) format('truetype');
+}
+
 /*----- Default CSS -----*/
 body {
   font-size: 16px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", irnasance;
   background-color: #fff;
   color: #828282;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", irnasance;
   color: #484848;
 }
 
@@ -2356,7 +2365,7 @@ button:focus {
 .banner-area-three .rev_slider_wrapper .banner-h1 {
   color: #fff;
   font-weight: 800 !important;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", irnasance;
 }
 .banner-area-three .rev_slider_wrapper .common-btn {
   transition: 0.5s all ease !important;
@@ -3629,7 +3638,7 @@ button:focus {
   margin-bottom: 15px;
 }
 .cart-area .cart-total .inner h3 {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", irnasance;
   font-size: 18px;
   font-weight: 600;
   position: relative;

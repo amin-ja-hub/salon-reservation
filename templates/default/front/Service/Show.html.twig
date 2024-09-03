@@ -1,0 +1,18 @@
+{% extends "base.front.twig" %}
+{% block body %}
+    <div class="service-details-area pt-100 pb-70">
+<div class="container">
+<div class="details-img">
+<img src="{{ asset('front/assets/images/services/service-details1.jpg')}}" alt="Details">
+</div>
+<div class="details-spa">
+<h3>{{ service.title }}</h3>
+</div>
+<div class="details-items">
+<div class="row align-items-center">
+{{ service.text|raw }}
+</div>
+</div>
+
+
+{% endblock %}
