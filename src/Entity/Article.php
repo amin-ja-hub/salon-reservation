@@ -50,6 +50,10 @@ class Article
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $remove;
 
+    #[ORM\ManyToOne(targetEntity: "Article")]
+    #[ORM\JoinColumn(name: "Parent", referencedColumnName: "id", nullable: true)]
+    private ?Article $parent = null;    
+    
     #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
     private ?User $user = null;
@@ -255,6 +259,18 @@ class Article
     public function removeBarchasb(Barchasb $barchasb): static
     {
         $this->barchasbs->removeElement($barchasb);
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
 
         return $this;
     }

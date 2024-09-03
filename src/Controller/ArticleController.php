@@ -35,7 +35,7 @@ class ArticleController extends AbstractController
         // Fetch all articles with type = 1
         $articles = $entityManager
             ->getRepository(Article::class)
-            ->findBy(['type' => 2]);
+            ->findBy(['type' => 2, 'parent'=> null]);
 
         return $this->render('article-service/service/index.html.twig', [
             'articles' => $articles,
