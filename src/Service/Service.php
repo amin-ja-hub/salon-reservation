@@ -191,13 +191,12 @@ class Service
 
         imagedestroy($image);
     }
-
     public function findEntitiesWithCriteria(
         string $entityClass, 
         ?int $count = null, 
         array $criteria = [], 
         string $orderByField = 'id', 
-        string $orderDirection = 'ASC' // New parameter for order direction
+        string $orderDirection = 'ASC'
     ): array {
         // Initialize the query builder
         $queryBuilder = $this->em->createQueryBuilder();
@@ -206,14 +205,18 @@ class Service
         $queryBuilder
             ->select('e')
             ->from($entityClass, 'e')
-            ->orderBy("e.$orderByField", $orderDirection); // Use the dynamic order direction
+            ->orderBy("e.$orderByField", $orderDirection);
 
         // Add criteria to the query
         foreach ($criteria as $field => $value) {
-            $operator = strpos($field, ' !=') !== false ? '!=' : '=';
-            $actualField = str_replace(' !=', '', $field);
-            $queryBuilder->andWhere("e.$actualField $operator :$actualField")
-                         ->setParameter($actualField, $value);
+            if ($value === null) {
+                $queryBuilder->andWhere("e.$field IS NULL");
+            } else {
+                $operator = strpos($field, ' !=') !== false ? '!=' : '=';
+                $actualField = str_replace(' !=', '', $field);
+                $queryBuilder->andWhere("e.$actualField $operator :$actualField")
+                             ->setParameter($actualField, $value);
+            }
         }
 
         // Set a maximum result count if provided
@@ -224,6 +227,7 @@ class Service
         // Execute the query and return the results
         return $queryBuilder->getQuery()->getResult();
     }
+
 
 
 }

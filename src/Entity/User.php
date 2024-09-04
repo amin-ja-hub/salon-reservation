@@ -57,6 +57,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: "Image", referencedColumnName: "id", nullable: true)]
     private ?File $image;
 
+    #[ORM\ManyToOne(targetEntity: "Article")]
+    #[ORM\JoinColumn(name: "Service", referencedColumnName: "id", nullable: true)]
+    private ?Article $service = null;        
+    
     // Getters and Setters
 
     public function getId(): ?int
@@ -234,6 +238,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(?int $role): static
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getService(): ?Article
+    {
+        return $this->service;
+    }
+
+    public function setService(?Article $service): static
+    {
+        $this->service = $service;
 
         return $this;
     }

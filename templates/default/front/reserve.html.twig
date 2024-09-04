@@ -1,5 +1,36 @@
 {% extends "base.front.twig" %}
 {% block body %}
+<!-- Include Bootstrap CSS -->
+
+<!-- Include Persian Calendar CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.0.0/dist/css/persian-datepicker.min.css">
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Include Persian Calendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.0.0/dist/js/persian-datepicker.min.js"></script>
+
+    <style>
+        /* Style for disabled accordion buttons */
+        .accordion-button[disabled] {
+            background-color: #f8f9fa;  /* Light gray background */
+            color: #6c757d;             /* Gray text color */
+            cursor: not-allowed;        /* Not-allowed cursor to indicate it's disabled */
+            opacity: 0.65;              /* Reduced opacity for a disabled effect */
+            box-shadow: none;           /* Remove any shadow to make it look flat */
+            pointer-events: none;       /* Prevent any interaction */
+        }
+
+        /* Optional: Style the hover effect for disabled buttons */
+        .accordion-button[disabled]:hover {
+            background-color: #f8f9fa;  /* Keep the background color same on hover */
+            color: #6c757d;             /* Keep the text color same on hover */
+        }
+    </style>
     <div style="height: 50px;"></div>
     <div class="container mt-5">
         <!-- Steps List as Accordion -->
@@ -16,18 +47,14 @@
                     <div class="accordion-body">
                         <h2>Select Main Service</h2>
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    <input type="radio" id="service1" name="mainService" value="Hair" class="form-check-input" required>
-                                    <label for="service1" class="form-check-label">Hair Services</label>
+                            {% for item in findEntitiesWithCriteria('App\\Entity\\Article', null, {'type': '2', 'parent': null}) %}
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input type="radio" id="service-{{ item.id }}" name="mainService" value="{{ item.id }}" class="form-check-input" required>
+                                        <label for="service-{{ item.id }}" class="form-check-label">{{ item.title }}</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    <input type="radio" id="service2" name="mainService" value="Nails" class="form-check-input" required>
-                                    <label for="service2" class="form-check-label">Nail Services</label>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -36,26 +63,15 @@
             <!-- Step 2 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step2Content" aria-expanded="false">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step2Content" aria-expanded="false" disabled>
                         2. Select Child Service
                     </button>
                 </h2>
                 <div id="step2Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                     <div class="accordion-body">
                         <h2>Select a Service</h2>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input type="radio" id="service3" name="childService" value="Haircut" class="form-check-input" required>
-                                    <label for="service3" class="form-check-label">Haircut</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input type="radio" id="service4" name="childService" value="Manicure" class="form-check-input" required>
-                                    <label for="service4" class="form-check-label">Manicure</label>
-                                </div>
-                            </div>
+                        <div id="childServices" class="row">
+                            <!-- Child services will be populated here -->
                         </div>
                     </div>
                 </div>
@@ -64,26 +80,15 @@
             <!-- Step 3 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step3Content" aria-expanded="false">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step3Content" aria-expanded="false" disabled>
                         3. Select Personal
                     </button>
                 </h2>
                 <div id="step3Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                     <div class="accordion-body">
                         <h2>Select Personal</h2>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    <input type="radio" id="personal1" name="personal" value="Stylist 1" class="form-check-input" required>
-                                    <label for="personal1" class="form-check-label">Stylist 1</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    <input type="radio" id="personal2" name="personal" value="Stylist 2" class="form-check-input" required>
-                                    <label for="personal2" class="form-check-label">Stylist 2</label>
-                                </div>
-                            </div>
+                        <div id="personalSelection" class="row">
+                            <!-- Users will be populated here -->
                         </div>
                     </div>
                 </div>
@@ -92,14 +97,14 @@
             <!-- Step 4 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step4Content" aria-expanded="false">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step4Content" aria-expanded="false" disabled>
                         4. Select Date
                     </button>
                 </h2>
                 <div id="step4Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                     <div class="accordion-body">
                         <h2>Select Date</h2>
-                        <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" required>
+                        <input type="text" id="appointmentDate" name="appointmentDate" class="form-control" required>
                     </div>
                 </div>
             </div>
@@ -107,26 +112,11 @@
             <!-- Step 5 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step5Content" aria-expanded="false">
-                        5. Select Hour
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step5Content" aria-expanded="false" disabled>
+                        5. User Information
                     </button>
                 </h2>
                 <div id="step5Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
-                    <div class="accordion-body">
-                        <h2>Select Hour</h2>
-                        <input type="time" id="appointmentTime" name="appointmentTime" class="form-control" required>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 6 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step6Content" aria-expanded="false">
-                        6. User Information
-                    </button>
-                </h2>
-                <div id="step6Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                     <div class="accordion-body">
                         <h2>User Information</h2>
                         <div class="mb-3">
@@ -145,25 +135,114 @@
                 </div>
             </div>
 
-            <!-- Step 7 -->
+            <!-- Step 6 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step7Content" aria-expanded="false">
-                        7. Agreement and Final Review
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step6Content" aria-expanded="false" disabled>
+                        6. Agreement and Final Review
                     </button>
                 </h2>
-                <div id="step7Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
+                <div id="step6Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                     <div class="accordion-body">
                         <h2>Agreement and Final Review</h2>
                         <div class="form-check mb-3">
                             <input type="checkbox" id="agreement" name="agreement" class="form-check-input" required>
                             <label for="agreement" class="form-check-label">I agree to the terms and conditions.</label>
                         </div>
-                        <button class="btn btn-success mt-3">Confirm Booking</button>
+                        <button class="btn btn-success mt-3" disabled>Confirm Booking</button>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const steps = [
+                '#step1Content',
+                '#step2Content',
+                '#step3Content',
+                '#step4Content',
+                '#step5Content',
+                '#step6Content'
+            ];
+
+            // Check if all required fields are completed
+            function isFormCompleted(inputs) {
+                return Array.from(inputs).every(input => input.type === 'checkbox' ? input.checked : input.value);
+            }
+
+            // Enable the next step button and trigger collapse
+            function enableNextStep(index) {
+                const nextStepButton = steps[index + 1] ? document.querySelector(`[data-bs-target="${steps[index + 1]}"]`) : null;
+                if (nextStepButton) {
+                    nextStepButton.disabled = false;
+                    console.log(`Enabling button for step ${index + 2}`); // Debugging line
+                    if (index === 2) { // Trigger step 4 to open after Step 3 is completed
+                        $('#step4Content').collapse('show');
+                    }
+                } else {
+                    document.querySelector('.btn-success').disabled = false;
+                }
+            }
+
+            // Attach change event listeners to all form inputs
+            steps.forEach((step, index) => {
+                const formInputs = document.querySelector(step).querySelectorAll('input, select, textarea');
+                formInputs.forEach(input => {
+                    input.addEventListener('change', function () {
+                        if (isFormCompleted(formInputs)) {
+                            enableNextStep(index);
+                        }
+                    });
+                });
+            });
+
+            // Handle AJAX for child services
+            $('input[name="mainService"]').on('change', function() {
+                const parentId = $(this).val();
+
+                $.post('{{ path('ajax_child_services') }}', { parentId }, function(response) {
+                    $('#childServices').empty().append(
+                        response.map(service => `
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="radio" id="service${service.id}" name="childService" value="${service.id}" class="form-check-input" required>
+                                    <label for="service${service.id}" class="form-check-label">${service.title}</label>
+                                </div>
+                            </div>`
+                        ).join('')
+                    );
+                    $('#step2Content').collapse('show');
+                    $('[data-bs-target="#step2Content"]').removeAttr('disabled');
+                }).fail(function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                });
+            });
+
+            // Handle the change event for child service selection
+            $(document).on('change', 'input[name="childService"]', function() {
+                const serviceId = $(this).val();
+
+                $.post('{{ path('ajax_users_by_service') }}', { serviceId }, function(response) {
+                    $('#personalSelection').empty().append(
+                        response.map(user => `
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="radio" id="personal${user.id}" name="personal" value="${user.id}" class="form-check-input" required>
+                                    <label for="personal${user.id}" class="form-check-label">${user.fullName}</label>
+                                </div>
+                            </div>`
+                        ).join('')
+                    );
+                    $('#step3Content').collapse('show');
+                    $('[data-bs-target="#step3Content"]').removeAttr('disabled');
+                    $('[data-bs-target="#step4Content"]').removeAttr('disabled');
+                }).fail(function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                });
+            });
+        });
+    </script>
+  
 {% endblock %}
