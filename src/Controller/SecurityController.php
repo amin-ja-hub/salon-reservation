@@ -59,7 +59,7 @@ class SecurityController extends AbstractController
             $targetPath = $request->getSession()->get('_security.main.target_path');
 
 
-    return $this->redirect($targetPath);
+        return $this->redirect($targetPath);
 
 
         }

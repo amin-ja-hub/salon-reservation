@@ -21,9 +21,6 @@ class Reservation
 
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $udate;
-    
-    #[ORM\Column(type: "datetime", nullable: true)]
-    private ?\DateTimeInterface $time;
 
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $published;
@@ -41,7 +38,14 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: "Article")]
     #[ORM\JoinColumn(name: "Article", referencedColumnName: "id", nullable: true)]
     private ?Article $article= null;
-
+    
+    #[ORM\ManyToOne(targetEntity: "Article")]
+    #[ORM\JoinColumn(name: "ArticleChild", referencedColumnName: "id", nullable: true)]
+    private ?Article $articleChild= null;
+ 
+    #[ORM\Column(type: "string", length: 256, nullable: true)]
+    private ?string $reservationDateTime;    
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -67,18 +71,6 @@ class Reservation
     public function setUdate(?\DateTimeInterface $udate): static
     {
         $this->udate = $udate;
-
-        return $this;
-    }
-
-    public function getTime(): ?\DateTimeInterface
-    {
-        return $this->time;
-    }
-
-    public function setTime(?\DateTimeInterface $time): static
-    {
-        $this->time = $time;
 
         return $this;
     }
@@ -139,6 +131,30 @@ class Reservation
     public function setArticle(?Article $article): static
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getArticleChild(): ?Article
+    {
+        return $this->articleChild;
+    }
+
+    public function setArticleChild(?Article $articleChild): static
+    {
+        $this->articleChild = $articleChild;
+
+        return $this;
+    }
+
+    public function getReservationDateTime(): ?string
+    {
+        return $this->reservationDateTime;
+    }
+
+    public function setReservationDateTime(?string $reservationDateTime): static
+    {
+        $this->reservationDateTime = $reservationDateTime;
 
         return $this;
     }    

@@ -12,7 +12,8 @@ framework:
         handler_id: null
         cookie_secure: auto
         cookie_samesite: lax
-
+parameters:
+    timezone: 'Asia/Tehran'
     #esi: true
     #fragments: true
     php_errors:

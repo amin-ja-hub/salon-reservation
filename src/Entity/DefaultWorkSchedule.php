@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'default_work_schedule')]
+class DefaultWorkSchedule
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
+
+    #[ORM\Column(type: "string", length: 10)]
+    private ?string $dayOfWeek = null; // ذخیره‌سازی روزهای هفته (شنبه تا پنج‌شنبه)
+
+    #[ORM\Column(type: "time")]
+    private ?\DateTimeInterface $startTime = null;
+
+    #[ORM\Column(type: "time")]
+    private ?\DateTimeInterface $endTime = null;
+
+    // Getters and Setters
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getDayOfWeek(): ?string
+    {
+        return $this->dayOfWeek;
+    }
+
+    public function setDayOfWeek(string $dayOfWeek): static
+    {
+        $this->dayOfWeek = $dayOfWeek;
+
+        return $this;
+    }
+
+    public function getStartTime(): ?\DateTimeInterface
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(\DateTimeInterface $startTime): static
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getEndTime(): ?\DateTimeInterface
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(\DateTimeInterface $endTime): static
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+}
