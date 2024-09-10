@@ -32,9 +32,13 @@ class Reservation
     private ?int $remove;
 
     #[ORM\ManyToOne(targetEntity: "User")]
-    #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
-    private ?User $user = null;
+    #[ORM\JoinColumn(name: "Personal", referencedColumnName: "id", nullable: true)]
+    private ?User $personal = null;
 
+//    #[ORM\ManyToOne(targetEntity: "User")]
+//    #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
+//    private ?User $user = null;    
+    
     #[ORM\ManyToOne(targetEntity: "Article")]
     #[ORM\JoinColumn(name: "Article", referencedColumnName: "id", nullable: true)]
     private ?Article $article= null;
@@ -155,6 +159,18 @@ class Reservation
     public function setReservationDateTime(?string $reservationDateTime): static
     {
         $this->reservationDateTime = $reservationDateTime;
+
+        return $this;
+    }
+
+    public function getPersonal(): ?User
+    {
+        return $this->personal;
+    }
+
+    public function setPersonal(?User $personal): static
+    {
+        $this->personal = $personal;
 
         return $this;
     }    

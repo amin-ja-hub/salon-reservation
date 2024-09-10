@@ -88,7 +88,10 @@ class DefaultController extends AbstractController
     public function getUsersByService(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $serviceId = $request->request->get('serviceId');
-        $users = $em->getRepository(User::class)->findBy(['service' => $serviceId]);
+        $users = $em->getRepository(User::class)->findBy([
+            'service' => $serviceId,
+            'role' => 2 // Role 2 corresponds to ROLE_PERSONNEL
+        ]);
 
         $data = array_map(fn($user) => [
             'id' => $user->getId(),
@@ -97,132 +100,94 @@ class DefaultController extends AbstractController
 
         return new JsonResponse($data);
     }
-    #[Route('/ajax/available-times', name: 'ajax_available_times', methods: ['POST'])]
-    public function getAvailableTimes(Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        $personalId = $request->request->get('personalId');
+#[Route('/ajax/available-times', name: 'ajax_available_times', methods: ['POST'])]
+public function getAvailableTimes(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $personalId = $request->request->get('personalId');
+    $now = new \DateTime('now', new \DateTimeZone('Asia/Tehran'));
 
-        // Create a new DateTime object with Tehran time zone
-        $now = new \DateTime('now', new \DateTimeZone('Asia/Tehran'));
+    // Find reservations for the next 16 days for the specific personalId
+    $reservations = $em->getRepository(Reservation::class)->createQueryBuilder('r')
+        ->where('r.personal = :personalId')
+        ->andWhere('r.reservationDateTime LIKE :dateRange')
+        ->setParameter('personalId', $personalId)
+        ->setParameter('dateRange', '1403%')  // Adjust the Jalali year here
+        ->getQuery()
+        ->getResult();
 
-        $endDate = (clone $now)->modify('+16 days');
+    // Parse reserved times and store them by date
+    $reservedTimes = [];
+    foreach ($reservations as $reservation) {
+        $reservationTimes = $reservation->getReservationDateTime();
+        list($reservedDate, $reservedTimeRange) = explode(' ', $reservationTimes, 2);
+        $reservedTimes[$reservedDate][] = $reservedTimeRange;
+    }
 
-        // Find all available work schedules for the next 16 days
-        $workSchedules = $em->getRepository(WorkSchedule::class)->createQueryBuilder('ws')
-            ->where('ws.user = :personalId')
-            ->andWhere('ws.startTime BETWEEN :now AND :endDate')
-            ->andWhere('ws.isAvailable = true')
-            ->setParameter('personalId', $personalId)
-            ->setParameter('now', $now)
-            ->setParameter('endDate', $endDate)
-            ->orderBy('ws.startTime', 'ASC')
-            ->getQuery()
-            ->getResult();
+    // Use custom work schedules if they exist
+    $customSchedules = $em->getRepository(WorkSchedule::class)->findBy(['user' => $personalId]);
+    
+    // If custom schedules exist, prioritize them; else, use default schedules
+    if (!$customSchedules) {
+        $defaultSchedules = $em->getRepository(DefaultWorkSchedule::class)->findAll();
+    }
 
-        // Retrieve reservations for the next 16 days for the specific personalId
-        $reservations = $em->getRepository(Reservation::class)->createQueryBuilder('r')
-            ->where('r.user = :personalId')
-            ->andWhere('r.reservationDateTime LIKE :dateRange')
-            ->setParameter('personalId', $personalId)
-            ->setParameter('dateRange', '1403%')  // Adjust the Jalali year here
-            ->getQuery()
-            ->getResult();
+    $currentDate = clone $now;
+    $dayOfWeekMap = [
+        0 => 'شنبه',
+        1 => 'یکشنبه',
+        2 => 'دوشنبه',
+        3 => 'سه‌شنبه',
+        4 => 'چهارشنبه',
+        5 => 'پنجشنبه',
+        6 => 'جمعه'
+    ];
 
-        // Parse reserved times and store them by date
-        $reservedTimes = [];
-        foreach ($reservations as $reservation) {
-            $reservationTimes = $reservation->getReservationDateTime();
-            list($reservedDate, $reservedTimeRange) = explode(' ', $reservationTimes, 2);
-            $reservedTimes[$reservedDate][] = $reservedTimeRange; // Store time ranges for each reserved day
-        }
+    $availableTimes = [];
+    for ($i = 0; $i <= 16; $i++) {
+        $jalaliDate = Jalalian::fromDateTime($currentDate);
+        $jalaliDayOfWeek = $jalaliDate->getDayOfWeek(); // Get current day of the week (0-6)
 
-        // If no custom work schedules are found, use default schedules
-        if (empty($workSchedules)) {
-            $defaultSchedules = $em->getRepository(DefaultWorkSchedule::class)->findAll();
-            $currentDate = clone $now;
-            $dayOfWeekMap = [
-                0 => 'شنبه',
-                1 => 'یکشنبه',
-                2 => 'دوشنبه',
-                3 => 'سه‌شنبه',
-                4 => 'چهارشنبه',
-                5 => 'پنجشنبه',
-                6 => 'جمعه'
-            ];
+        // Skip Friday (6)
+        if ($jalaliDayOfWeek != 6) {
+            $schedules = $customSchedules ?: $defaultSchedules;
 
-            for ($i = 0; $i <= 16; $i++) {
-                $jalaliDate = Jalalian::fromDateTime($currentDate);
-                $jalaliDayOfWeek = $jalaliDate->getDayOfWeek(); // Get current day of the week (0-6)
+            foreach ($schedules as $schedule) {
+                if ($dayOfWeekMap[$jalaliDayOfWeek] === $schedule->getDayOfWeek()) {
+                    $startTime = (clone $currentDate)->setTime(
+                        $schedule->getStartTime()->format('H'),
+                        $schedule->getStartTime()->format('i')
+                    );
+                    $endTime = (clone $currentDate)->setTime(
+                        $schedule->getEndTime()->format('H'),
+                        $schedule->getEndTime()->format('i')
+                    );
 
-                // Skip Friday (6)
-                if ($jalaliDayOfWeek != 6) {
-                    foreach ($defaultSchedules as $defaultSchedule) {
-                        if ($dayOfWeekMap[$jalaliDayOfWeek] === $defaultSchedule->getDayOfWeek()) {
-                            $startTime = (clone $currentDate)->setTime(
-                                $defaultSchedule->getStartTime()->format('H'),
-                                $defaultSchedule->getStartTime()->format('i')
-                            );
-                            $endTime = (clone $currentDate)->setTime(
-                                $defaultSchedule->getEndTime()->format('H'),
-                                $defaultSchedule->getEndTime()->format('i')
-                            );
+                    $jalaliStart = Jalalian::fromDateTime($startTime);
+                    $jalaliEnd = Jalalian::fromDateTime($endTime);
+                    $date = $jalaliStart->format('Y-m-d');
+                    $timeRange = $jalaliStart->format('H:i') . ' - ' . $jalaliEnd->format('H:i');
 
-                            $jalaliStart = Jalalian::fromDateTime($startTime);
-                            $jalaliEnd = Jalalian::fromDateTime($endTime);
-                            $date = $jalaliStart->format('Y-m-d');
-                            $timeRange = $jalaliStart->format('H:i') . ' - ' . $jalaliEnd->format('H:i');
-
-                            // Only add future times to workSchedules
-                            if (!isset($reservedTimes[$date]) || !in_array($timeRange, $reservedTimes[$date])) {
-                                if ($startTime > $now) { // Skip past times
-                                    $workSchedules[] = (new WorkSchedule())
-                                        ->setUser($em->getRepository(User::class)->find($personalId))
-                                        ->setStartTime($startTime)
-                                        ->setEndTime($endTime)
-                                        ->setAvailable(true);
-                                }
+                    // Only add future times and non-reserved slots to availableTimes
+                    if (!isset($reservedTimes[$date]) || !in_array($timeRange, $reservedTimes[$date])) {
+                        if ($startTime > $now) { // Skip past times
+                            if (!isset($availableTimes[$date])) {
+                                $availableTimes[$date] = [
+                                    'dayOfWeek' => $dayOfWeekMap[$jalaliDayOfWeek],
+                                    'times' => []
+                                ];
                             }
+                            $availableTimes[$date]['times'][] = $timeRange;
                         }
                     }
                 }
-
-                $currentDate->modify('+1 day'); // Move to next day
             }
         }
 
-        // Check work schedules and remove overlaps with reserved times
-        $availableTimes = [];
-        foreach ($workSchedules as $schedule) {
-            $jalaliStart = Jalalian::fromDateTime($schedule->getStartTime());
-            $jalaliEnd = Jalalian::fromDateTime($schedule->getEndTime());
-
-            $date = $jalaliStart->format('Y-m-d');
-            $timeRange = $jalaliStart->format('H:i') . ' - ' . $jalaliEnd->format('H:i');
-            $jalaliDayOfWeek = $jalaliStart->getDayOfWeek();
-
-            $dayOfWeekMap = [
-                0 => 'شنبه',
-                1 => 'یکشنبه',
-                2 => 'دوشنبه',
-                3 => 'سه‌شنبه',
-                4 => 'چهارشنبه',
-                5 => 'پنجشنبه',
-                6 => 'جمعه'
-            ];
-
-            // Check if the schedule is in the future
-            if ($schedule->getStartTime() > $now && (!isset($reservedTimes[$date]) || !in_array($timeRange, $reservedTimes[$date]))) {
-                if (!isset($availableTimes[$date])) {
-                    $availableTimes[$date] = [
-                        'dayOfWeek' => $dayOfWeekMap[$jalaliDayOfWeek],
-                        'times' => []
-                    ];
-                }
-                $availableTimes[$date]['times'][] = $timeRange;
-            }
-        }
-
-        // Return available times
-        return new JsonResponse($availableTimes);
+        $currentDate->modify('+1 day'); // Move to next day
     }
+
+    // Return available times
+    return new JsonResponse($availableTimes);
+}
+
 }

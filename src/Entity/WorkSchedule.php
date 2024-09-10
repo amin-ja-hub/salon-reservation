@@ -20,16 +20,20 @@ class WorkSchedule
     #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
     private ?User $user = null;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "string", length: 10)]
+    private ?string $dayOfWeek = null; // ذخیره‌سازی روزهای هفته (شنبه تا پنج‌شنبه)
+
+    #[ORM\Column(type: "time")]
     private ?\DateTimeInterface $startTime = null;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "time")]
     private ?\DateTimeInterface $endTime = null;
-
-    #[ORM\Column(type: "boolean")]
-    private bool $isAvailable = true;
-
     
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $cdate;
+
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $udate;    
     
     public function getId(): ?int
     {
@@ -60,18 +64,6 @@ class WorkSchedule
         return $this;
     }
 
-    public function setAvailable(bool $isAvailable): self
-    {
-        $this->isAvailable = $isAvailable;
-
-        return $this;
-    }
-
-    public function isAvailable(): bool
-    {
-        return $this->isAvailable;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -80,6 +72,42 @@ class WorkSchedule
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCdate(): ?\DateTimeInterface
+    {
+        return $this->cdate;
+    }
+
+    public function setCdate(?\DateTimeInterface $cdate): static
+    {
+        $this->cdate = $cdate;
+
+        return $this;
+    }
+
+    public function getUdate(): ?\DateTimeInterface
+    {
+        return $this->udate;
+    }
+
+    public function setUdate(?\DateTimeInterface $udate): static
+    {
+        $this->udate = $udate;
+
+        return $this;
+    }
+
+    public function getDayOfWeek(): ?string
+    {
+        return $this->dayOfWeek;
+    }
+
+    public function setDayOfWeek(string $dayOfWeek): static
+    {
+        $this->dayOfWeek = $dayOfWeek;
 
         return $this;
     }

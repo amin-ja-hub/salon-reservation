@@ -218,7 +218,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = [
             0 => 'ROLE_USER',
             1 => 'ROLE_ADMIN',
-            2 => 'ROLE_WRITER'
+            2 => 'ROLE_PERSONNEL'
         ];
 
         return [$role[$this->role]];
