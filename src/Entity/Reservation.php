@@ -33,19 +33,15 @@ class Reservation
 
     #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(name: "Personal", referencedColumnName: "id", nullable: true)]
-    private ?User $personal = null;
-
-//    #[ORM\ManyToOne(targetEntity: "User")]
-//    #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
-//    private ?User $user = null;    
+    private ?User $personal = null;  
     
-    #[ORM\ManyToOne(targetEntity: "Article")]
-    #[ORM\JoinColumn(name: "Article", referencedColumnName: "id", nullable: true)]
-    private ?Article $article= null;
+    #[ORM\ManyToOne(targetEntity: "Service")]
+    #[ORM\JoinColumn(name: "Service", referencedColumnName: "id", nullable: true)]
+    private ?Service $service= null;
     
-    #[ORM\ManyToOne(targetEntity: "Article")]
-    #[ORM\JoinColumn(name: "ArticleChild", referencedColumnName: "id", nullable: true)]
-    private ?Article $articleChild= null;
+    #[ORM\ManyToOne(targetEntity: "Service")]
+    #[ORM\JoinColumn(name: "ServiceChild", referencedColumnName: "id", nullable: true)]
+    private ?Service $serviceChild= null;
  
     #[ORM\Column(type: "string", length: 256, nullable: true)]
     private ?string $reservationDateTime;    
@@ -127,30 +123,6 @@ class Reservation
         return $this;
     }
 
-    public function getArticle(): ?Article
-    {
-        return $this->article;
-    }
-
-    public function setArticle(?Article $article): static
-    {
-        $this->article = $article;
-
-        return $this;
-    }
-
-    public function getArticleChild(): ?Article
-    {
-        return $this->articleChild;
-    }
-
-    public function setArticleChild(?Article $articleChild): static
-    {
-        $this->articleChild = $articleChild;
-
-        return $this;
-    }
-
     public function getReservationDateTime(): ?string
     {
         return $this->reservationDateTime;
@@ -171,6 +143,30 @@ class Reservation
     public function setPersonal(?User $personal): static
     {
         $this->personal = $personal;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): static
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    public function getServiceChild(): ?Service
+    {
+        return $this->serviceChild;
+    }
+
+    public function setServiceChild(?Service $serviceChild): static
+    {
+        $this->serviceChild = $serviceChild;
 
         return $this;
     }    

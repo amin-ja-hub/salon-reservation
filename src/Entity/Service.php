@@ -2,26 +2,26 @@
 
 namespace App\Entity;
 
+use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: "Article")]
-class Article
+#[ORM\Entity(repositoryClass: ServiceRepository::class)]
+class Service
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(type: "integer")]
-    private ?int $id;
-
-    #[ORM\ManyToMany(targetEntity: Barchasb::class, inversedBy: 'articles')]
-    #[ORM\JoinTable(name: 'ArticleBar')]
-    private Collection $barchasbs;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(type: "string", length: 256, nullable: true)]
-    private ?string $title;
+    private ?string $title;    
+ 
+    #[ORM\ManyToMany(targetEntity: Barchasb::class, inversedBy: 'services')]
+    #[ORM\JoinTable(name: 'ServiceBar')]
+    private Collection $barchasbs;    
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $text;
@@ -48,12 +48,16 @@ class Article
     private ?int $bazdid;
 
     #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $remove;  
-    
+    private ?int $remove;
+
+    #[ORM\ManyToOne(targetEntity: "Service")]
+    #[ORM\JoinColumn(name: "Parent", referencedColumnName: "id", nullable: true)]
+    private ?Service $parent = null;    
+
     #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
     private ?User $user = null;
-
+    
     #[ORM\ManyToOne(targetEntity: "File")]
     #[ORM\JoinColumn(name: "Image", referencedColumnName: "id", nullable: true)]
     private ?File $image = null;
@@ -65,10 +69,8 @@ class Article
     public function __construct()
     {
         $this->barchasbs = new ArrayCollection();
-    }
-
-    // Getters and Setters
-
+    }    
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -122,9 +124,9 @@ class Article
         return $this;
     }
 
-    public function getMetaKey(): ?string
+    public function getMetadesc(): ?string
     {
-        return $this->metaKey;
+        return $this->metadesc;
     }
 
     public function setMetadesc(?string $metadesc): static
@@ -194,6 +196,42 @@ class Article
         return $this;
     }
 
+    /**
+     * @return Collection<int, Barchasb>
+     */
+    public function getBarchasbs(): Collection
+    {
+        return $this->barchasbs;
+    }
+
+    public function addBarchasb(Barchasb $barchasb): static
+    {
+        if (!$this->barchasbs->contains($barchasb)) {
+            $this->barchasbs->add($barchasb);
+        }
+
+        return $this;
+    }
+
+    public function removeBarchasb(Barchasb $barchasb): static
+    {
+        $this->barchasbs->removeElement($barchasb);
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -226,35 +264,6 @@ class Article
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    public function getMetadesc(): ?string
-    {
-        return $this->metadesc;
-    }
-
-    /**
-     * @return Collection<int, Barchasb>
-     */
-    public function getBarchasbs(): Collection
-    {
-        return $this->barchasbs;
-    }
-
-    public function addBarchasb(Barchasb $barchasb): static
-    {
-        if (!$this->barchasbs->contains($barchasb)) {
-            $this->barchasbs->add($barchasb);
-        }
-
-        return $this;
-    }
-
-    public function removeBarchasb(Barchasb $barchasb): static
-    {
-        $this->barchasbs->removeElement($barchasb);
 
         return $this;
     }

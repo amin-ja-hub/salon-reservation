@@ -79,7 +79,7 @@
                 <div class="accordion-body">
                     <h2>Select Main Service</h2>
                     <div class="row">
-                        {% for item in findEntitiesWithCriteria('App\\Entity\\Article', null, {'type': '2', 'parent': null}) %}
+                        {% for item in findEntitiesWithCriteria('App\\Entity\\Service', null, { 'parent': null}) %}
                             <div class="col-md-6">
                                 <div class="form-check">
                                     <input type="radio" id="service-{{ item.id }}" name="mainService" value="{{ item.id }}" class="form-check-input" required>

@@ -57,9 +57,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: "Image", referencedColumnName: "id", nullable: true)]
     private ?File $image;
 
-    #[ORM\ManyToOne(targetEntity: "Article")]
-    #[ORM\JoinColumn(name: "Service", referencedColumnName: "id", nullable: true)]
-    private ?Article $service = null;        
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: 'user_service')]
+    private Collection $services;
+
+    public function __construct()
+    {
+        $this->services = new ArrayCollection();
+    }
     
     // Getters and Setters
 
@@ -242,14 +247,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getService(): ?Article
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
     {
-        return $this->service;
+        return $this->services;
     }
 
-    public function setService(?Article $service): static
+    public function addService(Service $service): static
     {
-        $this->service = $service;
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        $this->services->removeElement($service);
 
         return $this;
     }
