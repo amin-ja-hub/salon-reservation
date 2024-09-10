@@ -9,20 +9,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-#[Route('/work/schedule')]
+#[Route('/user/schedule')]
 final class WorkScheduleController extends AbstractController
 {
     #[Route(name: 'app_work_schedule_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $workSchedules = $entityManager
-            ->getRepository(WorkSchedule::class)
-            ->findAll();
+        // Get session
+        $session = $request->getSession();
 
-        return $this->render('work_schedule/index.html.twig', [
-            'work_schedules' => $workSchedules,
-        ]);
+        // Access the security token stored in the session
+        $tokenSerialized = $session->get('_security_main');
+
+        if ($tokenSerialized) {
+            // Unserialize the token to get the User object
+            $token = unserialize($tokenSerialized);
+            $user = $token->getUser();
+            
+            // Get the user ID
+            $userId = $user->getId();
+
+            // Find work schedules by user ID
+            $workSchedules = $entityManager
+                ->getRepository(WorkSchedule::class)
+                ->findBy(['user' => $userId]);
+
+            return $this->render('work_schedule/index.html.twig', [
+                'work_schedules' => $workSchedules,
+            ]);
+        }
+
+        // Handle cases where no user is logged in
+        throw $this->createAccessDeniedException('No user logged in');
     }
 
     #[Route('/new', name: 'app_work_schedule_new', methods: ['GET', 'POST'])]

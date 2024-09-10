@@ -20,6 +20,10 @@ class WorkSchedule
     #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\JoinColumn(name: "CreatedBy", referencedColumnName: "id", nullable: true)]
+    private ?User $created = null;
+
     #[ORM\Column(type: "string", length: 10)]
     private ?string $dayOfWeek = null; // ذخیره‌سازی روزهای هفته (شنبه تا پنج‌شنبه)
 
@@ -108,6 +112,18 @@ class WorkSchedule
     public function setDayOfWeek(string $dayOfWeek): static
     {
         $this->dayOfWeek = $dayOfWeek;
+
+        return $this;
+    }
+
+    public function getCreated(): ?User
+    {
+        return $this->created;
+    }
+
+    public function setCreated(?User $created): static
+    {
+        $this->created = $created;
 
         return $this;
     }

@@ -23,6 +23,10 @@ class DefaultWorkSchedule
     #[ORM\Column(type: "time")]
     private ?\DateTimeInterface $endTime = null;
 
+    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\JoinColumn(name: "CreatedBy", referencedColumnName: "id", nullable: true)]
+    private ?User $created = null;    
+    
     // Getters and Setters
 
     public function getId(): ?int
@@ -62,6 +66,18 @@ class DefaultWorkSchedule
     public function setEndTime(\DateTimeInterface $endTime): static
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getCreated(): ?User
+    {
+        return $this->created;
+    }
+
+    public function setCreated(?User $created): static
+    {
+        $this->created = $created;
 
         return $this;
     }

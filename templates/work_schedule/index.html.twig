@@ -11,7 +11,6 @@
                 <th>Id</th>
                 <th>StartTime</th>
                 <th>EndTime</th>
-                <th>IsAvailable</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,9 +18,8 @@
         {% for work_schedule in work_schedules %}
             <tr>
                 <td>{{ work_schedule.id }}</td>
-                <td>{{ work_schedule.startTime ? work_schedule.startTime|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ work_schedule.endTime ? work_schedule.endTime|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ work_schedule.isAvailable ? 'Yes' : 'No' }}</td>
+                <td>{{ work_schedule.startTime ? work_schedule.startTime|date('H:i') : '' }}</td>
+                <td>{{ work_schedule.endTime ? work_schedule.endTime|date('H:i') : '' }}</td>
                 <td>
                     <a href="{{ path('app_work_schedule_show', {'id': work_schedule.id}) }}">show</a>
                     <a href="{{ path('app_work_schedule_edit', {'id': work_schedule.id}) }}">edit</a>
