@@ -83,50 +83,66 @@
                                 </div>
                                 <!--end:Menu content-->
                         </div>
-                        <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                        <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <span class="menu-link">
+                                <a class="menu-link" href="{{ path('app_reservation_admin') }}">
                                         <span class="menu-icon">
-                                                <i class="ki-duotone ki-address-book fs-2">
+                                                <i class="bi bi-clock fs-2">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                         <span class="path3"></span>
                                                 </i>
                                         </span>
-                                        <span class="menu-title">مدیریت مقالات</span>
-                                        <span class="menu-arrow"></span>
-                                </span>
+                                        <span class="menu-title fs-5 fw-bold">مدیریت وقت های رزرو شده</span>
+                                </a>
                                 <!--end:Menu link-->
-                                <!--begin:Menu sub-->
-                                <div class="menu-sub menu-sub-accordion">
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                                <!--begin:Menu link-->
-                                                <a class="menu-link" href="{{ path('app_article_new') }}">
-                                                        <span class="menu-bullet">
-                                                                <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">اضافه کردن</span>
-                                                </a>
-                                                <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                                <!--begin:Menu link-->
-                                                <a class="menu-link" href="{{ path('app_article_index') }}">
-                                                        <span class="menu-bullet">
-                                                                <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">مدیریت</span>
-                                                </a>
-                                                <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu item-->                        
+                        <!--end:Menu item-->
+                        <!--begin:Menu item-->
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                            <!--begin:Menu link-->
+                            <span class="menu-link">
+                                <span class="menu-icon">
+                                    <i class="bi bi-file-text fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title fs-4 fw-bold">مدیریت مقالات</span> <!-- Adjusted size and weight -->
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <!--end:Menu link-->
+                            <!--begin:Menu sub-->
+                            <div class="menu-sub menu-sub-accordion">
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link" href="{{ path('app_article_new') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title fs-5">اضافه کردن</span> <!-- Adjusted size -->
+                                    </a>
+                                    <!--end:Menu link-->
                                 </div>
-                                <!--end:Menu sub-->
+                                <!--end:Menu item-->
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link" href="{{ path('app_article_index') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title fs-5">مدیریت</span> <!-- Adjusted size -->
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+                            </div>
+                            <!--end:Menu sub-->
                         </div>
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
@@ -134,13 +150,13 @@
                                 <!--begin:Menu link-->
                                 <span class="menu-link">
                                         <span class="menu-icon">
-                                                <i class="ki-duotone ki-address-book fs-2">
+                                                <i class="fas fa-cut fs-2">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                         <span class="path3"></span>
                                                 </i>
                                         </span>
-                                        <span class="menu-title">مدیریت خدمات</span>
+                                        <span class="menu-title fs-4 fw-bold">مدیریت خدمات</span>
                                         <span class="menu-arrow"></span>
                                 </span>
                                 <!--end:Menu link-->
@@ -153,7 +169,7 @@
                                                         <span class="menu-bullet">
                                                                 <span class="bullet bullet-dot"></span>
                                                         </span>
-                                                        <span class="menu-title">اضافه کردن</span>
+                                                        <span class="menu-title fs-5">اضافه کردن</span>
                                                 </a>
                                                 <!--end:Menu link-->
                                         </div>
@@ -165,7 +181,7 @@
                                                         <span class="menu-bullet">
                                                                 <span class="bullet bullet-dot"></span>
                                                         </span>
-                                                        <span class="menu-title">مدیریت</span>
+                                                        <span class="menu-title fs-5">مدیریت</span>
                                                 </a>
                                                 <!--end:Menu link-->
                                         </div>
@@ -179,13 +195,13 @@
                                 <!--begin:Menu link-->
                                 <span class="menu-link">
                                         <span class="menu-icon">
-                                                <i class="ki-duotone ki-address-book fs-2">
+                                                <i class="bi bi-grid fs-2">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                         <span class="path3"></span>
                                                 </i>
                                         </span>
-                                        <span class="menu-title">مدیریت دسته بندی</span>
+                                        <span class="menu-title fs-4 fw-bold">مدیریت دسته بندی</span>
                                         <span class="menu-arrow"></span>
                                 </span>
                                 <!--end:Menu link-->
@@ -198,7 +214,7 @@
                                                         <span class="menu-bullet">
                                                                 <span class="bullet bullet-dot"></span>
                                                         </span>
-                                                        <span class="menu-title">اضافه کردن</span>
+                                                        <span class="menu-title fs-5">اضافه کردن</span>
                                                 </a>
                                                 <!--end:Menu link-->
                                         </div>
@@ -210,7 +226,7 @@
                                                         <span class="menu-bullet">
                                                                 <span class="bullet bullet-dot"></span>
                                                         </span>
-                                                        <span class="menu-title">مدیریت</span>
+                                                        <span class="menu-title fs-5">مدیریت</span>
                                                 </a>
                                                 <!--end:Menu link-->
                                         </div>
@@ -220,102 +236,67 @@
                         </div>
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                        <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <span class="menu-link">
+                                <a class="menu-link" href="{{ path('app_contact_us_index') }}">
                                         <span class="menu-icon">
-                                                <i class="ki-duotone ki-address-book fs-2">
+                                                <i class="bi bi-envelope fs-2">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                         <span class="path3"></span>
                                                 </i>
                                         </span>
-                                        <span class="menu-title">مدیریت فایل</span>
-                                        <span class="menu-arrow"></span>
-                                </span>
+                                        <span class="menu-title fs-4 fw-bold">مدیریت تماس باما</span>
+                                </a>
                                 <!--end:Menu link-->
-                                <!--begin:Menu sub-->
-                                <div class="menu-sub menu-sub-accordion">
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                                <!--begin:Menu link-->
-                                                <a class="menu-link" href="{{ path('app_file_index') }}">
-                                                        <span class="menu-bullet">
-                                                                <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">مدیریت</span>
-                                                </a>
-                                                <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
-                                </div>
-                                <!--end:Menu sub-->
+                        </div>
+                        <!--end:Menu item-->      
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" href="{{ path('app_faq_index') }}">
+                                        <span class="menu-icon">
+                                                <i class="bi bi-question-circle fs-2">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                </i>
+                                        </span>
+                                        <span class="menu-title fs-5 fw-bold">مدیریت سوال و جواب</span>
+                                </a>
+                                <!--end:Menu link-->
                         </div>
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                        <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <span class="menu-link">
+                                <a class="menu-link" href="{{ path('app_user_index') }}">
                                         <span class="menu-icon">
-                                                <i class="ki-duotone ki-address-book fs-2">
+                                                <i class="bi bi-person fs-2">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                         <span class="path3"></span>
                                                 </i>
                                         </span>
-                                        <span class="menu-title">مدیریت تماس باما</span>
-                                        <span class="menu-arrow"></span>
-                                </span>
+                                        <span class="menu-title fs-5 fw-bold">مدیریت کاربران</span>
+                                </a>
                                 <!--end:Menu link-->
-                                <!--begin:Menu sub-->
-                                <div class="menu-sub menu-sub-accordion">
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                                <!--begin:Menu link-->
-                                                <a class="menu-link" href="{{ path('app_contact_us_index') }}">
-                                                        <span class="menu-bullet">
-                                                                <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">مدیریت</span>
-                                                </a>
-                                                <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
-                                </div>
-                                <!--end:Menu sub-->
                         </div>
-                        <!--end:Menu item-->
+                        <!--end:Menu item-->                        
                         <!--begin:Menu item-->
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                        <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <span class="menu-link">
+                                <a class="menu-link" href="{{ path('app_file_index') }}">
                                         <span class="menu-icon">
-                                                <i class="ki-duotone ki-address-book fs-2">
+                                                <i class="bi bi-file-earmark fs-2">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                         <span class="path3"></span>
                                                 </i>
                                         </span>
-                                        <span class="menu-title">مدیریت سوال و جواب</span>
-                                        <span class="menu-arrow"></span>
-                                </span>
+                                        <span class="menu-title fs-4 fw-bold">مدیریت فایل</span>
+                                </a>
                                 <!--end:Menu link-->
-                                <!--begin:Menu sub-->
-                                <div class="menu-sub menu-sub-accordion">
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                                <!--begin:Menu link-->
-                                                <a class="menu-link" href="{{ path('app_faq_index') }}">
-                                                        <span class="menu-bullet">
-                                                                <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">مدیریت,افزودن و ویرایش</span>
-                                                </a>
-                                                <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
-                                </div>
-                                <!--end:Menu sub-->
                         </div>
                         <!--end:Menu item-->
                 </div>

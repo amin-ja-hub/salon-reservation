@@ -24,24 +24,10 @@ class ArticleController extends AbstractController
             ->getRepository(Article::class)
             ->findBy(['type' => 1]);
 
-        return $this->render('article-service/article/index.html.twig', [
+        return $this->render('article/index.html.twig', [
             'articles' => $articles,
         ]);
     }
-
-    #[Route('/Services/', name: 'app_service_index', methods: ['GET'])]
-    public function Serviceindex(EntityManagerInterface $entityManager): Response
-    {
-        // Fetch all articles with type = 1
-        $articles = $entityManager
-            ->getRepository(Article::class)
-            ->findBy(['type' => 2, 'parent'=> null]);
-
-        return $this->render('article-service/service/index.html.twig', [
-            'articles' => $articles,
-        ]);
-    }
-    
 
     #[Route('/article/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, Service $service): Response
@@ -64,7 +50,7 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('article-service/article/new.html.twig', [
+        return $this->render('article/new.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
             'barchasbs' => $this->getBarchasbs($entityManager, 1),
@@ -90,64 +76,10 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('article-service/article/edit.html.twig', [
+        return $this->render('article/edit.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
             'barchasbs' => $this->getBarchasbs($entityManager, 1),
-        ]);
-    }
-
-    #[Route('/service/new', name: 'app_service_new', methods: ['GET', 'POST'])]
-    public function servicenew(Request $request, EntityManagerInterface $entityManager, Service $service): Response
-    {
-        $article = new Article();
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $request->request->all();
-            $this->setArticleFields($article, $formData, '2');
-            $this->handleCategory($article, $formData['category'] ?? null, $entityManager);
-            $this->handleTags($article, $formData['keywords'] ?? [], $entityManager,2);
-
-            $entityManager->persist($article);
-            $entityManager->flush();
-
-            $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
-
-            return $this->redirectToRoute('app_service_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('article-service/service/new.html.twig', [
-            'article' => $article,
-            'form' => $form->createView(),
-            'barchasbs' => $this->getBarchasbs($entityManager, 2),
-        ]);
-    }
-
-    #[Route('/service/edit/{id}', name: 'app_service_edit', methods: ['GET', 'POST'])]
-    public function serviceedit(Article $article, Request $request, EntityManagerInterface $entityManager, Service $service): Response
-    {
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $request->request->all();
-            $this->setArticleFields($article, $formData, '2');
-            $this->handleCategory($article, $formData['category'] ?? null, $entityManager);
-            $this->handleTags($article, $formData['keywords'] ?? [], $entityManager,2);
-
-            $this->handleFileUpload($article, $request->files->get('file'), $service, $entityManager);
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_service_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('article-service/service/edit.html.twig', [
-            'article' => $article,
-            'form' => $form->createView(),
-            'barchasbs' => $this->getBarchasbs($entityManager, 2),
         ]);
     }
 

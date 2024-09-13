@@ -34,6 +34,10 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(name: "Personal", referencedColumnName: "id", nullable: true)]
     private ?User $personal = null;  
+
+    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\JoinColumn(name: "User", referencedColumnName: "id", nullable: true)]
+    private ?User $user = null;  
     
     #[ORM\ManyToOne(targetEntity: "Service")]
     #[ORM\JoinColumn(name: "Service", referencedColumnName: "id", nullable: true)]
