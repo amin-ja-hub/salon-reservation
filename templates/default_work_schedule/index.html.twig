@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}
-
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد', 'url': path('app_panel')},
+        {'label': 'زمان کاری'},
+    ] %}
+    {% set title = 'مدیریت زمان کاری' %}
+    
+    {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
+{% endblock %}
 {% block title %}DefaultWorkSchedule index{% endblock %}
 {% block js %}
     <!-- Script to filter by Day of Week -->

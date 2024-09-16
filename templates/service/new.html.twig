@@ -1,5 +1,15 @@
 {% extends 'base.html.twig' %}
-
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد', 'url': path('app_panel')},
+        {'label': 'خدمات', 'url': path('app_service_index')},
+        {'label': 'اضافه کردن خدمات'},
+    ] %}
+    {% set title = 'افزودن خدمات' %}
+    
+    {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
+{% endblock %}
 {% block title %}افزودن مقاله{% endblock %}
 {% block jshead %}
 
@@ -195,9 +205,9 @@
                                                             <div class="form-group col-md-12">
                                                                 <label class="form-label d-block pt-10">متا کلمات کلیدی</label>
                                                                 <select name="keywords[]" class="DroidNaskh form-control mb-2" multiple data-role="tagsinput">
-                                                                {% for barchasb in barchasbs %}
+{#                                                                {% for barchasb in barchasbs %}
                                                                     <option value="{{ barchasb.title }}">{{ barchasb.title }}</option>
-                                                                {% endfor %}
+                                                                {% endfor %}#}
                                                                 </select>
                                                             </div>
                                                             <div class="text-muted fs-7">

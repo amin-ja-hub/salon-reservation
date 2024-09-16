@@ -36,7 +36,7 @@ final class DefaultWorkScheduleController extends AbstractController
             $entityManager->persist($defaultWorkSchedule);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_default_work_schedule_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_default_schedule_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('default_work_schedule/new.html.twig', [

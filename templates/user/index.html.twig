@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}
-
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد', 'url': path('app_panel')},
+        {'label': 'تماس با ما'},
+    ] %}
+    {% set title = 'تماس با ما' %}
+    
+    {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
+{% endblock %}
 {% block title %}Product index{% endblock %}
 {% block css %}
 {#    <!--begin::Vendor Stylesheets(used for this page only)-->

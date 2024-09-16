@@ -1,5 +1,15 @@
 {% extends 'base.html.twig' %}
-
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد', 'url': path('app_panel')},
+        {'label': 'دسته بندی', 'url': path('app_category_index')},
+        {'label': 'ویرایش کردن دسته بندی'},
+    ] %}
+    {% set title = 'ویرایش دسته بندی' %}
+    
+    {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
+{% endblock %}
 {% block title %}New Article{% endblock %}
 {% block jshead %}
 

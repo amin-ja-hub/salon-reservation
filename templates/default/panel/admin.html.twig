@@ -1,6 +1,12 @@
-{# dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
-
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد'},
+    ] %}
+    {% set title = 'داشبورد ادمین' %}
+    {{ parent() }}
+{% endblock %}
 {% block body %}
 <div class="container mt-4">
     <div class="row">
@@ -8,7 +14,7 @@
             <div class="alert alert-success d-flex align-items-center">
                 <i class="bi bi-emoji-smile me-3 fs-1"></i>
                 <div>
-                    <h4 class="alert-heading">{{ app.user.fullName ?? app.user.username }},خوش آمدید</h4>
+                    <h4 class="alert-heading">{{ app.user.fullName ?? app.user.username }}, خوش آمدید</h4>
                     <p>به داشبورد مدیریت خوش آمدید.</p>
                 </div>
             </div>
@@ -16,9 +22,9 @@
     </div>
 
     <div class="row">
-        <!-- Card 1: مدیریت وقت‌های رزرو شده -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
+        <!-- مدیریت وقت‌های رزرو شده -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-calendar-check" style="font-size: 2rem;"></i>
                     <h5 class="card-title mt-3">مدیریت وقت‌های رزرو شده</h5>
@@ -28,45 +34,57 @@
             </div>
         </div>
 
-        <!-- Card 2: مدیریت مقالات -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
+        <!-- مدیریت زمان کاری -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-clock" style="font-size: 2rem;"></i>
+                    <h5 class="card-title mt-3">مدیریت زمان کاری</h5>
+                    <p class="card-text">زمان کاری سالن را مدیریت کنید</p>
+                    <a href="{{ path('app_default_schedule_index') }}" class="btn btn-info">مدیریت زمان کاری</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- مدیریت مقالات -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-journal-text" style="font-size: 2rem;"></i>
                     <h5 class="card-title mt-3">مدیریت مقالات</h5>
                     <p class="card-text">مقالات خود را مدیریت و اضافه کنید.</p>
-                    <a href="{{ path('app_article_new') }}" class="btn btn-primary ">اضافه کردن مقاله</a>
-                    <a href="{{ path('app_article_index') }}" class="btn btn-secondary">مدیریت مقالات</a>
+                    <a href="{{ path('app_article_new') }}" class="btn btn-primary btn-sm">اضافه کردن مقاله</a>
+                    <a href="{{ path('app_article_index') }}" class="btn btn-secondary btn-sm">مدیریت مقالات</a>
                 </div>
             </div>
         </div>
 
-        <!-- Card 3: مدیریت خدمات -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
+        <!-- مدیریت خدمات -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-gear" style="font-size: 2rem;"></i>
                     <h5 class="card-title mt-3">مدیریت خدمات</h5>
                     <p class="card-text">خدمات موجود را مدیریت و اضافه کنید.</p>
-                    <a href="{{ path('app_service_new') }}" class="btn btn-success ">اضافه کردن خدمات</a>
-                    <a href="{{ path('app_service_index') }}" class="btn btn-secondary">مدیریت خدمات</a>
+                    <a href="{{ path('app_service_new') }}" class="btn btn-success btn-sm">اضافه کردن خدمات</a>
+                    <a href="{{ path('app_service_index') }}" class="btn btn-secondary btn-sm">مدیریت خدمات</a>
                 </div>
             </div>
         </div>
 
-        <!-- Card 4: مدیریت دسته بندی -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
+        <!-- مدیریت دسته بندی -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-tags" style="font-size: 2rem;"></i>
-                    <h5 class="card-title mt-3">مدیریت دسته بندی</h5>
-                    <p class="card-text">دسته بندی‌ها را مدیریت و اضافه کنید.</p>
-                    <a href="{{ path('app_category_new') }}" class="btn btn-warning ">اضافه کردن دسته بندی</a>
-                    <a href="{{ path('app_category_index') }}" class="btn btn-secondary">مدیریت دسته بندی</a>
+                    <h5 class="card-title mt-3">مدیریت دسته‌بندی</h5>
+                    <p class="card-text">دسته‌بندی‌ها را مدیریت و اضافه کنید.</p>
+                    <a href="{{ path('app_category_new') }}" class="btn btn-warning btn-sm">اضافه کردن دسته‌بندی</a>
+                    <a href="{{ path('app_category_index') }}" class="btn btn-secondary btn-sm">مدیریت دسته‌بندی</a>
                 </div>
             </div>
         </div>
-
+                
         <!-- Card 5: مدیریت تماس با ما -->
         <div class="col-md-4 mb-4">
             <div class="card">

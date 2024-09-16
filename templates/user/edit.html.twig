@@ -1,27 +1,21 @@
 {% extends 'base.html.twig' %}
-
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد', 'url': path('app_panel')},
+        {'label': 'پروفایل'},
+    ] %}
+    {% set title = 'ویرایش پروفایل' %}
+    
+    {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
+{% endblock %}
 {% block title %}New Article{% endblock %}
 {% block jshead %}
 
-<script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 
 {% endblock %}
 {% block js %}
-    <script>
-        CKEDITOR.replace( 'editor1',{
-        language: 'fa'
 
-        } );
-    </script>
-        <script>
-        $(document).ready(function() {
-            $('.DroidNaskh').select2({
-                placeholder: "Select or add fruits",
-                allowClear: true,
-                tags: true
-            });
-        });
-    </script>
 {% endblock %}
 {% block body %}
     <!--begin::Content-->

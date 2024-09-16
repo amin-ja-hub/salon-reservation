@@ -1,4 +1,13 @@
 {% extends "base.html.twig" %}
+{% block breadcrumbs %}
+    {% set breadcrumbs = [
+        {'label': 'خانه', 'url': path('app_home')},
+        {'label': 'داشبورد'},
+    ] %}
+    {% set title = 'داشبورد کاربر' %}
+    
+    {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
+{% endblock %}
 {% block body %}
     <div class="container-fluid mt-5" style="min-height: 100%">
         <!-- Welcome Section -->
@@ -28,7 +37,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title mt-3">مدیریت زمان‌های رزرو شده</h5>
                         <p class="card-text">زمان‌های رزرو شده خود را بررسی و مدیریت کنید.</p>
-                        <a href="{{ path('app_reservation_personnel') }}" class="btn btn-success">مدیریت زمان‌های رزرو شده</a>
+                        <a href="{{ path('app_reservation_user') }}" class="btn btn-success">مدیریت زمان‌های رزرو شده</a>
                     </div>
                 </div>
             </div>
