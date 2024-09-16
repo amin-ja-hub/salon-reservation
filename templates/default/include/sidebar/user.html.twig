@@ -5,7 +5,7 @@
         <div class="aside-user d-flex align-items-sm-center justify-content-center py-5">
                 <!--begin::Symbol-->
                 <div class="symbol symbol-50px">
-                        <img src="https://metronictheme.job100.ir/rtl/metronic8/demo8/dist/assets/media/avatars/300-1.jpg" alt="" />
+                        <img src="{{ UserImage }}" alt="" />
                 </div>
                 <!--end::Symbol-->
                 <!--begin::Wrapper-->
@@ -14,12 +14,17 @@
                         <div class="d-flex">
                                 <!--begin::Info-->
                                 <div class="flex-grow-1 me-2">
-                                        <!--begin::کاربرname-->
-                                        <span class="text-white text-hover-primary fs-6 fw-bold">{{ app.user.fullname }}</span>
-                                        <!--end::کاربرname-->
-                                        <!--begin::توضیحات-->
-                                        <span class="text-gray-600 fw-semibold d-block fs-8 mb-1">ادمین سایت</span>
-                                        <!--end::توضیحات-->
+                                    <!--begin::کاربرname-->
+                                    <span class="text-white text-hover-primary fs-6 fw-bold">{{ app.user.fullname }}</span>
+                                    <!--end::کاربرname-->
+                                    <!--begin::توضیحات-->
+                                    <span class="text-gray-600 fw-semibold d-block fs-8 mb-1">پرسونل:
+                                        {% for service in app.user.services %}
+                                            {{ service.title }}
+                                            {% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <!--end::توضیحات-->
                                 </div>
                                 <!--end::Info-->
                                 <!--begin::کاربر menu-->
@@ -38,11 +43,11 @@
                                                         <div class="menu-content d-flex align-items-center px-3">
                                                                 <!--begin::Avatar-->
                                                                 <div class="symbol symbol-50px me-5">
-                                                                        <img alt="Logo" src="{% if app.user.image is not null %}{{ asset(app.user.image.path ~'/'~app.user.image.name) }}{% else %}{{ asset('panel/assets/media/images/not-found.png') }} {% endif %}" />
+                                                                        <img alt="Logo" src="{{ UserImage }}" />
                                                                 </div>
                                                                 <!--end::Avatar-->
                                                                 <div class="menu-item px-5">
-                                                                        <a href="{{ path('app_user_edit', {'id': app.user.id}) }}" class="menu-link px-5">پروفایل من</a>
+                                                                        <a href="{{ path('app_user_edit_self') }}" class="menu-link px-5">پروفایل من</a>
                                                                 </div>
                                                         </div>
                                                 </div>
@@ -77,11 +82,11 @@
                 <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
                         <!--begin:Menu item-->
                         <div class="menu-item pt-5">
-                                <!--begin:Menu content-->
-                                <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">صفحات</span>
-                                </div>
-                                <!--end:Menu content-->
+                            <!--begin:Menu content-->
+                            <div class="menu-content">
+                                    <span class="menu-heading fw-bold text-uppercase fs-7">صفحات</span>
+                            </div>
+                            <!--end:Menu content-->
                         </div>
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
@@ -89,11 +94,14 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
+                                <a class="menu-link" href="{{ path('app_reservation_personnel') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="bi bi-calendar-check">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                        </i>
                                     </span>
-                                    <h3 class="menu-title">رزومه های من</h3>
+                                    <h3 class="menu-title">زمان های رزرو شده</h3>
                                 </a>
                                 <!--end:Menu link-->
                             </div>
@@ -101,11 +109,11 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
+                                <a class="menu-link" href="{{ path('app_user_edit_self') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="bi bi-person-badge"></i>
                                     </span>
-                                    <h3 class="menu-title">افزودن رزومه</h3>
+                                    <h3 class="menu-title">من کیستم؟</h3>
                                 </a>
                                 <!--end:Menu link-->
                             </div>
@@ -113,33 +121,9 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
+                                <a class="menu-link" href="{{ path('app_logout') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <h3 class="menu-title">پرداخت ها</h3>
-                                </a>
-                                <!--end:Menu link-->
-                            </div>
-                            <!--end:Menu item-->
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <h3 class="menu-title">قالب های ما</h3>
-                                </a>
-                                <!--end:Menu link-->
-                            </div>
-                            <!--end:Menu item-->
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="fas fa-sign-out-alt"></i>
                                     </span>
                                     <h3 class="menu-title">خروج از حساب کاربری</h3>
                                 </a>

@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/file')]
+#[Route('/')]
 class FileController extends AbstractController
 {
-    #[Route('/', name: 'app_file_index', methods: ['GET'])]
+    #[Route('/admin/file', name: 'app_file_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $files = $entityManager
@@ -25,7 +25,7 @@ class FileController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_file_new', methods: ['GET', 'POST'])]
+    #[Route('file/new', name: 'app_file_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $file = new File();
@@ -45,7 +45,7 @@ class FileController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_file_show', methods: ['GET'])]
+    #[Route('file/{id}', name: 'app_file_show', methods: ['GET'])]
     public function show(File $file): Response
     {
         return $this->render('file/show.html.twig', [
@@ -53,7 +53,7 @@ class FileController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_file_edit', methods: ['GET', 'POST'])]
+    #[Route('file/{id}/edit', name: 'app_file_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, File $file, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(FileType::class, $file);
@@ -71,7 +71,7 @@ class FileController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_file_delete', methods: ['POST'])]
+    #[Route('admin/file/{id}', name: 'app_file_delete', methods: ['POST'])]
     public function delete(Request $request, File $file, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$file->getId(), $request->getPayload()->getString('_token'))) {

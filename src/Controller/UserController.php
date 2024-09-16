@@ -118,6 +118,7 @@ class UserController extends AbstractController
             $user->setFullName($formData['name']);
             $user->setEmail($formData['email']);
             $user->setMobile($formData['mobile']);
+            $user->setText($formData['text']);
             $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
             $user->setPassword($hashedPassword);
             $user->setPlainPassword($plainPassword);
@@ -131,7 +132,7 @@ class UserController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_profile', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_panel', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [

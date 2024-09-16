@@ -61,6 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'user_service')]
     private Collection $services;
 
+    #[ORM\Column(type: "text", nullable: true)]
+    private ?string $text;    
+    
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -267,6 +270,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeService(Service $service): static
     {
         $this->services->removeElement($service);
+
+        return $this;
+    }
+
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(?string $text): static
+    {
+        $this->text = $text;
 
         return $this;
     }

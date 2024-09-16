@@ -11,10 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Comment; // Ensure you have the correct namespace
 use App\Service\Service;
-#[Route('/admin')]
+#[Route('/')]
 class PanelController extends AbstractController
 {
-    #[Route('/update-field', name: 'update_field', methods: ['POST'])]
+    #[Route('admin/update-field', name: 'update_field', methods: ['POST'])]
     public function updateField(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $tableName = $request->request->get('table'); // Retrieve 'table' from POST request
@@ -63,7 +63,7 @@ class PanelController extends AbstractController
         }
     }
 
-    #[Route('/add-commet', name: 'add_comment', methods: ['POST'])]
+    #[Route('admin/add-commet', name: 'add_comment', methods: ['POST'])]
     public function addCommentAction(Request $request,EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -96,16 +96,20 @@ class PanelController extends AbstractController
             return new JsonResponse(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
-    #[Route('/upload-file', name: 'upload_file', methods: ['POST'])]
-    public function uploadFiles(Request $request, Service $service) {
-        $type = $request->request->get('type');
-        $id = $request->request->get('id');
-        $status = $request->request->get('status');
-        $files = $request->files->get('files');
-
-        $fileAddresses = $service->uploadFile($type, $files, $id, $status);
-
-        return new JsonResponse(['fileAddresses' => $fileAddresses]);
+    
+    #[Route('/panel', name: 'app_panel', methods: ['GET', 'POST'])]
+    public function panelAction(Request $request, EntityManagerInterface $entityManager)
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $folder = 'admin';
+        } elseif ($this->isGranted('ROLE_PERSONNEL')) {
+            $folder = 'personnel';
+        } elseif ($this->isGranted('ROLE_USER')) {
+            $folder = 'user';
+        }
+        
+        return $this->render("default/panel/$folder.html.twig");
     }
+
 
 }

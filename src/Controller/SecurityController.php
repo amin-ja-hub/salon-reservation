@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Form\RegistrationType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,39 +16,39 @@ use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 
 class SecurityController extends AbstractController
 {
-#[Route('/register', name: 'app_register')]
-public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator, FormLoginAuthenticator $formLoginAuthenticator): Response
-{
-    $user = new User();
-    $form = $this->createForm(RegistrationFormType::class, $user);
-    $form->handleRequest($request);
+    #[Route('/register', name: 'app_register')]
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator, FormLoginAuthenticator $formLoginAuthenticator): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationType::class, $user);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Encode the plain password
-        $hashedPassword = $passwordHasher->hashPassword(
-            $user,
-            $form->get('plainPassword')->getData()
-        );
-        $user->setPassword($hashedPassword);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Encode the plain password
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $form->get('plainPassword')->getData()
+            );
+            $user->setPassword($hashedPassword);
 
-        // Set default role
-        $user->setRoles('0');
+            // Set default role
+            $user->setRoles('0');
 
-        $entityManager->persist($user);
-        $entityManager->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-        // Authenticate the user with the injected FormLoginAuthenticator
-        return $userAuthenticator->authenticateUser(
-            $user,
-            $formLoginAuthenticator,  // Use the injected authenticator
-            $request
-        );
+            // Authenticate the user with the injected FormLoginAuthenticator
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $formLoginAuthenticator,  // Use the injected authenticator
+                $request
+            );
+        }
+
+        return $this->render('default/security/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
     }
-
-    return $this->render('default/security/register.html.twig', [
-        'registrationForm' => $form->createView(),
-    ]);
-}
 
 
     #[Route('/login', name: 'app_login')]

@@ -19,7 +19,7 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                default_target_path: app_article_index
+                default_target_path: app_panel
 
                 enable_csrf: true
             logout:
@@ -34,9 +34,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/reserve, roles: [ROLE_ADMIN,ROLE_USER] }
-         - { path: ^/profile, roles: [ROLE_ADMIN,ROLE_USER]}
-
+         - { path: ^/user, roles: [ROLE_USER,ROLE_ADMIN,ROLE_PERSONNEL] }
+         - { path: ^/personnel, roles: [ROLE_PERSONNEL,ROLE_ADMIN] }
+         - { path: ^/reserve, roles: [ROLE_PERSONNEL,ROLE_ADMIN,ROLE_USER] }
+         - { path: ^/panel, roles: [ROLE_PERSONNEL,ROLE_ADMIN,ROLE_USER] }
 when@test:
     security:
         password_hashers:

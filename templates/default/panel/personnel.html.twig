@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="container-fluid mt-5" style="min-height: 100%">
+        <!-- Welcome Section -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <div class="alert alert-primary d-flex align-items-center justify-content-center rounded-4 shadow-lg">
+                    <div>
+                        <h4 class="alert-heading mb-2">{{ app.user.fullName ?? app.user.username }}, خوش آمدید!</h4>
+                        <p>به داشبورد مدیریت خوش آمدید. سه بخش کلیدی را در زیر مشاهده کنید.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="row g-4">
+            <!-- Card 1: مدیریت زمان کاری من -->
+            <div class="col-lg-4 col-md-12">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100">
+                    <div class="card-img-top bg-primary text-white d-flex align-items-center justify-content-center p-4">
+                        <!-- SVG for Clock (larger) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                            <path d="M8 3.5a.5.5 0 0 1 .5.5v4.25l3.15 1.857a.5.5 0 0 1-.5.866l-3.5-2.059A.5.5 0 0 1 7.5 8.5V4a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mt-3">مدیریت زمان کاری من</h5>
+                        <p class="card-text">زمان کاری خود را به‌راحتی مدیریت کنید.</p>
+                        <a href="{{ path('app_work_schedule_index') }}" class="btn btn-primary">مشاهده زمان کاری</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: مدیریت زمان‌های رزرو شده -->
+            <div class="col-lg-4 col-md-12 ">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100">
+                    <div class="card-img-top bg-success text-white d-flex align-items-center justify-content-center p-4">
+                        <!-- SVG for Calendar (larger) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1zm1-1h12V3a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v1z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mt-3">مدیریت زمان‌های رزرو شده</h5>
+                        <p class="card-text">زمان‌های رزرو شده خود را بررسی و مدیریت کنید.</p>
+                        <a href="{{ path('app_reservation_personnel') }}" class="btn btn-success">مدیریت زمان‌های رزرو شده</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: ویرایش اطلاعات -->
+            <div class="col-lg-4 col-md-12 ">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100">
+                    <div class="card-img-top bg-warning text-white d-flex align-items-center justify-content-center p-4">
+                        <!-- SVG for Profile (larger) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mt-3">ویرایش اطلاعات</h5>
+                        <p class="card-text">پروفایل خود را تکمیل و به‌روزرسانی کنید.</p>
+                        <a href="{{ path('app_user_edit_self') }}" class="btn btn-warning text-white">تکمیل پروفایل</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

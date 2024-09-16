@@ -5,7 +5,7 @@
         <div class="aside-user d-flex align-items-sm-center justify-content-center py-5">
                 <!--begin::Symbol-->
                 <div class="symbol symbol-50px">
-                        <img src="https://metronictheme.job100.ir/rtl/metronic8/demo8/dist/assets/media/avatars/300-1.jpg" alt="" />
+                        <img src="{{ UserImage }}" alt="" />
                 </div>
                 <!--end::Symbol-->
                 <!--begin::Wrapper-->
@@ -43,7 +43,7 @@
                                                         <div class="menu-content d-flex align-items-center px-3">
                                                                 <!--begin::Avatar-->
                                                                 <div class="symbol symbol-50px me-5">
-                                                                        <img alt="Logo" src="{% if app.user.image is not null %}{{ asset(app.user.image.path ~'/'~app.user.image.name) }}{% else %}{{ asset('panel/assets/media/images/not-found.png') }} {% endif %}" />
+                                                                        <img alt="Logo" src="{{ UserImage }}" />
                                                                 </div>
                                                                 <!--end::Avatar-->
                                                                 <div class="menu-item px-5">
@@ -96,7 +96,10 @@
                                 <!--begin:Menu link-->
                                 <a class="menu-link" href="{{ path('app_work_schedule_index') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="bi bi-clock text-muted">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>                                   
                                     </span>
                                     <h3 class="menu-title">زمان کاری من</h3>
                                 </a>
@@ -106,9 +109,12 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
+                                <a class="menu-link" href="{{ path('app_reservation_personnel') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="bi bi-calendar-check">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                        </i>
                                     </span>
                                     <h3 class="menu-title">زمان های رزرو شده</h3>
                                 </a>
@@ -118,9 +124,9 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" href="{{ path('app_article_new') }}">
+                                <a class="menu-link" href="{{ path('app_user_edit_self') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="bi bi-person-badge"></i>
                                     </span>
                                     <h3 class="menu-title">من کیستم؟</h3>
                                 </a>
@@ -132,7 +138,7 @@
                                 <!--begin:Menu link-->
                                 <a class="menu-link" href="{{ path('app_article_new') }}">
                                     <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
+                                        <i class="fas fa-sign-out-alt"></i>
                                     </span>
                                     <h3 class="menu-title">خروج از حساب کاربری</h3>
                                 </a>
