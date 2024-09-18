@@ -10,7 +10,7 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}افزودن مقاله{% endblock %}
+{% block title %}افزودن خدمات{% endblock %}
 {% block jshead %}
 
 <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
@@ -139,57 +139,35 @@
                                                     <!--end::کارت body-->
                                             </div>
                                             <!--end::Thumbnail settings-->
-                                            <!--begin::وضعیت-->
-                                            <div class="card card-flush py-4">
-                                                    <!--begin::کارت header-->
-                                                    <div class="card-header">
-                                                            <!--begin::کارت title-->
-                                                            <div class="card-title">
-                                                                    <h2>وضعیت</h2>
-                                                            </div>
-                                                            <!--end::کارت title-->
-                                                            <!--begin::کارت toolbar-->
-                                                            <div class="card-toolbar">
-                                                                    <div class="rounded-circle bg-success w-15px h-15px" id="kt_ecommerce_add_product_status"></div>
-                                                            </div>
-                                                            <!--begin::کارت toolbar-->
-                                                    </div>
-                                                    <!--end::کارت header-->
-                                                    <!--begin::کارت body-->
-                                                    <div class="card-body pt-0">
-                                                            <!--begin::انتخاب2-->
-                                                            <select class="form-select mb-2" name="publish" data-control="select2" data-hide-search="true" data-placeholder="انتخاب " id="kt_ecommerce_add_product_status_select">
-                                                                    <option></option>
-                                                                    <option value="1" selected="selected">منتشر شده</option>
-                                                                    <option value="0">پیش نویس</option>
-                                                            </select>
-                                                            <!--end::انتخاب2-->
-                                                            <!--begin::توضیحات-->
-                                                            <div class="text-muted fs-7">وضعیت محصول را تنظیم کنید.</div>
-                                                            <!--end::توضیحات-->
-                                                            <!--begin::تاریخpicker-->
-                                                            <div class="d-none mt-10">
-                                                                    <label for="kt_ecommerce_add_product_status_datepicker" class="form-label">انتخاب publishing date and time</label>
-                                                                    <input class="form-control" id="kt_ecommerce_add_product_status_datepicker" placeholder="انتخاب تاریخ & time" />
-                                                            </div>
-                                                            <!--end::تاریخpicker-->
-                                                    </div>
-                                                    <!--end::کارت body-->
-                                            </div>
-                                            <!--end::وضعیت-->
                                             <!--begin::دسته بندی & tags-->
                                             <div class="card card-flush py-4">
                                                     <!--begin::کارت header-->
                                                     <div class="card-header">
                                                             <!--begin::کارت title-->
                                                             <div class="card-title">
-                                                                    <h2>محصولات جزییات</h2>
+                                                                    <h2>جزییات خدمات</h2>
                                                             </div>
                                                             <!--end::کارت title-->
                                                     </div>
                                                     <!--end::کارت header-->
                                                     <!--begin::کارت body-->
                                                     <div class="card-body pt-0">
+                                                            <!--begin::Input group-->
+                                                            <label class="form-label">زیر مجموعه</label>
+                                                            {{ form_widget(form.parent, {'attr': {'class': 'form-select mb-2', 'data-control': 'select2', 'data-placeholder': 'انتخاب زیر مجموعه'}}) }}
+
+                                                            <label class="form-label">دسته بندی</label>
+                                                            {{ form_widget(form.category, {'attr': {'class': 'form-select mb-2', 'data-control': 'select2', 'data-placeholder': 'انتخاب زیر مجموعه'}}) }}
+
+                                                            <!--end::انتخاب2-->
+                                                            <!--begin::توضیحات-->
+                                                            <div class="text-muted fs-7 mb-7">افزودن دسته بندی به خدمات.</div>
+                                                            <!--end::توضیحات-->
+                                                            <!--end::Input group-->
+                                                            <!--begin::Button-->
+                                                            <a href="{{ path('app_category_new') }}" target="_blank" class="btn btn-light-primary btn-sm mb-10">
+                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن دسته بندی</a>
+                                                            <!--end::Button-->
                                                             <!--begin::Input group-->
                                                             <!--begin::Tags-->
                                                             <label class="form-label d-block">متا توضیحات</label>
@@ -226,15 +204,6 @@
                                     <!--end::کناری column-->
                                     <!--begin::اصلی column-->
                                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                            <!--begin:::Tabs-->
-                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2">
-                                                    <!--begin:::Tab item-->
-                                                    <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="../../../index.html#kt_ecommerce_add_product_general">عمومی</a>
-                                                    </li>
-                                                    <!--end:::Tab item-->
-                                            </ul>
-                                            <!--end:::Tabs-->
                                             <!--begin::Tab content-->
                                             <div class="tab-content">
                                                     <!--begin::Tab pane-->
@@ -242,25 +211,18 @@
                                                             <div class="d-flex flex-column gap-7 gap-lg-10">
                                                                     <!--begin::عمومی options-->
                                                                     <div class="card card-flush py-4">
-                                                                            <!--begin::کارت header-->
-                                                                            <div class="card-header">
-                                                                                    <div class="card-title">
-                                                                                            <h2>عمومی</h2>
-                                                                                    </div>
-                                                                            </div>
-                                                                            <!--end::کارت header-->
                                                                             <!--begin::کارت body-->
                                                                             <div class="card-body pt-0">
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">محصولات نام</label>
+                                                                                            <label class="required form-label">عنوان خدمات</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
-                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام محصول" value="" />
+                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام خدمات" value="" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">نام محصول مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
+                                                                                            <div class="text-muted fs-7">نام خدمات مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -271,12 +233,11 @@
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::or-->
                                                                                             <div id="kt_ecommerce_add_product_description" name="kt_ecommerce_add_product_description" class="min-h-200px mb-2">
-<textarea id="editor1" name="text"></textarea>
-
+                                                                                                <textarea id="editor1" name="text"></textarea>
                                                                                             </div>
                                                                                             <!--end::or-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای محصول تنظیم کنید.</div>
+                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای خدمات تنظیم کنید.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -298,13 +259,13 @@
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">لینک مقاله</label>
+                                                                                            <label class="required form-label">لینک خدمات</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
                                                                                             <input type="text" name="url" class="form-control mb-2" placeholder="لینک را وارد کنید" value="" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">لینک مقاله باید منحصر به فرد باشد</div>
+                                                                                            <div class="text-muted fs-7">لینک خدمات باید منحصر به فرد باشد</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->

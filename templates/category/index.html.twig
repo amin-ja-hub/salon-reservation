@@ -88,7 +88,6 @@
 
 {% endblock %}
 {% block body %}
-
     <!--begin::Content-->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <!--begin::Post-->
@@ -129,7 +128,6 @@
                                                             <th class="text-start min-w-100px">عنوان</th>
                                                             <th class="text-start min-w-100px">زمان ساخت</th>
                                                             <th class="text-start min-w-100px">زمان آپدیت</th>
-                                                            <th class="text-start min-w-100px">کاربر</th>
                                                             <th class="text-start min-w-40px">وضعیت</th>
                                                             <th class="text-start min-w-70px">عملیات</th>
                                                         </tr>
@@ -168,10 +166,6 @@
                                                                     </td>
                                                                     <td class="text-center pe-0" data-order="در انتظار">
                                                                     <span>{{ category.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian' , 'Asia/Tehran' , 'yyy/MM/dd' ) }} ساعت {{ category.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian' , 'Asia/Tehran' , ' HH:mm' ) }}</span>
-                                                                    </td>
-                                                                    <td class="text-start">
-                                                                        {{ category.user.id ?? 'No user' }}
-
                                                                     </td>
                                                                     <td class="text-start">
                                                                         {% if category.published == 1 %}

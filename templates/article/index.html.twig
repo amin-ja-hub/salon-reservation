@@ -130,7 +130,6 @@
                                                             <th class="text-start min-w-70px">بازدید</th>
                                                             <th class="text-start min-w-100px">زمان ساخت</th>
                                                             <th class="text-start min-w-100px">زمان آپدیت</th>
-                                                            <th class="text-start min-w-100px">کاربر</th>
                                                             <th class="text-start min-w-40px">وضعیت</th>
                                                             <th class="text-start min-w-70px">عملیات</th>
                                                         </tr>
@@ -144,7 +143,7 @@
                                                                             <!--begin::Thumbnail-->
                                                                             {% if article.image is not null %}
                                                                                 <a href="کاربران" class="symbol symbol-50px">
-                                                                                    <span class="symbol-label" style="background-image: url({{ asset(article.image.path ~'/'~article.image.name) }})"></span>
+                                                                                    <span class="symbol-label" style="background-image: url({{ asset(article.image.path ~'/85x85_'~article.image.name) }}.webp"></span>
                                                                                 </a>
                                                                             {% else %}
                                                                                 <a href="کاربران" class="symbol symbol-50px">
@@ -172,10 +171,6 @@
                                                                     </td>
                                                                     <td class="text-center pe-0" data-order="در انتظار">
                                                                     <span>{{ article.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian' , 'Asia/Tehran' , 'yyy/MM/dd' ) }} ساعت {{ article.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian' , 'Asia/Tehran' , ' HH:mm' ) }}</span>
-                                                                    </td>
-                                                                    <td class="text-start">
-                                                                        {{ article.user.id ?? 'No user' }}
-
                                                                     </td>
                                                                     <td class="text-start">
                                                                         {% if article.published == 1 %}

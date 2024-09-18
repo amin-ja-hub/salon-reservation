@@ -10,7 +10,7 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}New Article{% endblock %}
+{% block title %}ویرایش {{article.title}}{% endblock %}
 {% block jshead %}
 
 <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
@@ -110,7 +110,7 @@
                                                     <div class="card-header">
                                                             <!--begin::کارت title-->
                                                             <div class="card-title">
-                                                                    <h2>محصولات جزییات</h2>
+                                                                    <h2>جزییات مقاله</h2>
                                                             </div>
                                                             <!--end::کارت title-->
                                                     </div>
@@ -136,8 +136,8 @@
                                                             <!--end::توضیحات-->
                                                             <!--end::Input group-->
                                                             <!--begin::Button-->
-                                                            <a href="add-category.html" class="btn btn-light-primary btn-sm mb-10">
-                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن new category</a>
+                                                            <a href="{{ path('app_category_new') }}" target="_blank" class="btn btn-light-primary btn-sm mb-10">
+                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن دسته بندی</a>
                                                             <!--end::Button-->
                                                             <!--begin::Input group-->
                                                             <!--begin::Tags-->
@@ -178,20 +178,6 @@
                                     <!--end::کناری column-->
                                     <!--begin::اصلی column-->
                                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                            <!--begin:::Tabs-->
-                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2">
-                                                    <!--begin:::Tab item-->
-                                                    <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="../../../index.html#kt_ecommerce_add_product_general">عمومی</a>
-                                                    </li>
-                                                    <!--end:::Tab item-->
-                                                    <!--begin:::Tab item-->
-                                                    <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="../../../index.html#kt_ecommerce_add_product_advanced">پیشرفته</a>
-                                                    </li>
-                                                    <!--end:::Tab item-->
-                                            </ul>
-                                            <!--end:::Tabs-->
                                             <!--begin::Tab content-->
                                             <div class="tab-content">
                                                     <!--begin::Tab pane-->
@@ -199,25 +185,18 @@
                                                             <div class="d-flex flex-column gap-7 gap-lg-10">
                                                                     <!--begin::عمومی options-->
                                                                     <div class="card card-flush py-4">
-                                                                            <!--begin::کارت header-->
-                                                                            <div class="card-header">
-                                                                                    <div class="card-title">
-                                                                                            <h2>عمومی</h2>
-                                                                                    </div>
-                                                                            </div>
-                                                                            <!--end::کارت header-->
                                                                             <!--begin::کارت body-->
                                                                             <div class="card-body pt-0">
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">محصولات نام</label>
+                                                                                            <label class="required form-label">عنوان مقاله</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
-                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام محصول" value="{{ article.title }}" />
+                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام مقاله" value="{{ article.title }}" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">نام محصول مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
+                                                                                            <div class="text-muted fs-7">نام مقاله مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -232,7 +211,7 @@
                                                                                             </div>
                                                                                             <!--end::or-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای محصول تنظیم کنید.</div>
+                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای مقاله تنظیم کنید.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -271,58 +250,11 @@
                                                             </div>
                                                     </div>
                                                     <!--end::Tab pane-->
-                                                    <!--begin::Tab pane-->
-                                                    <div class="tab-pane fade" id="kt_ecommerce_add_product_advanced" role="tab-panel">
-                                                            <div class="d-flex flex-column gap-7 gap-lg-10">
-                                                                    <!--begin::Media-->
-                                                                    <div class="card card-flush py-4">
-                                                                            <!--begin::کارت header-->
-                                                                            <div class="card-header">
-                                                                                    <div class="card-title">
-                                                                                            <h2>رسانه</h2>
-                                                                                    </div>
-                                                                            </div>
-                                                                            <!--end::کارت header-->
-                                                                            <!--begin::کارت body-->
-                                                                            <div class="card-body pt-0">
-                                                                                    <!--begin::Input group-->
-                                                                                    <div class="fv-row mb-2">
-                                                                                            <!--begin::Dropzone-->
-                                                                                            <div class="dropzone" id="kt_ecommerce_add_product_media">
-                                                                                                    <!--begin::Message-->
-                                                                                                    <div class="dz-message needsclick">
-                                                                                                            <!--begin::Icon-->
-                                                                                                            <i class="ki-duotone ki-file-up text-primary fs-3x">
-                                                                                                                    <span class="path1"></span>
-                                                                                                                    <span class="path2"></span>
-                                                                                                            </i>
-                                                                                                            <!--end::Icon-->
-                                                                                                            <!--begin::Info-->
-                                                                                                            <div class="ms-4">
-                                                                                                                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">فایل ها را اینجا رها کنید یا برای آپلود کلیک کنید.</h3>
-                                                                                                                    <span class="fs-7 fw-semibold text-gray-400">اپلود فایل بیش از 10 تا</span>
-                                                                                                            </div>
-                                                                                                            <!--end::Info-->
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <!--end::Dropzone-->
-                                                                                    </div>
-                                                                                    <!--end::Input group-->
-                                                                                    <!--begin::توضیحات-->
-                                                                                    <div class="text-muted fs-7">گالری رسانه محصول را تنظیم کنید.</div>
-                                                                                    <!--end::توضیحات-->
-                                                                            </div>
-                                                                            <!--end::کارت header-->
-                                                                    </div>
-                                                                    <!--end::Media-->
-                                                            </div>
-                                                    </div>
-                                                    <!--end::Tab pane-->
                                             </div>
                                             <!--end::Tab content-->
                                             <div class="d-flex justify-content-end">
                                                     <!--begin::Button-->
-                                                    <a href="products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">انصراف</a>
+                                                    <a href="{{ path('app_article_index') }}" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">انصراف</a>
                                                     <!--end::Button-->
                                                     <!--begin::Button-->
                                                     <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary">

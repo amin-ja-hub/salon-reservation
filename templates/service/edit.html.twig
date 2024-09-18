@@ -10,7 +10,7 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}New Article{% endblock %}
+{% block title %}ویرایش {{ service.title }}{% endblock %}
 {% block jshead %}
 
 <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
@@ -60,7 +60,7 @@
                                                     <!--begin::کارت body-->
                                                     <div class="card-body text-center pt-0">
                                                             <!--begin::Image input-->
-                                                            <!--begin::Image input placeholder-->{% set img = article.Image is not null ? article.Image.path ~ '/85x85_' ~ article.Image.name ~ '.webp' : 'a' %}
+                                                            <!--begin::Image input placeholder-->{% set img = service.Image is not null ? service.Image.path ~ '/85x85_' ~ service.Image.name ~ '.webp' : 'a' %}
                                                             <style>.image-input-placeholder { background-image: url({{ asset(img) }}); }  [data-bs-theme="dark"] .image-input-placeholder { background-image: url({{ asset(img) }}); }</style>
                                                             <!--end::Image input placeholder-->
                                                             <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
@@ -110,7 +110,7 @@
                                                     <div class="card-header">
                                                             <!--begin::کارت title-->
                                                             <div class="card-title">
-                                                                    <h2>محصولات جزییات</h2>
+                                                                    <h2>جزییات مقاله</h2>
                                                             </div>
                                                             <!--end::کارت title-->
                                                     </div>
@@ -121,30 +121,27 @@
                                                             <!--begin::Tags-->
                                                             <label class="form-label">دسته بندی ها</label>
                                                             <!--end::Tags-->
-                                                            <!--begin::انتخاب2-->
-                                                            <select name="category" class="form-select mb-2" data-control="select2" data-placeholder="انتخاب ">
-                                                                {% if article.category is not null %}
-                                                                    <option selected="" value="{{ article.category.id }}">{{ article.category.title }}</option>
-                                                                {% endif %}
-                                                                {% for category in findEntitiesWithCriteria('App\\Entity\\Category', null, {'type': '2'}) %}
-                                                                    <option value="{{ category.id }}">{{ category.title }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                            <!--end::انتخاب2-->
+                                                            <!--begin::Input group-->
+                                                            <label class="form-label">زیر مجموعه</label>
+                                                            {{ form_widget(form.parent, {'attr': {'class': 'form-select mb-2', 'data-control': 'select2', 'data-placeholder': 'انتخاب زیر مجموعه'}}) }}
+
+                                                            <label class="form-label">دسته بندی</label>
+                                                            {{ form_widget(form.category, {'attr': {'class': 'form-select mb-2', 'data-control': 'select2', 'data-placeholder': 'انتخاب زیر مجموعه'}}) }}
+
                                                             <!--begin::توضیحات-->
                                                             <div class="text-muted fs-7 mb-7">افزودن product to a category.</div>
                                                             <!--end::توضیحات-->
                                                             <!--end::Input group-->
                                                             <!--begin::Button-->
-                                                            <a href="add-category.html" class="btn btn-light-primary btn-sm mb-10">
-                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن new category</a>
+                                                            <a href="{{ path('app_category_new') }}" target="_blank" class="btn btn-light-primary btn-sm mb-10">
+                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن دسته بندی</a>
                                                             <!--end::Button-->
                                                             <!--begin::Input group-->
                                                             <!--begin::Tags-->
                                                             <label class="form-label d-block">متا توضیحات</label>
                                                             <!--end::Tags-->
                                                             <!--begin::Input-->
-                                                            <textarea name="metadesc" class="form-control mb-2">{{ article.metadesc }}</textarea>
+                                                            <textarea name="metadesc" class="form-control mb-2">{{ service.metadesc }}</textarea>
                                                             <!--end::Input-->
                                                             <!--begin::توضیحات-->
                                                             <div class="text-muted fs-7">افزودن متا توضیحات</div>
@@ -154,9 +151,9 @@
                                                             <div class="form-group col-md-12">
                                                                 <label class="form-label d-block pt-10">متا کلمات کلیدی</label>
                                                                 <select name="keywords[]" class="DroidNaskh form-control mb-2" multiple data-role="tagsinput">
-                                                                    {% for barchasb in barchasbs %}
+                                                                    {% for barchasb in service.Barchasbs %}
                                                                         <option value="{{ barchasb.title }}"
-                                                                            {% if article.barchasbs.contains(barchasb) %} selected {% endif %}>
+                                                                            {% if service.barchasbs.contains(barchasb) %} selected {% endif %}>
                                                                             {{ barchasb.title }}
                                                                         </option>
                                                                     {% endfor %}
@@ -178,20 +175,6 @@
                                     <!--end::کناری column-->
                                     <!--begin::اصلی column-->
                                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                            <!--begin:::Tabs-->
-                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2">
-                                                    <!--begin:::Tab item-->
-                                                    <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="../../../index.html#kt_ecommerce_add_product_general">عمومی</a>
-                                                    </li>
-                                                    <!--end:::Tab item-->
-                                                    <!--begin:::Tab item-->
-                                                    <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="../../../index.html#kt_ecommerce_add_product_advanced">پیشرفته</a>
-                                                    </li>
-                                                    <!--end:::Tab item-->
-                                            </ul>
-                                            <!--end:::Tabs-->
                                             <!--begin::Tab content-->
                                             <div class="tab-content">
                                                     <!--begin::Tab pane-->
@@ -199,25 +182,18 @@
                                                             <div class="d-flex flex-column gap-7 gap-lg-10">
                                                                     <!--begin::عمومی options-->
                                                                     <div class="card card-flush py-4">
-                                                                            <!--begin::کارت header-->
-                                                                            <div class="card-header">
-                                                                                    <div class="card-title">
-                                                                                            <h2>عمومی</h2>
-                                                                                    </div>
-                                                                            </div>
-                                                                            <!--end::کارت header-->
                                                                             <!--begin::کارت body-->
                                                                             <div class="card-body pt-0">
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">محصولات نام</label>
+                                                                                            <label class="required form-label">عنوان مقاله</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
-                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام محصول" value="{{ article.title }}" />
+                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام مقاله" value="{{ service.title }}" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">نام محصول مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
+                                                                                            <div class="text-muted fs-7">نام مقاله مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -228,11 +204,11 @@
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::or-->
                                                                                             <div id="kt_ecommerce_add_product_description" name="kt_ecommerce_add_product_description" class="min-h-200px mb-2">
-                                                                                                <textarea id="editor1" name="text">{{ article.text }}</textarea>
+                                                                                                <textarea id="editor1" name="text">{{ service.text }}</textarea>
                                                                                             </div>
                                                                                             <!--end::or-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای محصول تنظیم کنید.</div>
+                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای مقاله تنظیم کنید.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -257,7 +233,7 @@
                                                                                             <label class="required form-label">لینک مقاله</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
-                                                                                            <input type="text" name="url" class="form-control mb-2" placeholder="لینک را وارد کنید" value="{{ article.url }}" />
+                                                                                            <input type="text" name="url" class="form-control mb-2" placeholder="لینک را وارد کنید" value="{{ service.url }}" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
                                                                                             <div class="text-muted fs-7">لینک مقاله باید منحصر به فرد باشد</div>
@@ -271,58 +247,11 @@
                                                             </div>
                                                     </div>
                                                     <!--end::Tab pane-->
-                                                    <!--begin::Tab pane-->
-                                                    <div class="tab-pane fade" id="kt_ecommerce_add_product_advanced" role="tab-panel">
-                                                            <div class="d-flex flex-column gap-7 gap-lg-10">
-                                                                    <!--begin::Media-->
-                                                                    <div class="card card-flush py-4">
-                                                                            <!--begin::کارت header-->
-                                                                            <div class="card-header">
-                                                                                    <div class="card-title">
-                                                                                            <h2>رسانه</h2>
-                                                                                    </div>
-                                                                            </div>
-                                                                            <!--end::کارت header-->
-                                                                            <!--begin::کارت body-->
-                                                                            <div class="card-body pt-0">
-                                                                                    <!--begin::Input group-->
-                                                                                    <div class="fv-row mb-2">
-                                                                                            <!--begin::Dropzone-->
-                                                                                            <div class="dropzone" id="kt_ecommerce_add_product_media">
-                                                                                                    <!--begin::Message-->
-                                                                                                    <div class="dz-message needsclick">
-                                                                                                            <!--begin::Icon-->
-                                                                                                            <i class="ki-duotone ki-file-up text-primary fs-3x">
-                                                                                                                    <span class="path1"></span>
-                                                                                                                    <span class="path2"></span>
-                                                                                                            </i>
-                                                                                                            <!--end::Icon-->
-                                                                                                            <!--begin::Info-->
-                                                                                                            <div class="ms-4">
-                                                                                                                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">فایل ها را اینجا رها کنید یا برای آپلود کلیک کنید.</h3>
-                                                                                                                    <span class="fs-7 fw-semibold text-gray-400">اپلود فایل بیش از 10 تا</span>
-                                                                                                            </div>
-                                                                                                            <!--end::Info-->
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <!--end::Dropzone-->
-                                                                                    </div>
-                                                                                    <!--end::Input group-->
-                                                                                    <!--begin::توضیحات-->
-                                                                                    <div class="text-muted fs-7">گالری رسانه محصول را تنظیم کنید.</div>
-                                                                                    <!--end::توضیحات-->
-                                                                            </div>
-                                                                            <!--end::کارت header-->
-                                                                    </div>
-                                                                    <!--end::Media-->
-                                                            </div>
-                                                    </div>
-                                                    <!--end::Tab pane-->
                                             </div>
                                             <!--end::Tab content-->
                                             <div class="d-flex justify-content-end">
                                                     <!--begin::Button-->
-                                                    <a href="products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">انصراف</a>
+                                                    <a href="{{ path('app_service_index') }}" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">انصراف</a>
                                                     <!--end::Button-->
                                                     <!--begin::Button-->
                                                     <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary">
@@ -343,7 +272,6 @@
             <!--end::Post-->
     </div>
     <!--end::Content-->
-    {{ include('article/_form.html.twig') }}
 
-    <a href="{{ path('app_article_index') }}">back to list</a>
+    <a href="{{ path('app_service_index') }}">back to list</a>
 {% endblock %}

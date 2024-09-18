@@ -32,41 +32,6 @@
             });
         });
     </script>
-{#<script>
-    $(document).ready(function() {
-        $('#uploadBtn').click(function() {
-            var files = $('#fileInput')[0].files;
-            var formData = new FormData();
-
-            formData.append('type', 1); // Example type, change as needed
-            formData.append('id', 1); // Example ID, change as needed
-            formData.append('status', 'gallery'); // or 'mainpic'
-
-            for (var i = 0; i < files.length; i++) {
-                formData.append('files[]', files[i]);
-            }
-
-            $.ajax({
-                url: '{{ path('upload_file') }}',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    var fileAddresses = response.fileAddresses;
-                    var uploadedFilesDiv = $('#uploadedFiles');
-                    uploadedFilesDiv.empty();
-                    fileAddresses.forEach(function(address) {
-                        uploadedFilesDiv.append('<div>' + address + '</div>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('File upload failed:', error);
-                }
-            });
-        });
-    });
-</script>#}
 {% endblock %}
 {% block body %}
     <!--begin::Content-->
@@ -139,51 +104,13 @@
                                                     <!--end::کارت body-->
                                             </div>
                                             <!--end::Thumbnail settings-->
-                                            <!--begin::وضعیت-->
-                                            <div class="card card-flush py-4">
-                                                    <!--begin::کارت header-->
-                                                    <div class="card-header">
-                                                            <!--begin::کارت title-->
-                                                            <div class="card-title">
-                                                                    <h2>وضعیت</h2>
-                                                            </div>
-                                                            <!--end::کارت title-->
-                                                            <!--begin::کارت toolbar-->
-                                                            <div class="card-toolbar">
-                                                                    <div class="rounded-circle bg-success w-15px h-15px" id="kt_ecommerce_add_product_status"></div>
-                                                            </div>
-                                                            <!--begin::کارت toolbar-->
-                                                    </div>
-                                                    <!--end::کارت header-->
-                                                    <!--begin::کارت body-->
-                                                    <div class="card-body pt-0">
-                                                            <!--begin::انتخاب2-->
-                                                            <select class="form-select mb-2" name="publish" data-control="select2" data-hide-search="true" data-placeholder="انتخاب " id="kt_ecommerce_add_product_status_select">
-                                                                    <option></option>
-                                                                    <option value="1" selected="selected">منتشر شده</option>
-                                                                    <option value="0">پیش نویس</option>
-                                                            </select>
-                                                            <!--end::انتخاب2-->
-                                                            <!--begin::توضیحات-->
-                                                            <div class="text-muted fs-7">وضعیت محصول را تنظیم کنید.</div>
-                                                            <!--end::توضیحات-->
-                                                            <!--begin::تاریخpicker-->
-                                                            <div class="d-none mt-10">
-                                                                    <label for="kt_ecommerce_add_product_status_datepicker" class="form-label">انتخاب publishing date and time</label>
-                                                                    <input class="form-control" id="kt_ecommerce_add_product_status_datepicker" placeholder="انتخاب تاریخ & time" />
-                                                            </div>
-                                                            <!--end::تاریخpicker-->
-                                                    </div>
-                                                    <!--end::کارت body-->
-                                            </div>
-                                            <!--end::وضعیت-->
                                             <!--begin::دسته بندی & tags-->
                                             <div class="card card-flush py-4">
                                                     <!--begin::کارت header-->
                                                     <div class="card-header">
                                                             <!--begin::کارت title-->
                                                             <div class="card-title">
-                                                                    <h2>محصولات جزییات</h2>
+                                                                    <h2>جزییات مقاله</h2>
                                                             </div>
                                                             <!--end::کارت title-->
                                                     </div>
@@ -202,12 +129,12 @@
                                                             </select>
                                                             <!--end::انتخاب2-->
                                                             <!--begin::توضیحات-->
-                                                            <div class="text-muted fs-7 mb-7">افزودن product to a category.</div>
+                                                            <div class="text-muted fs-7 mb-7">افزودن دسته بندی به مقاله.</div>
                                                             <!--end::توضیحات-->
                                                             <!--end::Input group-->
                                                             <!--begin::Button-->
-                                                            <a href="add-category.html" class="btn btn-light-primary btn-sm mb-10">
-                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن new category</a>
+                                                            <a href="{{ path('app_category_new') }}" target="_blank" class="btn btn-light-primary btn-sm mb-10">
+                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن دسته بندی</a>
                                                             <!--end::Button-->
                                                             <!--begin::Input group-->
                                                             <!--begin::Tags-->
@@ -245,15 +172,6 @@
                                     <!--end::کناری column-->
                                     <!--begin::اصلی column-->
                                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                            <!--begin:::Tabs-->
-                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2">
-                                                    <!--begin:::Tab item-->
-                                                    <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="../../../index.html#kt_ecommerce_add_product_general">عمومی</a>
-                                                    </li>
-                                                    <!--end:::Tab item-->
-                                            </ul>
-                                            <!--end:::Tabs-->
                                             <!--begin::Tab content-->
                                             <div class="tab-content">
                                                     <!--begin::Tab pane-->
@@ -261,25 +179,18 @@
                                                             <div class="d-flex flex-column gap-7 gap-lg-10">
                                                                     <!--begin::عمومی options-->
                                                                     <div class="card card-flush py-4">
-                                                                            <!--begin::کارت header-->
-                                                                            <div class="card-header">
-                                                                                    <div class="card-title">
-                                                                                            <h2>عمومی</h2>
-                                                                                    </div>
-                                                                            </div>
-                                                                            <!--end::کارت header-->
                                                                             <!--begin::کارت body-->
                                                                             <div class="card-body pt-0">
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">محصولات نام</label>
+                                                                                            <label class="required form-label">عنوان مقاله</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
-                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام محصول" value="" />
+                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام مقاله" value="" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">نام محصول مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
+                                                                                            <div class="text-muted fs-7">نام مقاله مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -295,7 +206,7 @@
                                                                                             </div>
                                                                                             <!--end::or-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای محصول تنظیم کنید.</div>
+                                                                                            <div class="text-muted fs-7">برای دید بهتر، توضیحاتی را برای مقاله تنظیم کنید.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->

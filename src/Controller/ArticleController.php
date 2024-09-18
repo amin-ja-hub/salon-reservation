@@ -88,6 +88,7 @@ class ArticleController extends AbstractController
     private function setArticleFields(Article $article, array $formData, string $type = '1'): void
     {
         $article->setTitle($formData['title']);
+        $article->setUser($this->getUser());
         $article->setMetadesc($formData['metadesc']);
         $article->setText($formData['text']);
         $article->setUrl($formData['url']);

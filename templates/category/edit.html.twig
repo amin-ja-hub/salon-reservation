@@ -170,10 +170,10 @@
                                                             <label class="form-label">دسته بندی ها</label>
                                                             <!--end::Tags-->
                                                             <!--begin::انتخاب2-->
-                                                            <select name="category1" class="form-select "  data-placeholder="انتخاب">
-                                                                {% for category in findEntitiesWithCriteria('App\\Entity\\Category', null, null) %}
-                                                                    <option value="{{ category.id }}">{{ category.title }}</option>
-                                                                {% endfor %}
+                                                            <select name="categorytype" class="form-select "  data-placeholder="انتخاب">
+                                                                <option {% if category.type == '1' %}selected{% endif %} value="1">محصولات</option>
+                                                                <option {% if category.type == '2' %}selected{% endif %} value="2">مقالات</option>
+                                                                <option {% if category.type == '3' %}selected{% endif %} value="3">سوال و جواب</option>
                                                             </select>
                                                             <!--end::انتخاب2-->
                                                             <!--begin::توضیحات-->

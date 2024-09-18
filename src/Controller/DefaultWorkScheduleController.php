@@ -25,7 +25,7 @@ final class DefaultWorkScheduleController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_default_schedule_new', methods: ['GET', 'POST'])]
+    #[Route('new', name: 'app_default_schedule_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $defaultWorkSchedule = new DefaultWorkSchedule();
@@ -33,6 +33,8 @@ final class DefaultWorkScheduleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // ارسال شیء User به جای شناسه کاربر
+            $defaultWorkSchedule->setCreated($this->getUser());
             $entityManager->persist($defaultWorkSchedule);
             $entityManager->flush();
 
@@ -53,7 +55,7 @@ final class DefaultWorkScheduleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_default_schedule_edit', methods: ['GET', 'POST'])]
+    #[Route('{id}/edit', name: 'app_default_schedule_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, DefaultWorkSchedule $defaultWorkSchedule, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(DefaultWorkScheduleType::class, $defaultWorkSchedule);
@@ -62,7 +64,7 @@ final class DefaultWorkScheduleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_default_work_schedule_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_default_schedule_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('default_work_schedule/edit.html.twig', [

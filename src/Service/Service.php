@@ -24,7 +24,7 @@ class Service
 
     //type 1 == article
     //type 2 == category
-    //type 3 == product
+    //type 3 == serviece
     //type 4 == user
     //type 5 == res
     public function uploadFile($type, $file, $id, $status) {
@@ -67,8 +67,8 @@ class Service
                     ];
                     break;
                 case 3:
-                    $fileDir = $projectDir . '/public/uploads/product/' . $id;
-                    $FileEntity->setPath('/uploads/product/' . $id);
+                    $fileDir = $projectDir . '/public/uploads/service/' . $id;
+                    $FileEntity->setPath('/uploads/service/' . $id);
                     $sizes = [
                         ['width' => 770, 'height' => 350],
                         ['width' => 570, 'height' => 300],

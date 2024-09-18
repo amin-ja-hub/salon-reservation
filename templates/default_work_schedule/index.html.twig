@@ -42,28 +42,8 @@
                         <!--begin::کارت title-->
                         <div class="card-title">
                             <!--begin::جستجو-->
-                            <div class="d-flex align-items-center position-relative my-1">
-                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                                <input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-12" placeholder="جستجو مقالات" />
-                            </div>
-                            <!--end::جستجو-->
-                        </div>
-                        <!--end::کارت title-->
-                        <!--begin::کارت toolbar-->
-                        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                            <a href="{{ path('app_default_schedule_new') }}" class="btn btn-primary">افزودن مقالات</a>
-                        </div>
-                        <!--end::کارت toolbar-->
-                    </div>
-                    <!--end::کارت header-->
-
-                    <!-- Day of Week Filter -->
-                    <div class="card-body pt-0">
                         <div class="d-flex align-items-center mb-3">
-                            <label for="dayOfWeekFilter" class="form-label me-2">Filter by Day of Week:</label>
+                            <label for="dayOfWeekFilter" class="form-label me-2">فیلتر</label>
                             <select id="dayOfWeekFilter" class="form-select w-200px" onchange="filterByDayOfWeek()">
                                 <option value="">همه ی روز ها</option>
                                 <option value="شنبه">شنبه</option>
@@ -75,16 +55,28 @@
                                 <option value="جمعه">جمعه</option>
                             </select>
                         </div>
+                            <!--end::جستجو-->
+                        </div>
+                        <!--end::کارت title-->
+                        <!--begin::کارت toolbar-->
+                        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                            <a href="{{ path('app_default_schedule_new') }}" class="btn btn-primary">افزودن زمان</a>
+                        </div>
+                        <!--end::کارت toolbar-->
+                    </div>
+                    <!--end::کارت header-->
 
+                    <!-- Day of Week Filter -->
+                    <div class="card-body pt-0">
                         <!--begin::Table-->
                         <table class="table align-middle table-row-dashed fs-6 gy-5 border" id="kt_ecommerce_products_table">
                             <thead class="border">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                    <th>Id</th>
-                                    <th>DayOfWeek</th>
-                                    <th>StartTime</th>
-                                    <th>EndTime</th>
-                                    <th>actions</th>
+                                    <th>ردیف</th>
+                                    <th>روز هفته</th>
+                                    <th>زمان شروع</th>
+                                    <th>زمان پایان</th>
+                                    <th>عملیات</th>
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold border" id="productTable">
