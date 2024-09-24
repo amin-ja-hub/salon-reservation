@@ -27,6 +27,9 @@ class DefaultWorkSchedule
     #[ORM\JoinColumn(name: "CreatedBy", referencedColumnName: "id", nullable: true)]
     private ?User $created = null;    
     
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $published;    
+    
     // Getters and Setters
 
     public function getId(): ?int
@@ -81,4 +84,17 @@ class DefaultWorkSchedule
 
         return $this;
     }
+    
+    public function getPublished(): ?int
+    {
+        return $this->published;
+    }
+
+    public function setPublished(?int $published): static
+    {
+        $this->published = $published;
+
+        return $this;
+    }    
+    
 }

@@ -9,7 +9,64 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}Reservation Index{% endblock %}
+{% block js %}
+        <script>
+            $(document).ready(function() {
+                $('.sendData').click(function(e) {
+                    e.preventDefault();
+                    var button = $(this);
+                    var dataTable = button.data('table');
+                    var dataField = button.data('field');
+                    var dataValue = button.data('value');
+                    var dataId = button.data('id');
+
+                    var dataToSend = {
+                        table: dataTable,
+                        field: dataField,
+                        value: dataValue,
+                        id: dataId
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ path('update_field') }}', // Replace with your Symfony route
+                        data: dataToSend,
+                        success: function(response) {
+                            // Handle the response based on the action
+                            if (dataField === 'published') {
+                                // Update button's data-value attribute and text based on new value
+                                var newValue = dataValue === 1 ? 0 : 1; // Toggle the value
+                                button.data('value', newValue);
+                                if (newValue === 1) {
+                                    button.removeClass('badge-danger').addClass('badge-light-success').text('برسی شد');
+                                } else {
+                                    button.removeClass('badge-light-success').addClass('badge-danger').text('کنارگذاشتن');
+                                }
+
+                                // Update status display based on new value
+                                var statusSpan = $('#publishStatus-' + dataId);
+                                if (newValue === 0) {
+                                    statusSpan.removeClass('badge-danger').addClass('badge-light-success').text('برسی شد');
+                                } else {
+                                    statusSpan.removeClass('badge-light-success').addClass('badge-danger').text('در انتظار');
+                                }
+                            } else if (dataField === 'remove') {
+                                // Remove the corresponding <tr> from the table
+                                $('#articleRow-' + dataId).remove();
+                            }
+
+                            // Optionally show a success message
+                            alert('OK: ' + response.message);
+                        },
+                        error: function(error) {
+                            alert('Not OK: ' + error.responseJSON.error);
+                        }
+                    });
+                });
+            });
+        </script>    
+{% endblock js %}
+{% block title %}مدیریت وقت های رزرو شده{% endblock %}
 
 {% block body %}
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -40,27 +97,27 @@
 
                         <tbody class="fw-semibold border">
                             {% for reserve in reservations %}
-                                <tr>
+                                <tr id="articleRow-{{ reserve.id }}">
                                     <td>{{ reserve.id }}</td>
-                                    <td>{{ reserve.personal.fullname ?? 'No user' }}</td>
+                                    <td>{{ reserve.personal.fullname ?? reserve.personal.Username }}</td>
                                     <td>{{ reserve.Service.title }} | {{ reserve.ServiceChild.title }}</td>
                                     <td>{{ reserve.reservationDateTime }}</td>
 
                                     {% if is_granted('ROLE_PERSONNEL') or is_granted('ROLE_ADMIN') %}
-                                        <td>{{ reserve.user.id ?? 'No user' }}</td>
+                                        <td>{{ reserve.user.fullname ?? reserve.user.Username }}</td>
                                     {% endif %}
 
                                     {% if is_granted('ROLE_ADMIN') %}
                                         <td>{{ reserve.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'yyyy/MM/dd') }} ساعت {{ reserve.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'HH:mm') }}</td>
                                         <td>{{ reserve.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'yyyy/MM/dd') }} ساعت {{ reserve.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'HH:mm') }}</td>
                                         <td>
-                                            <span class="badge {{ reserve.published ? 'badge-light-success' : 'badge-danger' }}">
+                                            <span id="publishStatus-{{ reserve.id }}" class="badge {{ reserve.published ? 'badge-light-success' : 'badge-danger' }}">
                                                 {{ reserve.published ? 'برسی شد' : 'در انتظار' }}
                                             </span>
                                         </td>
                                         <td>
-                                            <button id="removeButton-{{ reserve.id }}" class="btn badge badge-dark sendData" data-table="reserve" data-field="remove" data-value="1" data-id="{{ reserve.id }}">حذف کردن</button>
-                                            <button id="publishButton-{{ reserve.id }}" class="btn badge {{ reserve.published ? 'badge-danger' : 'badge-light-success' }} sendData" data-table="reserve" data-field="published" data-value="{{ reserve.published ? '0' : '1' }}" data-id="{{ reserve.id }}">
+                                            <button id="removeButton-{{ reserve.id }}" class="btn badge badge-dark sendData" data-table="Reservation" data-field="remove" data-value="1" data-id="{{ reserve.id }}">حذف کردن</button>
+                                            <button id="publishButton-{{ reserve.id }}" class="btn badge {{ reserve.published ? 'badge-danger' : 'badge-light-success' }} sendData" data-table="Reservation" data-field="published" data-value="{{ reserve.published ? '0' : '1' }}" data-id="{{ reserve.id }}">
                                                 {{ reserve.published ? 'کنارگذاشتن' : 'برسی شد' }}
                                             </button>
                                         </td>

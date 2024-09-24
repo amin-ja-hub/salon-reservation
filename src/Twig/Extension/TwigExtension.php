@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
@@ -7,7 +8,7 @@ use Twig\TwigFunction;
 use App\Service\Service;
 use Twig\Environment;
 use IntlDateFormatter;
-use ReflectionClass;
+use Morilog\Jalali\Jalalian;
 
 class TwigExtension extends AbstractExtension
 {
@@ -27,7 +28,6 @@ class TwigExtension extends AbstractExtension
 
     public function getFunctions()
     {
-        // Predefined array of Twig functions to expose
         return [
             new \Twig\TwigFunction('findEntitiesWithCriteria', [$this->service, 'findEntitiesWithCriteria']),
         ];
@@ -35,30 +35,48 @@ class TwigExtension extends AbstractExtension
 
     public function persiandatetimeFilter(Environment $env, $date, $dateFormat = 'medium', $timeFormat = 'medium', $locale = null, $timezone = null, $format = null)
     {
+        // Convert the date to a DateTime object based on the timezone
         $date = twig_date_converter($env, $date, $timezone);
 
+        // Define IntlDateFormatter format options for date and time
         $formatValues = [
             'none'   => IntlDateFormatter::NONE,
             'short'  => IntlDateFormatter::SHORT,
             'medium' => IntlDateFormatter::MEDIUM,
             'long'   => IntlDateFormatter::LONG,
             'full'   => IntlDateFormatter::FULL,
-            'custom' => 'd MMMM yyyy'  // Custom format for Persian date
         ];
 
-        // If a specific format is provided, use it; otherwise, use the one from the formatValues array
-        $format = $format ?? $formatValues[$dateFormat];
+        // Resolve the date and time formats
+        $resolvedDateFormat = $formatValues[$dateFormat] ?? IntlDateFormatter::MEDIUM; // Default to 'medium' if not set
+        $resolvedTimeFormat = $formatValues[$timeFormat] ?? IntlDateFormatter::MEDIUM; // Default to 'medium' if not set
 
-        $formatter = IntlDateFormatter::create(
-            $locale ?? 'fa_IR@calendar=persian',
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::NONE,
-            $date->getTimezone()->getName(),
-            IntlDateFormatter::TRADITIONAL,
-            $format
-        );
+        // Try to use IntlDateFormatter for localization
+        try {
+            $formatter = IntlDateFormatter::create(
+                $locale ?? 'fa_IR',                        // Default to Persian locale
+                $resolvedDateFormat,                       // Use resolved date format
+                $resolvedTimeFormat,                       // Use resolved time format
+                $date->getTimezone()->getName(),           // Use the provided timezone
+                IntlDateFormatter::TRADITIONAL,            // Traditional calendar (Persian for 'fa_IR')
+                $format                                   // Optional custom format
+            );
 
-        return $formatter->format($date->getTimestamp());
+            // Format and return the date using IntlDateFormatter
+            return $formatter->format($date->getTimestamp());
+        } catch (\Exception $e) {
+            // If IntlDateFormatter fails, fallback to manual Jalali date conversion
+            $jalaliDate = Jalalian::fromDateTime($date);
+
+            // Use custom formats if provided
+            if ($format === 'yyyy/MM/dd') {
+                return $jalaliDate->format('Y/m/d');
+            } elseif ($format === 'HH:mm') {
+                return $jalaliDate->format('H:i');
+            }
+
+            // Return the Jalali date as a fallback (full date and time)
+            return $jalaliDate->format('Y/m/d H:i');
+        }
     }
-
 }
