@@ -18,7 +18,9 @@ class ContactUsController extends AbstractController
     {
         $contactuses = $entityManager
             ->getRepository(ContactUs::class)
-            ->findAll();
+            ->findBy([
+                'remove' => [null, 0] // Use an array to check for multiple values
+            ]);
 
         return $this->render('contact_us/index.html.twig', [
             'contact' => $contactuses,

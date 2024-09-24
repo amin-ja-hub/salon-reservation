@@ -10,7 +10,7 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}New Article{% endblock %}
+{% block title %}افزودن دسته بندی{% endblock %}
 {% block jshead %}
 
 <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
@@ -123,15 +123,13 @@
                                                             <!--end::Tags-->
                                                             <!--begin::انتخاب2-->
                                                             <select name="categorytype" class="form-select "  data-placeholder="انتخاب">
-                                                                <option value="1">محصولات</option>
                                                                 <option value="2">مقالات</option>
                                                                 <option value="3">سوال و جواب</option>
                                                             </select>
                                                             <!--end::انتخاب2-->
                                                             <!--end::Input group-->
                                                             <!--begin::Button-->
-                                                            <a href="add-category.html" class="btn btn-light-primary btn-sm mb-10">
-                                                            <i class="ki-duotone ki-plus fs-2"></i>ساختن new category</a>
+                                                            <div class="text-muted fs-7">دسته بندی برای کدوم بخش؟</div>
                                                             <!--end::Button-->
                                                             <!--begin::Input group-->
                                                             <!--begin::Tags-->
@@ -181,13 +179,13 @@
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">محصولات نام</label>
+                                                                                            <label class="required form-label">عنوان دسته بندی</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
-                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="نام محصول" value="" />
+                                                                                            <input type="text" name="title" class="form-control mb-2" placeholder="عنوان دسته بندی" value="" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">نام محصول مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
+                                                                                            <div class="text-muted fs-7">عنوان دسته بندی مورد نیاز است و توصیه می شود منحصر به فرد باشد.</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->
@@ -209,13 +207,13 @@
                                                                                     <!--begin::Input group-->
                                                                                     <div class="mb-10 fv-row">
                                                                                             <!--begin::Tags-->
-                                                                                            <label class="required form-label">لینک مقاله</label>
+                                                                                            <label class="required form-label">لینک دسته بندی</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
                                                                                             <input type="text" name="url" class="form-control mb-2" placeholder="لینک را وارد کنید" value="" />
                                                                                             <!--end::Input-->
                                                                                             <!--begin::توضیحات-->
-                                                                                            <div class="text-muted fs-7">لینک مقاله باید منحصر به فرد باشد</div>
+                                                                                            <div class="text-muted fs-7">لینک دسته بندی باید منحصر به فرد باشد</div>
                                                                                             <!--end::توضیحات-->
                                                                                     </div>
                                                                                     <!--end::Input group-->

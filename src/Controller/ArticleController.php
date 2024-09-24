@@ -22,8 +22,10 @@ class ArticleController extends AbstractController
         // Fetch all articles with type = 1
         $articles = $entityManager
             ->getRepository(Article::class)
-            ->findBy(['type' => 1]);
-
+            ->findBy([
+                'type' => 1,
+                'remove' => [null, 0] // Use an array to check for multiple values
+            ]);
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
         ]);

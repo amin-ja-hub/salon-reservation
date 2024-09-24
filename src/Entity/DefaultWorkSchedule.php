@@ -30,6 +30,9 @@ class DefaultWorkSchedule
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $published;    
     
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $udate;    
+    
     // Getters and Setters
 
     public function getId(): ?int
@@ -93,6 +96,18 @@ class DefaultWorkSchedule
     public function setPublished(?int $published): static
     {
         $this->published = $published;
+
+        return $this;
+    }    
+    
+    public function getUdate(): ?\DateTimeInterface
+    {
+        return $this->udate;
+    }
+
+    public function setUdate(?\DateTimeInterface $udate): static
+    {
+        $this->udate = $udate;
 
         return $this;
     }    

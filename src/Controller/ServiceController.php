@@ -53,7 +53,7 @@ final class ServiceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_service_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Service $service, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Service $service, EntityManagerInterface $entityManager, FileUploadService $fileUploadService): Response
     {
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);

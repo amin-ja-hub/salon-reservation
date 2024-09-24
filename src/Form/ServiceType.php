@@ -25,7 +25,7 @@ class ServiceType extends AbstractType
                 'data-placeholder' => 'انتخاب زیر مجموعه',
             ],
         ])
-        ->add('category', EntityType::class, [
+        ->remove('category', EntityType::class, [
             'class' => Category::class,
             'choice_label' => 'title',
             'placeholder' => 'انتخاب دسته بندی', // Corrected placeholder

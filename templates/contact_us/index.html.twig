@@ -9,7 +9,7 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}Product index{% endblock %}
+{% block title %}تماس با ما{% endblock %}
 {% block css %}
 {#    <!--begin::Vendor Stylesheets(used for this page only)-->
     <link href="{{ asset('panel/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css')}}" rel="stylesheet" type="text/css" />
@@ -135,48 +135,13 @@
                     <div id="kt_content_container" class="container-xxl">
                             <!--begin::محصولات-->
                             <div class="card card-flush">
-                                    <!--begin::کارت header-->
-                                    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
-                                            <!--begin::کارت title-->
-                                            <div class="card-title">
-                                                    <!--begin::جستجو-->
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                            </i>
-                                                            <input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-12" placeholder="جستجو محصولات" />
-                                                    </div>
-                                                    <!--end::جستجو-->
-                                            </div>
-                                            <!--end::کارت title-->
-                                            <!--begin::کارت toolbar-->
-                                            <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                                                    <div class="w-100 mw-150px">
-                                                            <!--begin::انتخاب2-->
-                                                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="وضعیت" data-kt-ecommerce-product-filter="status">
-                                                                    <option></option>
-                                                                    <option value="all">همه</option>
-                                                                    <option value="published">منتشر شده</option>
-                                                                    <option value="scheduled">در انتظار</option>
-                                                                    <option value="inactive">غیرفعال</option>
-                                                            </select>
-                                                            <!--end::انتخاب2-->
-                                                    </div>
-                                                    <!--begin::افزودن product-->
-                                                    <a href="add-product.html" class="btn btn-primary">افزودن محصولات</a>
-                                                    <!--end::افزودن product-->
-                                            </div>
-                                            <!--end::کارت toolbar-->
-                                    </div>
-                                    <!--end::کارت header-->
                                     <!--begin::کارت body-->
-                                    <div class="card-body pt-0">
+                                    <div class="card-body pt-10">
                                             <!--begin::Table-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-5 border" id="kt_ecommerce_products_table">
                                                 <thead class="border">
                                                         <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-40px">ردیف</th>
+                                                            <th class="text-start min-w-40px">ردیف</th>
                                                             <th class="text-start min-w-40px">عنوان</th>
                                                             <th class="text-start min-w-40px">موبایل</th>
                                                             <th class="text-start min-w-40px">ایمیل</th>

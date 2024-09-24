@@ -66,6 +66,7 @@ class UserController extends AbstractController
 
             // Handle required fields like title, publish, metadesc, text, etc.
             $user->setFullName($formData['name']);
+            $user->setUdate(new \DateTime());
             $user->setEmail($formData['email']);
             $user->setMobile($formData['mobile']);
             $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);

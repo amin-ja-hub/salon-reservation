@@ -1,5 +1,5 @@
-categoty type = [article = 1 ,faq = 2]	
-barchasb type =>  [article = 1 ,category = 2] 
+categoty type = [article = 2 ,faq = 3]	
+barchasb type =>  [article = 1 ,service = 2,category = 3] 
 user role => [ROLE_USER =0 , ROLE_ADMIN = 1]
 contactus type => [main = 1,faq = 2]
 commetns type => [article = 1 ]

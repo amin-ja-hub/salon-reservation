@@ -68,8 +68,9 @@ class FaqController extends AbstractController
     public function getCategories(EntityManagerInterface $entityManager): JsonResponse
     {
         try {
-            $categories = $entityManager->getRepository(Category::class)->findBy([
-                'published' => 1
+            $categories = $entityManager->getRepository(Category::class)            ->findBy([
+                'type' => 3,
+                'published' => 1 // Use an array to check for multiple values
             ]);
 
             $categoryData = array_map(function (Category $category) {

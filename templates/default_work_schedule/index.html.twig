@@ -9,9 +9,64 @@
     
     {{ parent() }} {# This ensures the breadcrumbs are rendered in the base template #}
 {% endblock %}
-{% block title %}DefaultWorkSchedule index{% endblock %}
+{% block title %}مدیریت ساعت کاری{% endblock %}
 {% block js %}
-    <!-- Script to filter by Day of Week -->
+
+        <script>
+            $(document).ready(function() {
+                $('.sendData').click(function(e) {
+                    e.preventDefault();
+                    var button = $(this);
+                    var dataTable = button.data('table');
+                    var dataField = button.data('field');
+                    var dataValue = button.data('value');
+                    var dataId = button.data('id');
+
+                    var dataToSend = {
+                        table: dataTable,
+                        field: dataField,
+                        value: dataValue,
+                        id: dataId
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ path('update_field') }}', // Replace with your Symfony route
+                        data: dataToSend,
+                        success: function(response) {
+                            // Handle the response based on the action
+                            if (dataField === 'published') {
+                                // Update button's data-value attribute and text based on new value
+                                var newValue = dataValue === 1 ? 0 : 1; // Toggle the value
+                                button.data('value', newValue);
+                                if (newValue === 1) {
+                                    button.removeClass('badge-danger').addClass('badge-light-success').text('منتشر کردن');
+                                } else {
+                                    button.removeClass('badge-light-success').addClass('badge-danger').text('کنارگذاشتن');
+                                }
+
+                                // Update status display based on new value
+                                var statusSpan = $('#publishStatus-' + dataId);
+                                if (newValue === 0) {
+                                    statusSpan.removeClass('badge-danger').addClass('badge-light-success').text('منتشر شده');
+                                } else {
+                                    statusSpan.removeClass('badge-light-success').addClass('badge-danger').text('در انتظار');
+                                }
+                            } else if (dataField === 'remove') {
+                                // Remove the corresponding <tr> from the table
+                                $('#articleRow-' + dataId).remove();
+                            }
+
+                            // Optionally show a success message
+                            alert('OK: ' + response.message);
+                        },
+                        error: function(error) {
+                            alert('Not OK: ' + error.responseJSON.error);
+                        }
+                    });
+                });
+            });
+        </script>
     <script>
         function filterByDayOfWeek() {
             var filterValue = document.getElementById('dayOfWeekFilter').value.toLowerCase();
@@ -76,6 +131,7 @@
                                     <th>روز هفته</th>
                                     <th>زمان شروع</th>
                                     <th>زمان پایان</th>
+                                    <th>وضعیت</th>
                                     <th>عملیات</th>
                                 </tr>
                             </thead>
@@ -95,6 +151,13 @@
                                     <td class="text-start pe-0">{{ item.startTime|date('H:i') }}</td>
                                     <td class="text-start pe-0">{{ item.endTime|date('H:i') }}</td>
                                     <td class="text-start">
+                                        {% if item.published == 1 %}
+                                            <span id="publishStatus-{{ item.id }}" class="badge badge-light-success">منتشر شده</span>
+                                        {% else %}
+                                            <span id="publishStatus-{{ item.id }}" class="badge badge-danger">در انتظار</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-start">
                                         <span class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                             عملیات<i class="ki-duotone ki-down fs-5 ms-1"></i>
                                         </span>
@@ -109,6 +172,13 @@
                                                     <button class="btn menu-link px-3 btn-danger ">حذف کردن</button>
                                                 </form>                                            
                                             </div>
+                                            <div class="menu-item px-3">
+                                                {% if item.published == 0 %}
+                                                    <button id="publishButton-{{ item.id }}" href="#" class="btn badge badge-light-success sendData" data-table="DefaultWorkSchedule" data-field="published" data-value="1" data-id="{{ item.id }}">منتشر کردن</button>
+                                                {% elseif item.published == 1 %}
+                                                    <button id="publishButton-{{ item.id }}" href="#" class="btn badge badge-danger sendData" data-table="DefaultWorkSchedule" data-field="published" data-value="0" data-id="{{ item.id }}">کنارگذاشتن</button>
+                                                {% endif %}
+                                            </div>                                                    
                                         </div>
                                         <!--end::Menu-->
                                     </td>

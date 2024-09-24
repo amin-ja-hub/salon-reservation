@@ -44,8 +44,8 @@
                                                     <!--begin::کارت body-->
                                                     <div class="card-body text-center pt-0">
                                                             <!--begin::Image input-->
-                                                            <!--begin::Image input placeholder-->
-                                                            <style>.image-input-placeholder { background-image: url('{% if user.image is not null %}{{ user.image.path~'/'~user.image.name }}{% endif %}'); }</style>
+                                                            <!--begin::Image input placeholder-->{% set img = user.Image is not null ? user.Image.path ~ '/200x200_' ~ user.Image.name ~ '.webp' : 'a' %}
+                                                            <style>.image-input-placeholder { background-image: url({{ asset(img) }}); }  [data-bs-theme="dark"] .image-input-placeholder { background-image: url({{ asset(img) }}); }</style>
                                                             <!--end::Image input placeholder-->
                                                             <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
                                                                     <!--begin::نمایش existing avatar-->
@@ -147,7 +147,7 @@
                                             <!--end::Tab content-->
                                             <div class="d-flex justify-content-end">
                                                     <!--begin::Button-->
-                                                    <a href="products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">انصراف</a>
+                                                    <a href="{{ path('app_user_index') }}" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">انصراف</a>
                                                     <!--end::Button-->
                                                     <!--begin::Button-->
                                                     <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary">
