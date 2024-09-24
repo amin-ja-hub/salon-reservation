@@ -7,17 +7,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\File;
-use App\Entity\User;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class Service
 {
-    private KernelInterface $kernel;
     private $em;
+    private $security;
+    private $kernel;
 
-    public function __construct(EntityManagerInterface $em,KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $em, Security $security, KernelInterface $kernel)
     {
         $this->em = $em;
+        $this->security = $security;
         $this->kernel = $kernel;
     }
 
@@ -27,6 +29,7 @@ class Service
     //type 3 == serviece
     //type 4 == user
     //type 5 == res
+    //type 6 == files
     public function uploadFile($type, $file, $id, $status) {
         $em = $this->em;
         $projectDir = $this->kernel->getProjectDir();
@@ -46,7 +49,9 @@ class Service
             $FileEntity->setCdate(new \DateTime());
             $FileEntity->setFormat($extension);
             $FileEntity->setSize($file->getSize());
-
+            $user = $this->security->getUser();
+            $FileEntity->setUser($user);
+            
             switch ($type) {
                 case 1:
                     $fileDir = $projectDir . '/public/uploads/article/' . $id;
@@ -111,45 +116,12 @@ class Service
             $em->flush();
 
             return $FileEntity->getId();
-        } elseif ($status == 'gallery') {
-            $fileAddresses = [];
-
-            foreach ($file as $file) {
-                if ($file->getError() !== UPLOAD_ERR_OK) {
-                    throw new \Exception('File upload error: ' . $file->getErrorMessage());
-                }
-
-                $FileEntity = new File();
-                $unic = sha1(microtime());
-                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $file->guessExtension();
-                $NewName = $unic . '.' . $extension;  // Changed filename to not include type
-                $FileEntity->setName($unic);
-                $FileEntity->setType($type);  // Store the type information
-                $FileEntity->setCdate(new \DateTime());
-                $FileEntity->setFormat($extension);
-                $FileEntity->setSize($file->getSize());
-
-                $fileDir = $projectDir . '/public/uploads/files';
-                $FileEntity->setPath('/uploads/files');
-
-                if (!is_dir($fileDir)) {
-                    if (!mkdir($fileDir, 0755, true) && !is_dir($fileDir)) {
-                        throw new \Exception('Unable to create the directory: ' . $fileDir);
-                    }
-                }
-
-                $file->move($fileDir, $NewName);
-
-                $em->persist($FileEntity);
-                $em->flush();
-
-                $fileAddresses[] = $FileEntity->getPath() . '/' . $NewName;
-            }
-
-            return $fileAddresses;
         }
+        
+
+        return $fileAddresses;
     }
+    
 
     private function resizeImage($filePath, $sizes) {
         list($width, $height) = getimagesize($filePath);
