@@ -39,6 +39,8 @@ final class WorkScheduleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $workSchedule->setUser($this->getUser());
+            $workSchedule->setCdate(new \DateTime());
             $entityManager->persist($workSchedule);
             $entityManager->flush();
 

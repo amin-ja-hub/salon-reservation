@@ -15,16 +15,26 @@ use App\Service\Service;
 class UserController extends AbstractController
 {
     #[Route('/admin/user', name: 'app_user_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $users = $entityManager
-            ->getRepository(User::class)
-            ->findAll();
+        $searchTerm = $request->query->get('search');
+
+        $query = $entityManager->createQuery(
+            'SELECT u FROM App\Entity\User u 
+             WHERE u.fullName LIKE :searchTerm 
+             OR u.email LIKE :searchTerm
+             OR u.mobile LIKE :searchTerm
+             OR u.username LIKE :searchTerm'
+        )->setParameter('searchTerm', '%' . $searchTerm . '%');
+
+        $users = $query->getResult();
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
+            'searchTerm' => $searchTerm
         ]);
     }
+
 
     #[Route('admin/user/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

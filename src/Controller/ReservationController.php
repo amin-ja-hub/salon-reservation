@@ -54,7 +54,7 @@ final class ReservationController extends AbstractController
         
         $reservations = $entityManager
             ->getRepository(Reservation::class)
-            ->findBy(['id' => $userId]);
+            ->findBy(['user' => $userId]);
 
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,

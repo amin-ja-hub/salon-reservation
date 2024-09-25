@@ -2,30 +2,35 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Entity\WorkSchedule;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class WorkScheduleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('dayOfWeek', ChoiceType::class, [
+                'choices'  => [
+                    'شنبه'     => 'شنبه',
+                    'یکشنبه'   => 'یکشنبه',
+                    'دوشنبه'   => 'دوشنبه',
+                    'سه‌شنبه'  => 'سه‌شنبه',
+                    'چهارشنبه' => 'چهارشنبه',
+                    'پنج‌شنبه' => 'پنجشنبه',
+                    'جمعه'     => 'جمعه',
+                ],
+                'placeholder' => 'انتخاب روز هفته',
+            ])
             ->add('startTime', null, [
                 'widget' => 'single_text',
             ])
             ->add('endTime', null, [
                 'widget' => 'single_text',
-            ])
-            ->add('isAvailable')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

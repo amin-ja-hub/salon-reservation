@@ -63,6 +63,55 @@ class PanelController extends AbstractController
         }
     }
 
+    #[Route('personnel/update-field', name: 'personnel_update_field', methods: ['POST'])]
+    public function updateFieldPersonnel(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $tableName = $request->request->get('table'); // Retrieve 'table' from POST request
+        $fieldName = $request->request->get('field'); // Retrieve 'field' from POST request
+        $fieldValue = $request->request->get('value'); // Retrieve 'value' from POST request
+        $id = $request->request->get('id'); // Retrieve 'id' from POST request
+
+        try {
+            // Example: Check if the table name corresponds to a valid entity
+            $entityClass = 'App\Entity\\' . ucfirst($tableName);
+            if (!class_exists($entityClass)) {
+                throw new \Exception('Entity class not found for table: ' . $tableName);
+            }
+
+            // Retrieve the entity manager and repository
+            $repository = $em->getRepository($entityClass);
+
+            // Find the entity by its primary key (id)
+            $entity = $repository->find($id);
+
+            if (!$entity) {
+                throw new \Exception('Entity not found for id: ' . $id);
+            }
+
+            // Check if the field exists in the entity
+            $entityMetadata = $em->getClassMetadata($entityClass);
+            if (!$entityMetadata->hasField($fieldName)) {
+                throw new \Exception("Field '{$fieldName}' does not exist in entity '{$entityClass}'");
+            }
+
+            // Update the specified field
+            $setterMethod = 'set' . ucfirst($fieldName); // Assuming convention where setter is set<Field>
+            $entity->$setterMethod($fieldValue);
+
+            $entity->setUdate(new \DateTime());
+
+            // Persist changes
+            $em->persist($entity);
+            $em->flush();
+
+            // Return success response
+            return new JsonResponse(['message' => 'Field updated successfully'], 200);
+        } catch (\Exception $e) {
+            // Return error response
+            return new JsonResponse(['error' => 'Failed to update field: ' . $e->getMessage()], 500);
+        }
+    }    
+    
     #[Route('admin/add-commet', name: 'add_comment', methods: ['POST'])]
     public function addCommentAction(Request $request,EntityManagerInterface $entityManager)
     {

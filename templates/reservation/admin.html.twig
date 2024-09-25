@@ -73,11 +73,11 @@
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl">
             <div class="card card-flush">
-                <div class="card-body pt-0">
+                <div class="card-body">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 border">
                         <thead class="border">
                             <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                <th class="min-w-40px">ردیف</th>
+                                <th class="min-w-40px text-center">ردیف</th>
                                 <th class="text-start min-w-100px">پرسنل</th>
                                 <th class="text-start min-w-100px">خدمات</th>
                                 <th class="text-start min-w-100px">وقت رزرو</th>
@@ -98,7 +98,7 @@
                         <tbody class="fw-semibold border">
                             {% for reserve in reservations %}
                                 <tr id="articleRow-{{ reserve.id }}">
-                                    <td>{{ reserve.id }}</td>
+                                    <td class="text-center">{{ reserve.id }}</td>
                                     <td>{{ reserve.personal.fullname ?? reserve.personal.Username }}</td>
                                     <td>{{ reserve.Service.title }} | {{ reserve.ServiceChild.title }}</td>
                                     <td>{{ reserve.reservationDateTime }}</td>

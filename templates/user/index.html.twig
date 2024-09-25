@@ -100,6 +100,14 @@ $(document).ready(function() {
                             <div class="card card-flush">
                                     <!--begin::کارت body-->
                                     <div class="card-body pt-10">
+                                            <form method="get" action="{{ path('app_user_index') }}">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" name="search" class="form-control" placeholder="جستجو..." value="{{ searchTerm }}">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="submit">جستجو</button>
+                                                    </div>
+                                                </div>
+                                            </form>                                        
                                             <!--begin::Table-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-5 border" id="kt_ecommerce_products_table">
                                                 <thead class="border">

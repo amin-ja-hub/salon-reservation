@@ -19,6 +19,10 @@ class ServiceType extends AbstractType
             'choice_label' => 'title',
             'placeholder' => 'انتخاب زیر مجموعه', // This adds a null option
             'required' => false,  // Allow null selection
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('c')
+                ->where('c.parent IS NULL'); // No need for parameter here
+            },              
             'attr' => [
                 'class' => 'form-select mb-2',
                 'data-control' => 'select2',

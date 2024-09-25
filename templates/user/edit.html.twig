@@ -121,19 +121,19 @@
                                                                                             <!--begin::Input-->
                                                                                             <input type="text" name="mobile" class="form-control mb-2" placeholder="شماره موبایل خود را وارد کنید" value="{{ user.mobile }}" />
                                                                                             <!--end::Input-->
+                                                                                            <label class=" form-label">سرویس ها</label>                                                                                            
+                                                                                            {{ form_widget(form.services) }}
                                                                                             <!--begin::Tags-->
                                                                                             <label class=" form-label">رمز ورود</label>
                                                                                             <!--end::Tags-->
                                                                                             <!--begin::Input-->
                                                                                             <input type="text" name="pass" class="form-control mb-2" placeholder="رمز ورود شما" value="{{ user.plainPassword }}" />
                                                                                             <!--end::Input-->
-                                                                                            {% if is_granted('ROLE_PERSONNEL') %}
-                                                                                                <div>
+                                                                                                <div {% if is_granted('ROLE_USER') %}style="display: none;"{% endif %}>
                                                                                                     <label for="exampleFormControlTextarea1">درباره من:</label>
-                                                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="text">{{ user.text }}</textarea>
+                                                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="text" >{{ user.text }}</textarea>
                                                                                                     <div class="text-gray-600">چند جمله کوتاه در مورد خود بنویسید</div>
                                                                                                 </div>
-                                                                                            {% endif %}                                                                                            
                                                                                     </div>
                                                                                     <!--end::Input group-->
                                                                             </div>
