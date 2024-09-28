@@ -135,6 +135,10 @@
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <div id="kt_content_container" class="container-xxl">
                 <div class="card card-flush">
+                    <button class="btn btn-primary mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#addFaqForm" aria-expanded="false" aria-controls="addFaqForm">
+                        افزودن سوال جدید
+                    </button>
+                    
                     <div class="collapse" id="addFaqForm">
                         <div class="card-body border rounded shadow-sm p-4 bg-light">
                             <h5 class="mb-4">افزودن سوال جدید</h5>
@@ -172,7 +176,6 @@
                                     <th class="text-start min-w-70px">دسته بندی</th>
                                     <th class="text-start min-w-100px">زمان ساخت</th>
                                     <th class="text-start min-w-100px">زمان آپدیت</th>
-                                    <th class="text-start min-w-100px">کاربر</th>
                                     <th class="text-start min-w-40px">وضعیت</th>
                                     <th class="text-start min-w-70px">عملیات</th>
                                 </tr>
@@ -229,7 +232,6 @@
                                         <td>{{ faq.category.title?? 'No user' }}</td>
                                         <td>{{ faq.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'yyy/MM/dd') }} ساعت {{ faq.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'HH:mm') }}</td>
                                         <td>{{ faq.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'yyy/MM/dd') }} ساعت {{ faq.udate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', 'HH:mm') }}</td>
-                                        <td>{{ faq.user.id ?? 'No user' }}</td>
                                         <td>
                                             {% if faq.published == 1 %}
                                                 <span id="publishStatus-{{ faq.id }}" class="badge badge-light-success">منتشر شده</span>

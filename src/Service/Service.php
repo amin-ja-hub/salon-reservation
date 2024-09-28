@@ -26,10 +26,9 @@ class Service
 
     //type 1 == article
     //type 2 == category
-    //type 3 == serviece
+    //type 3 == service
     //type 4 == user
-    //type 5 == res
-    //type 6 == files
+    //type 5 == files
     public function uploadFile($type, $file, $id, $status) {
         $em = $this->em;
         $projectDir = $this->kernel->getProjectDir();

@@ -72,6 +72,7 @@ class FileController extends AbstractController
                     $fileEntity->setCdate(new \DateTime());
                     $fileEntity->setSize($fileSize); // Now using the size fetched before moving the file
                     $fileEntity->setFormat($uploadedFile->getClientMimeType());
+                    $fileEntity->setFormat(5);
                     // Optionally set the user
                     $fileEntity->setUser($this->getUser());
 

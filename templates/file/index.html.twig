@@ -81,10 +81,28 @@
                 });
             });
         </script>
+        <script>
+            function copyToClipboard(url) {
+                // Create a temporary input element to hold the URL
+                const tempInput = document.createElement('input');
+                tempInput.value = url;
+                document.body.appendChild(tempInput);
 
+                // Select and copy the URL from the input element
+                tempInput.select();
+                tempInput.setSelectionRange(0, 99999); // For mobile devices
+                document.execCommand('copy');
+
+                // Remove the temporary input element
+                document.body.removeChild(tempInput);
+
+                // Optionally provide feedback to the user
+                alert('URL copied to clipboard: ' + url);
+            }
+        </script>
 {% endblock %}
 {% block jshead %}
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{#        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>#}
 
 {% endblock %}
 {% block body %}
@@ -111,7 +129,7 @@
                     <div class="d-flex align-items-center">
                         <div class="d-flex align-items-center">
                             <a href="کاربران" class="symbol symbol-50px">
-                                <span class="symbol-label" style="background-image: url({{ asset(file.path ~ '/' ~ file.name) }})"></span>
+                                <span class="symbol-label" style="background-image: url({{ asset(file.path ~ '/' ~ file.name) }}{%if file.type != 5 %}.{{file.format}} {%endif%})"></span>
                             </a>
                         </div>
                         <div class="ms-5">
@@ -126,38 +144,20 @@
                     <span>{{ file.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran' , 'yyy/MM/dd') }} ساعت {{ file.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian' , 'Asia/Tehran' , 'HH:mm') }}</span>
                 </td>
                 <td class="text-start">{{ file.user.id ?? 'No user' }}</td>
-<td class="text-start">
-    <div class="d-flex align-items-center">
-        <!-- File Link styled as a button -->
-        <a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}" class="btn btn-link p-0">
-            {{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}
-        </a>
+                <td class="text-start">
+                    <div class="d-flex align-items-center">
+                        <!-- File Link styled as a button -->
+                        <a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}" class="btn btn-link p-0">
+                            {{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}
+                        </a>
 
-        <!-- Copy Button -->
-        <button class="btn btn-outline-primary btn-sm ms-2" onclick="copyToClipboard('{{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}')">
-            Copy
-        </button>
-    </div>
-</td>
-<script>
-    function copyToClipboard(url) {
-        // Create a temporary input element to hold the URL
-        const tempInput = document.createElement('input');
-        tempInput.value = url;
-        document.body.appendChild(tempInput);
+                        <!-- Copy Button -->
+                        <button class="btn btn-outline-primary btn-sm ms-2" onclick="copyToClipboard('{{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}{%if file.type != 5 %}.{{file.format}} {%endif%}')">
+                            Copy
+                        </button>
+                    </div>
+                </td>
 
-        // Select and copy the URL from the input element
-        tempInput.select();
-        tempInput.setSelectionRange(0, 99999); // For mobile devices
-        document.execCommand('copy');
-
-        // Remove the temporary input element
-        document.body.removeChild(tempInput);
-
-        // Optionally provide feedback to the user
-        alert('URL copied to clipboard: ' + url);
-    }
-</script>
 
             </tr>
             {% endfor %}
