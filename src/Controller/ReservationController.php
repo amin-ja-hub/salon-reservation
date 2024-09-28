@@ -93,18 +93,18 @@ final class ReservationController extends AbstractController
 
         if (!empty($searchTerm)) {
             // If searchTerm is provided, create a dynamic query using DQL
-$query = $entityManager->createQuery(
-    'SELECT r FROM App\Entity\Reservation r
-     JOIN r.user u
-     JOIN r.service s
-     JOIN r.serviceChild sc
-     WHERE (r.reservationDateTime LIKE :searchTerm
-     OR s.title LIKE :searchTerm
-     OR sc.title LIKE :searchTerm)
-     AND u.id = :userId'
-)
-->setParameter('searchTerm', '%' . $searchTerm . '%')
-->setParameter('userId', $userId);
+            $query = $entityManager->createQuery(
+                'SELECT r FROM App\Entity\Reservation r
+                 JOIN r.user u
+                 JOIN r.service s
+                 JOIN r.serviceChild sc
+                 WHERE (r.reservationDateTime LIKE :searchTerm
+                 OR s.title LIKE :searchTerm
+                 OR sc.title LIKE :searchTerm)
+                 AND u.id = :userId'
+            )
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->setParameter('userId', $userId);
 
 
             // Execute the query to get search results
@@ -199,8 +199,10 @@ $query = $entityManager->createQuery(
 
         $data = array_map(fn($service) => [
             'id' => $service->getId(),
-            'title' => $service->getTitle()
+            'title' => $service->getTitle(),
+            'image' => $service->getImage() ? $service->getImage()->getPath() . '/770x350_' . $service->getImage()->getName() . '.webp' : null
         ], $childServices);
+
 
         return new JsonResponse($data);
     }
@@ -232,7 +234,9 @@ $query = $entityManager->createQuery(
         // Transform the users into a simple array
         $data = array_map(fn($user) => [
             'id' => $user->getId(),
-            'fullName' => $user->getFullName()
+            'fullName' => $user->getFullName(),
+            'image' => $service->getImage() ? $service->getImage()->getPath() . '/770x350_' . $service->getImage()->getName() . '.webp' : null,
+            'bio' => $user->getText()
         ], $users);
 
         return new JsonResponse($data);

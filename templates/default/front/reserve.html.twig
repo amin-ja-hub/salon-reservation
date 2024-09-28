@@ -68,7 +68,6 @@
     <!-- Steps List as Accordion -->
     <div class="accordion" id="reservationAccordion">
         
-        <!-- Step 1: Select Main Service -->
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#step1Content" aria-expanded="true">
@@ -77,20 +76,74 @@
             </h2>
             <div id="step1Content" class="accordion-collapse collapse show" data-bs-parent="#reservationAccordion">
                 <div class="accordion-body">
-                    <h2>Select Main Service</h2>
-                    <div class="row">
+                    <h2 class="mb-4">Select Main Service</h2>
+                    <div class="row g-4">
                         {% for item in findEntitiesWithCriteria('App\\Entity\\Service', null, { 'parent': null}) %}
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    <input type="radio" id="service-{{ item.id }}" name="mainService" value="{{ item.id }}" class="form-check-input" required>
-                                    <label for="service-{{ item.id }}" class="form-check-label">{{ item.title }}</label>
-                                </div>
+                            <div class="col-md-6 col-lg-4">
+                                <label for="service-{{ item.id }}" class="card h-100 service-card">
+                                    <img src="{{ item.Image.path ~ '/770x350_' ~ item.Image.name ~ '.webp' }}" class="card-img-top" alt="{{ item.title }}">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">{{ item.title }}</h5>
+                                        <input type="radio" id="service-{{ item.id }}" name="mainService" value="{{ item.id }}" class="form-check-input visually-hidden" required>
+                                    </div>
+                                </label>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            .service-card {
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                overflow: hidden;
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+            }
+
+            .service-card:hover,
+            .service-card input:checked + .card-body {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                transform: translateY(-5px);
+                border-color: #007bff;
+            }
+
+            .service-card img {
+                height: 200px;
+                object-fit: cover;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .service-card .card-body {
+                padding: 20px;
+            }
+
+            .service-card .card-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #333;
+                transition: color 0.3s ease;
+            }
+
+            .service-card input:checked + .card-body .card-title {
+                color: #007bff;
+            }
+
+            .form-check-input.visually-hidden {
+                position: absolute;
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .service-card img {
+                    height: 150px;
+                }
+            }
+        </style>
 
         <!-- Step 2: Select Child Service -->
         <div class="accordion-item">
@@ -101,9 +154,9 @@
             </h2>
             <div id="step2Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                 <div class="accordion-body">
-                    <h2>Select a Service</h2>
-                    <div id="childServices" class="row">
-                        <!-- Child services will be populated here -->
+                    <h2 class="mb-4">Select a Service</h2>
+                    <div id="childServices" class="row g-4">
+                        <!-- Child services will be dynamically populated here -->
                     </div>
                 </div>
             </div>
@@ -118,9 +171,9 @@
             </h2>
             <div id="step3Content" class="accordion-collapse collapse" data-bs-parent="#reservationAccordion">
                 <div class="accordion-body">
-                    <h2>Select Personal</h2>
-                    <div id="personalSelection" class="row">
-                        <!-- Users will be populated here -->
+                    <h2 class="mb-4">Select Personal</h2>
+                    <div id="personalSelection" class="row g-4">
+                        <!-- Users will be dynamically populated here -->
                     </div>
                 </div>
             </div>
@@ -181,15 +234,17 @@
             });
         }
 
-        // Update child services based on main service selection
         function updateChildServices(parentId) {
             postRequest('{{ path("ajax_child_services") }}', { parentId }, function(response) {
                 const childServicesHtml = response.map(service => `
-                    <div class="col-md-4">
-                        <div class="form-check">
-                            <input type="radio" id="service${service.id}" name="childService" value="${service.id}" class="form-check-input" required>
-                            <label for="service${service.id}" class="form-check-label">${service.title}</label>
-                        </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="service${service.id}" class="card h-100 service-card">
+                            <img src="${service.image}" class="card-img-top" alt="${service.title}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${service.title}</h5>
+                                <input type="radio" id="service${service.id}" name="childService" value="${service.id}" class="form-check-input visually-hidden" required>
+                            </div>
+                        </label>
                     </div>`
                 ).join('');
                 $('#childServices').empty().append(childServicesHtml);
@@ -197,16 +252,20 @@
                 $('[data-bs-target="#step2Content"]').removeAttr('disabled');
             });
         }
-
+        
         // Update available users based on child service selection
         function updatePersonalSelection(serviceId) {
             postRequest('{{ path("ajax_users_by_service") }}', { serviceId }, function(response) {
                 const personalHtml = response.map(user => `
-                    <div class="col-md-6">
-                        <div class="form-check">
-                            <input type="radio" id="personal${user.id}" name="personal" value="${user.id}" class="form-check-input" required>
-                            <label for="personal${user.id}" class="form-check-label">${user.fullName}</label>
-                        </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="personal${user.id}" class="card h-100 service-card">
+                            <img src="${user.image}" class="card-img-top" alt="${user.fullName}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${user.fullName}</h5>
+                                <p class="card-text">${user.bio}</p>
+                                <input type="radio" id="personal${user.id}" name="personal" value="${user.id}" class="form-check-input visually-hidden" required>
+                            </div>
+                        </label>
                     </div>`
                 ).join('');
                 $('#personalSelection').empty().append(personalHtml);
