@@ -135,6 +135,24 @@
                     <div id="kt_content_container" class="container-xxl">
                             <!--begin::محصولات-->
                             <div class="card card-flush">
+                                    <!--begin::کارت header-->
+                                    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+                                            <!--begin::کارت title-->
+                                            <div class="card-title">
+                                                    <!--begin::جستجو-->
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <form method="get" action="{{ path('app_contact_us_index') }}">
+                                                            <div class="input-group mb-3">
+                                                                <input type="text" class="form-control" name="search" value="{{ searchTerm }}" placeholder="Search for contacts...">
+                                                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <!--end::جستجو-->
+                                            </div>
+                                            <!--end::کارت title-->
+                                    </div>
+                                    <!--end::کارت header-->                                
                                     <!--begin::کارت body-->
                                     <div class="card-body pt-10">
                                             <!--begin::Table-->

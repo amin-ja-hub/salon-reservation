@@ -31,21 +31,21 @@ class UserType extends AbstractType
                 'class' => File::class,
                 'choice_label' => 'id',
             ])
-->add('services', EntityType::class, [
-    'class' => Service::class,  // The entity related to the field
-    'choice_label' => 'title',  // Display the name of the service
-    'multiple' => true,         // Allow multiple selections
-    'expanded' => false,        // Dropdown with multi-select
-    'query_builder' => function (ServiceRepository $er) {  // Correct type hint
-        return $er->createQueryBuilder('c')
-                  ->where('c.parent IS NULL');  // Filtering services without a parent
-    },
-    'attr' => [
-        'class' => 'form-select mb-2',   // Using Bootstrap 'form-select' for dropdown
-        'data-control' => 'select2',     // Custom attribute for initializing Select2
-        'data-placeholder' => 'انتخاب سرویس‌ها',  // Placeholder for Select2
-    ],
-])
+    ->add('services', EntityType::class, [
+        'class' => Service::class,  // The entity related to the field
+        'choice_label' => 'title',  // Display the name of the service
+        'multiple' => true,         // Allow multiple selections
+        'expanded' => false,        // Dropdown with multi-select
+        'query_builder' => function (ServiceRepository $er) {  // Correct type hint
+            return $er->createQueryBuilder('c')
+                      ->where('c.parent IS NOT NULL');  // Filtering services without a parent
+        },
+        'attr' => [
+            'class' => 'form-select mb-2',   // Using Bootstrap 'form-select' for dropdown
+            'data-control' => 'select2',     // Custom attribute for initializing Select2
+            'data-placeholder' => 'انتخاب سرویس‌ها',  // Placeholder for Select2
+        ],
+    ])
         ;
     }
 

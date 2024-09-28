@@ -56,11 +56,26 @@ class FaqController extends AbstractController
             }
         }
 
-        $faqs = $entityManager->getRepository(Faq::class)->findAll();
+        // Fetch the search query from the request
+        $searchQuery = $request->query->get('search', '');
 
+        // Build the query to search for articles
+        $queryBuilder = $entityManager->getRepository(Faq::class)->createQueryBuilder('a')
+            ->andWhere('(a.remove IS NULL OR a.remove = 0)');
+
+        // If a search query exists, filter by the article title or content
+        if ($searchQuery) {
+            $queryBuilder->andWhere('a.title LIKE :search ')
+                ->setParameter('search', '%' . $searchQuery . '%');
+        }
+
+        // Execute the query
+        $faqs = $queryBuilder->getQuery()->getResult();
+        
         return $this->render('faq/index.html.twig', [
             'faqs' => $faqs,
             'form' => $form->createView(),
+            'searchQuery' => $searchQuery // Pass the search query back to the template            
         ]);
     }
 

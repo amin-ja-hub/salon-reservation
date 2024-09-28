@@ -16,14 +16,27 @@ use App\Service\Service;
 class CategoryController extends AbstractController
 {
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request,EntityManagerInterface $entityManager): Response
     {
-        $categories = $entityManager
-            ->getRepository(Category::class)
-            ->findAll();
+        // Fetch the search query from the request
+        $searchQuery = $request->query->get('search', '');
 
+        // Build the query to search for articles
+        $queryBuilder = $entityManager->getRepository(Category::class)->createQueryBuilder('a')
+            ->Where('(a.remove IS NULL OR a.remove = 0)');
+
+        // If a search query exists, filter by the article title or content
+        if ($searchQuery) {
+            $queryBuilder->andWhere('a.title LIKE :search ')
+                ->setParameter('search', '%' . $searchQuery . '%');
+        }
+
+        // Execute the query
+        $categories = $queryBuilder->getQuery()->getResult();        
+        
         return $this->render('category/index.html.twig', [
             'categories' => $categories,
+            'searchQuery' => $searchQuery // Pass the search query back to the template            
         ]);
     }
 

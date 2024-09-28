@@ -18,10 +18,27 @@ use App\Service\Service as FileUploadService; // Ensure this is imported
 final class ServiceController extends AbstractController
 {
     #[Route(name: 'app_service_index', methods: ['GET'])]
-    public function index(ServiceRepository $serviceRepository): Response
+    public function index(Request $request, ServiceRepository $serviceRepository): Response
     {
+        // Get the search query from the request
+        $searchQuery = $request->query->get('search', '');
+
+        // If search query exists, apply it to the query builder
+        if ($searchQuery) {
+            $services = $serviceRepository->createQueryBuilder('s')
+                ->where('s.parent IS NULL')
+                ->andWhere('s.title LIKE :search') // Assuming your Service entity has a 'name' and 'description' field
+                ->setParameter('search', '%' . $searchQuery . '%')
+                ->getQuery()
+                ->getResult();
+        } else {
+            // If no search, return services with parent null
+            $services = $serviceRepository->findBy(['parent' => null]);
+        }
+
         return $this->render('service/index.html.twig', [
-            'services' => $serviceRepository->findBy(['parent' => null]),
+            'services' => $services,
+            'searchQuery' => $searchQuery // Pass the search query to the template
         ]);
     }
 

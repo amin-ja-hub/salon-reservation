@@ -17,17 +17,29 @@ use Symfony\Component\HttpFoundation\File\UploadedFile; // Add this at the top o
 class ArticleController extends AbstractController
 {
     #[Route('/article/', name: 'app_article_index', methods: ['GET'])]
-    public function Articleindex(EntityManagerInterface $entityManager): Response
+    public function Articleindex(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Fetch all articles with type = 1
-        $articles = $entityManager
-            ->getRepository(Article::class)
-            ->findBy([
-                'type' => 1,
-                'remove' => [null, 0] // Use an array to check for multiple values
-            ]);
+        // Fetch the search query from the request
+        $searchQuery = $request->query->get('search', '');
+
+        // Build the query to search for articles
+        $queryBuilder = $entityManager->getRepository(Article::class)->createQueryBuilder('a')
+            ->where('a.type = :type')
+            ->andWhere('(a.remove IS NULL OR a.remove = 0)') // Apply the remove condition
+            ->setParameter('type', 1);
+
+        // If a search query exists, filter by the article title or content
+        if ($searchQuery) {
+            $queryBuilder->andWhere('a.title LIKE :search ')
+                ->setParameter('search', '%' . $searchQuery . '%');
+        }
+
+        // Execute the query
+        $articles = $queryBuilder->getQuery()->getResult();
+
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
+            'searchQuery' => $searchQuery // Pass the search query back to the template
         ]);
     }
 

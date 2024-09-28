@@ -14,16 +14,25 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContactUsController extends AbstractController
 {
     #[Route('/', name: 'app_contact_us_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request,EntityManagerInterface $entityManager): Response
     {
-        $contactuses = $entityManager
-            ->getRepository(ContactUs::class)
-            ->findBy([
-                'remove' => [null, 0] // Use an array to check for multiple values
-            ]);
+        $searchTerm = $request->query->get('search');
+
+        $query = $entityManager->createQuery(
+            'SELECT u FROM App\Entity\ContactUs u 
+             WHERE u.fullName LIKE :searchTerm 
+             OR u.email LIKE :searchTerm
+             OR u.mobile LIKE :searchTerm
+             OR u.subject LIKE :searchTerm'
+        )->setParameter('searchTerm', '%' . $searchTerm . '%');
+
+        $contactuses = $query->getResult();        
+
 
         return $this->render('contact_us/index.html.twig', [
             'contact' => $contactuses,
+            'searchTerm' => $searchTerm
+            
         ]);
     }
 

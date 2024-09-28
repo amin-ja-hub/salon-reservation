@@ -19,48 +19,110 @@ use App\Entity\User;
 #[Route('/')]
 final class ReservationController extends AbstractController
 {
-    #[Route('admin/reservation',name: 'app_reservation_admin', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('admin/reservation', name: 'app_reservation_admin', methods: ['GET'])]
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $reservations = $entityManager
-            ->getRepository(Reservation::class)
-            ->findAll();
+        $searchTerm = $request->query->get('search');
+
+        $query = $entityManager->createQuery(
+            'SELECT r FROM App\Entity\Reservation r
+             JOIN r.user u
+             WHERE (u.username LIKE :searchTerm 
+             OR u.fullName LIKE :searchTerm)
+             OR (r.reservationDateTime LIKE :searchTerm)'
+        )->setParameter('searchTerm', '%' . $searchTerm . '%');
+
+        $reservations = $query->getResult();
 
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,
+            'searchTerm' => $searchTerm
         ]);
     }
 
-    #[Route('personnel/reservation',name: 'app_reservation_personnel', methods: ['GET'])]
-    public function indexpersonnel(EntityManagerInterface $entityManager): Response
+    #[Route('personnel/reservation', name: 'app_reservation_personnel', methods: ['GET'])]
+    public function indexpersonnel(EntityManagerInterface $entityManager, Request $request): Response
     {
-        
-        $userId = $this->getUser()->getid();        
-        
-        $reservations = $entityManager
-            ->getRepository(Reservation::class)
-            ->findBy(['personal' => $userId]);
+        // Get the current user's ID
+        $userId = $this->getUser()->getId();
 
+        // Get the search term from the query string
+        $searchTerm = $request->query->get('search', '');
+
+        // If searchTerm is provided, add the search to the query
+        if (!empty($searchTerm)) {
+            // Create the query with parameters for search and userId
+            $query = $entityManager->createQuery(
+                'SELECT r FROM App\Entity\Reservation r
+                 JOIN r.user u
+                 JOIN r.personal c
+                 WHERE (u.username LIKE :searchTerm 
+                 OR u.fullName LIKE :searchTerm 
+                 OR r.reservationDateTime LIKE :searchTerm)
+                 AND c.id = :userId'
+            )
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->setParameter('userId', $userId);
+
+            // Execute the query and get results
+            $reservations = $query->getResult();
+        } else {
+            // If no search term, fetch all reservations for the current personnel
+            $reservations = $entityManager
+                ->getRepository(Reservation::class)
+                ->findBy(['personal' => $userId]);
+        }
+
+        // Debug output for testing
+
+        // Render the template with reservations
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,
+            'searchTerm' => $searchTerm
         ]);
-    }    
-  
-    #[Route('user/reservation',name: 'app_reservation_user', methods: ['GET'])]
-    public function indexuser(EntityManagerInterface $entityManager): Response
-    {
-        
-        $userId = $this->getUser()->getid();        
-        
-        $reservations = $entityManager
-            ->getRepository(Reservation::class)
-            ->findBy(['user' => $userId]);
+    }
 
+    #[Route('user/reservation', name: 'app_reservation_user', methods: ['GET'])]
+    public function indexuser(EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Get the current user's ID
+        $userId = $this->getUser()->getId();
+
+        // Get the search term from the query string, default to an empty string if not provided
+        $searchTerm = $request->query->get('search', '');
+
+        if (!empty($searchTerm)) {
+            // If searchTerm is provided, create a dynamic query using DQL
+$query = $entityManager->createQuery(
+    'SELECT r FROM App\Entity\Reservation r
+     JOIN r.user u
+     JOIN r.service s
+     JOIN r.serviceChild sc
+     WHERE (r.reservationDateTime LIKE :searchTerm
+     OR s.title LIKE :searchTerm
+     OR sc.title LIKE :searchTerm)
+     AND u.id = :userId'
+)
+->setParameter('searchTerm', '%' . $searchTerm . '%')
+->setParameter('userId', $userId);
+
+
+            // Execute the query to get search results
+            $reservations = $query->getResult();
+        } else {
+            // If no search term, fetch all reservations for the current user
+            $reservations = $entityManager
+                ->getRepository(Reservation::class)
+                ->findBy(['user' => $userId]);
+        }
+
+        // Render the template with the reservations
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,
+            'searchTerm' => $searchTerm
         ]);
-    }        
-    
+    }
+
     #[Route('admin/reservation/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

@@ -69,11 +69,28 @@
 {% block title %}مدیریت وقت های رزرو شده{% endblock %}
 
 {% block body %}
+{% if is_granted('ROLE_ADMIN') %}
+    {% set search = path('app_reservation_admin') %}
+{% elseif is_granted('ROLE_PERSONNEL') %}
+    {% set search = path('app_reservation_personnel') %}
+{% elseif is_granted('ROLE_USER') %}
+    {% set search = path('app_reservation_user') %}
+{% endif %}
+
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl">
             <div class="card card-flush">
                 <div class="card-body">
+                    <form method="get" action="{{ search }}">
+
+                        <div class="input-group mb-3">
+                            <input type="text" name="search" class="form-control" placeholder="جستجو..." value="{{ searchTerm }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">جستجو</button>
+                            </div>
+                        </div>
+                    </form>                                                            
                     <table class="table align-middle table-row-dashed fs-6 gy-5 border">
                         <thead class="border">
                             <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
