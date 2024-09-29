@@ -143,16 +143,24 @@
                 <td class="text-center pe-0">
                     <span>{{ file.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran' , 'yyy/MM/dd') }} ساعت {{ file.cdate|localizeddatetr('full', 'none', 'fa_IR@calendar=persian' , 'Asia/Tehran' , 'HH:mm') }}</span>
                 </td>
-                <td class="text-start">{{ file.user.id ?? 'No user' }}</td>
+                <td class="text-start">
+                    {% if file.user %}
+                        <a href="{{ path('app_user_edit', { id: file.user.id }) }}" target="_blank">{{ file.user.id }}</a>
+                    {% else %}
+                        No user
+                    {% endif %}
+                </td>
                 <td class="text-start">
                     <div class="d-flex align-items-center">
+                        {% set fileUrl = app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port not in [80, 443] ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) ~ (file.type != 5 ? '.' ~ file.format : '') %}
+
                         <!-- File Link styled as a button -->
-                        <a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}" class="btn btn-link p-0">
-                            {{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}
+                        <a href="{{ fileUrl }}" class="btn btn-link p-0" target="_blank">
+                            {{ fileUrl|slice(0, 50) ~ '...' }}
                         </a>
 
                         <!-- Copy Button -->
-                        <button class="btn btn-outline-primary btn-sm ms-2" onclick="copyToClipboard('{{ app.request.scheme ~ '://' ~ app.request.host ~ (app.request.port != 80 and app.request.port != 443 ? ':' ~ app.request.port : '') ~ asset(file.path ~ '/' ~ file.name) }}{%if file.type != 5 %}.{{file.format}} {%endif%}')">
+                        <button class="btn btn-outline-primary btn-sm ms-2" onclick="copyToClipboard('{{ fileUrl }}')">
                             Copy
                         </button>
                     </div>

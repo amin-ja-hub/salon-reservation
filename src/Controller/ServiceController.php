@@ -17,28 +17,43 @@ use App\Service\Service as FileUploadService; // Ensure this is imported
 #[Route('/admin/service')]
 final class ServiceController extends AbstractController
 {
+    
     #[Route(name: 'app_service_index', methods: ['GET'])]
     public function index(Request $request, ServiceRepository $serviceRepository): Response
     {
         // Get the search query from the request
         $searchQuery = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1); // Current page from the query string
+        $limit = 10; // Limit of services per page
 
-        // If search query exists, apply it to the query builder
+        // Build the query for services
+        $queryBuilder = $serviceRepository->createQueryBuilder('s')
+            ->where('s.parent IS NULL');
+
+        // If a search query exists, apply it to the query builder
         if ($searchQuery) {
-            $services = $serviceRepository->createQueryBuilder('s')
-                ->where('s.parent IS NULL')
-                ->andWhere('s.title LIKE :search') // Assuming your Service entity has a 'name' and 'description' field
-                ->setParameter('search', '%' . $searchQuery . '%')
-                ->getQuery()
-                ->getResult();
-        } else {
-            // If no search, return services with parent null
-            $services = $serviceRepository->findBy(['parent' => null]);
+            $queryBuilder->andWhere('s.title LIKE :search')
+                ->setParameter('search', '%' . $searchQuery . '%');
         }
+
+        // Get the total number of services matching the query
+        $totalServices = count($queryBuilder->getQuery()->getResult());
+        $totalPages = ceil($totalServices / $limit);
+        $offset = ($page - 1) * $limit;
+
+        // Fetch the services for the current page, ordered in reverse (newest first)
+        $services = $queryBuilder
+            ->orderBy('s.id', 'DESC') // Reverse order by service ID
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
 
         return $this->render('service/index.html.twig', [
             'services' => $services,
-            'searchQuery' => $searchQuery // Pass the search query to the template
+            'searchQuery' => $searchQuery, // Pass the search query back to the template
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 

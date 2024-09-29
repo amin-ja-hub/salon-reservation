@@ -16,11 +16,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile; // Add this at the top o
 #[Route('/admin')]
 class ArticleController extends AbstractController
 {
+    
     #[Route('/article/', name: 'app_article_index', methods: ['GET'])]
     public function Articleindex(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Fetch the search query from the request
         $searchQuery = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1); // Current page from the query string
+        $limit = 50; // Limit of articles per page
 
         // Build the query to search for articles
         $queryBuilder = $entityManager->getRepository(Article::class)->createQueryBuilder('a')
@@ -30,18 +33,31 @@ class ArticleController extends AbstractController
 
         // If a search query exists, filter by the article title or content
         if ($searchQuery) {
-            $queryBuilder->andWhere('a.title LIKE :search ')
+            $queryBuilder->andWhere('a.title LIKE :search')
                 ->setParameter('search', '%' . $searchQuery . '%');
         }
 
-        // Execute the query
-        $articles = $queryBuilder->getQuery()->getResult();
+        // Get the total number of articles matching the query
+        $totalArticles = count($queryBuilder->getQuery()->getResult());
+        $totalPages = ceil($totalArticles / $limit);
+        $offset = ($page - 1) * $limit;
+
+        // Fetch the articles for the current page, reverse order
+        $articles = $queryBuilder
+            ->orderBy('a.id', 'DESC') // Reverse order by article ID
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
-            'searchQuery' => $searchQuery // Pass the search query back to the template
+            'searchQuery' => $searchQuery, // Pass the search query back to the template
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
+
 
     #[Route('/article/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, Service $service): Response

@@ -203,10 +203,20 @@
                                                                     </td>
                                                                 </tr>
                                                         {% endfor %}
-
                                                     </tbody>
                                             </table>
                                             <!--end::Table-->
+                                            <div class="pagination">
+                                                {% if currentPage > 1 %}
+                                                    <a href="{{ path('app_article_index', { search: searchQuery, page: currentPage - 1 }) }}">قبلی</a>
+                                                {% endif %}
+
+                                                <span>صفحه {{ currentPage }} از {{ totalPages }}</span>
+
+                                                {% if currentPage < totalPages %}
+                                                    <a href="{{ path('app_article_index', { search: searchQuery, page: currentPage + 1 }) }}">بعدی</a>
+                                                {% endif %}
+                                            </div>                                            
                                     </div>
                                     <!--end::کارت body-->
                             </div>

@@ -21,7 +21,7 @@ class FileController extends AbstractController
     {
         // Get the current page from the query parameter, default is 1
         $page = $request->query->getInt('page', 1);
-        $limit = 5; // Limit to 50 items per page
+        $limit = 50; // Limit to 50 items per page
 
         // Get the total number of files
         $fileRepository = $entityManager->getRepository(File::class);
@@ -33,8 +33,8 @@ class FileController extends AbstractController
         // Calculate the offset for the current page
         $offset = ($page - 1) * $limit;
 
-        // Fetch the files for the current page
-        $files = $fileRepository->findBy([], null, $limit, $offset);
+        // Fetch the files for the current page, ordered in reverse (e.g., newest first)
+        $files = $fileRepository->findBy([], ['id' => 'DESC'], $limit, $offset); // Assuming 'id' or a field like 'createdAt'
 
         return $this->render('file/index.html.twig', [
             'files' => $files,

@@ -13,26 +13,40 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin/contact')]
 class ContactUsController extends AbstractController
 {
+    
     #[Route('/', name: 'app_contact_us_index', methods: ['GET'])]
-    public function index(Request $request,EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $searchTerm = $request->query->get('search');
+        // Fetch the search term from the request
+        $searchTerm = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1); // Current page from the query string
+        $limit = 50; // Limit of contact messages per page
 
-        $query = $entityManager->createQuery(
-            'SELECT u FROM App\Entity\ContactUs u 
-             WHERE u.fullName LIKE :searchTerm 
-             OR u.email LIKE :searchTerm
-             OR u.mobile LIKE :searchTerm
-             OR u.subject LIKE :searchTerm'
-        )->setParameter('searchTerm', '%' . $searchTerm . '%');
+        // Build the query to search for contact messages
+        $queryBuilder = $entityManager->createQueryBuilder()
+            ->select('u')
+            ->from(ContactUs::class, 'u')
+            ->where('u.fullName LIKE :searchTerm OR u.email LIKE :searchTerm OR u.mobile LIKE :searchTerm OR u.subject LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%');
 
-        $contactuses = $query->getResult();        
+        // Get the total number of contact messages matching the query
+        $totalContactUs = count($queryBuilder->getQuery()->getResult());
+        $totalPages = ceil($totalContactUs / $limit);
+        $offset = ($page - 1) * $limit;
 
+        // Fetch the contact messages for the current page, ordered in reverse (newest first)
+        $contactuses = $queryBuilder
+            ->orderBy('u.id', 'DESC') // Reverse order by ID
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
 
         return $this->render('contact_us/index.html.twig', [
             'contact' => $contactuses,
-            'searchTerm' => $searchTerm
-            
+            'searchTerm' => $searchTerm, // Pass the search term back to the template
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 

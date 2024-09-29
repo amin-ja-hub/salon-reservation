@@ -23,35 +23,45 @@ final class ReservationController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $searchTerm = $request->query->get('search');
+        $page = $request->query->getInt('page', 1);
+        $limit = 50; // Limit to 50 items per page
 
         $query = $entityManager->createQuery(
             'SELECT r FROM App\Entity\Reservation r
              JOIN r.user u
              WHERE (u.username LIKE :searchTerm 
              OR u.fullName LIKE :searchTerm)
-             OR (r.reservationDateTime LIKE :searchTerm)'
+             OR (r.reservationDateTime LIKE :searchTerm)
+             ORDER BY r.id DESC'
         )->setParameter('searchTerm', '%' . $searchTerm . '%');
 
-        $reservations = $query->getResult();
+        // Get the total number of reservations
+        $totalReservations = count($query->getResult());
+        $totalPages = ceil($totalReservations / $limit);
+        $offset = ($page - 1) * $limit;
+
+        // Fetch the reservations for the current page
+        $reservations = $query->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getResult();
 
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,
-            'searchTerm' => $searchTerm
+            'searchTerm' => $searchTerm,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 
     #[Route('personnel/reservation', name: 'app_reservation_personnel', methods: ['GET'])]
     public function indexpersonnel(EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Get the current user's ID
         $userId = $this->getUser()->getId();
-
-        // Get the search term from the query string
         $searchTerm = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1);
+        $limit = 50; // Limit to 50 items per page
 
-        // If searchTerm is provided, add the search to the query
         if (!empty($searchTerm)) {
-            // Create the query with parameters for search and userId
             $query = $entityManager->createQuery(
                 'SELECT r FROM App\Entity\Reservation r
                  JOIN r.user u
@@ -59,40 +69,55 @@ final class ReservationController extends AbstractController
                  WHERE (u.username LIKE :searchTerm 
                  OR u.fullName LIKE :searchTerm 
                  OR r.reservationDateTime LIKE :searchTerm)
-                 AND c.id = :userId'
+                 AND c.id = :userId
+                 ORDER BY r.id DESC'
             )
             ->setParameter('searchTerm', '%' . $searchTerm . '%')
             ->setParameter('userId', $userId);
 
-            // Execute the query and get results
-            $reservations = $query->getResult();
+            // Get the total number of reservations
+            $totalReservations = count($query->getResult());
+            $totalPages = ceil($totalReservations / $limit);
+            $offset = ($page - 1) * $limit;
+
+            $reservations = $query->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getResult();
         } else {
-            // If no search term, fetch all reservations for the current personnel
-            $reservations = $entityManager
-                ->getRepository(Reservation::class)
-                ->findBy(['personal' => $userId]);
+            $query = $entityManager->getRepository(Reservation::class)
+                ->createQueryBuilder('r')
+                ->where('r.personal = :userId')
+                ->setParameter('userId', $userId)
+                ->orderBy('r.id', 'DESC');
+
+            // Get the total number of reservations
+            $totalReservations = count($query->getQuery()->getResult());
+            $totalPages = ceil($totalReservations / $limit);
+            $offset = ($page - 1) * $limit;
+
+            $reservations = $query->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
         }
 
-        // Debug output for testing
-
-        // Render the template with reservations
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,
-            'searchTerm' => $searchTerm
+            'searchTerm' => $searchTerm,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 
     #[Route('user/reservation', name: 'app_reservation_user', methods: ['GET'])]
     public function indexuser(EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Get the current user's ID
         $userId = $this->getUser()->getId();
-
-        // Get the search term from the query string, default to an empty string if not provided
         $searchTerm = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1);
+        $limit = 50; // Limit to 50 items per page
 
         if (!empty($searchTerm)) {
-            // If searchTerm is provided, create a dynamic query using DQL
             $query = $entityManager->createQuery(
                 'SELECT r FROM App\Entity\Reservation r
                  JOIN r.user u
@@ -101,25 +126,43 @@ final class ReservationController extends AbstractController
                  WHERE (r.reservationDateTime LIKE :searchTerm
                  OR s.title LIKE :searchTerm
                  OR sc.title LIKE :searchTerm)
-                 AND u.id = :userId'
+                 AND u.id = :userId
+                 ORDER BY r.id DESC'
             )
             ->setParameter('searchTerm', '%' . $searchTerm . '%')
             ->setParameter('userId', $userId);
 
+            // Get the total number of reservations
+            $totalReservations = count($query->getResult());
+            $totalPages = ceil($totalReservations / $limit);
+            $offset = ($page - 1) * $limit;
 
-            // Execute the query to get search results
-            $reservations = $query->getResult();
+            $reservations = $query->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getResult();
         } else {
-            // If no search term, fetch all reservations for the current user
-            $reservations = $entityManager
-                ->getRepository(Reservation::class)
-                ->findBy(['user' => $userId]);
+            $query = $entityManager->getRepository(Reservation::class)
+                ->createQueryBuilder('r')
+                ->where('r.user = :userId')
+                ->setParameter('userId', $userId)
+                ->orderBy('r.id', 'DESC');
+
+            // Get the total number of reservations
+            $totalReservations = count($query->getQuery()->getResult());
+            $totalPages = ceil($totalReservations / $limit);
+            $offset = ($page - 1) * $limit;
+
+            $reservations = $query->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
         }
 
-        // Render the template with the reservations
         return $this->render('reservation/admin.html.twig', [
             'reservations' => $reservations,
-            'searchTerm' => $searchTerm
+            'searchTerm' => $searchTerm,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 

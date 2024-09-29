@@ -143,6 +143,17 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    <div class="pagination">
+                        {% if currentPage > 1 %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': currentPage - 1})) }}">قبلی</a>
+                        {% endif %}
+
+                        <span>صفحه {{ currentPage }} از {{ totalPages }}</span>
+
+                        {% if currentPage < totalPages %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': currentPage + 1})) }}">بعدی</a>
+                        {% endif %}
+                    </div>                        
                 </div>
             </div>
         </div>

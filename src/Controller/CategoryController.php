@@ -15,28 +15,43 @@ use App\Service\Service;
 #[Route('/admin/category')]
 class CategoryController extends AbstractController
 {
+    
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
-    public function index(Request $request,EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Fetch the search query from the request
         $searchQuery = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1); // Current page from the query string
+        $limit = 15; // Limit of categories per page
 
-        // Build the query to search for articles
+        // Build the query to search for categories
         $queryBuilder = $entityManager->getRepository(Category::class)->createQueryBuilder('a')
-            ->Where('(a.remove IS NULL OR a.remove = 0)');
+            ->where('(a.remove IS NULL OR a.remove = 0)');
 
-        // If a search query exists, filter by the article title or content
+        // If a search query exists, filter by the category title
         if ($searchQuery) {
-            $queryBuilder->andWhere('a.title LIKE :search ')
+            $queryBuilder->andWhere('a.title LIKE :search')
                 ->setParameter('search', '%' . $searchQuery . '%');
         }
 
-        // Execute the query
-        $categories = $queryBuilder->getQuery()->getResult();        
-        
+        // Get the total number of categories matching the query
+        $totalCategories = count($queryBuilder->getQuery()->getResult());
+        $totalPages = ceil($totalCategories / $limit);
+        $offset = ($page - 1) * $limit;
+
+        // Fetch the categories for the current page, ordered in reverse (newest first)
+        $categories = $queryBuilder
+            ->orderBy('a.id', 'DESC') // Reverse order by category ID
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('category/index.html.twig', [
             'categories' => $categories,
-            'searchQuery' => $searchQuery // Pass the search query back to the template            
+            'searchQuery' => $searchQuery, // Pass the search query back to the template
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 
