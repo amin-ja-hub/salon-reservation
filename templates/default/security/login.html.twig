@@ -1,15 +1,4 @@
-{#    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-    <form action="{{ path('app_login') }}" method="post">
-        <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="_password">
-        <button type="submit">Login</button>
-    </form>#}
-<!DOCTYPE html>
+{#
 <html lang="fa">
 
 <head>
@@ -143,6 +132,87 @@
 
 </body>
 
-</html>
+</html>#}
 
+{% extends "base.front.twig" %}
+{% block body %}
+    <!-- Page Title Section -->
+    <div class="page-title-wrap">
+        <div class="page-title-area title-img-six">
+            <div class="title-shape">
+                <img src="{{ asset('front/assets/images/title/title-shape1.png') }}" alt="Shape">
+            </div>
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="title-content">
+                        <h2>Sign In</h2>
+                        <ul>
+                            <li>
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li>
+                                <span>Sign In</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Sign-In Form Section -->
+    <div class="user-area ptb-100">
+        <div class="container">
+            <div class="user-item">
+                <!-- Decorative Shapes -->
+                <div class="user-shape">
+                    <img src="{{ asset('front/assets/images/contact-shape1.png') }}" alt="Shape 1">
+                    <img src="{{ asset('front/assets/images/contact-shape2.png') }}" alt="Shape 2">
+                </div>
+
+                <!-- Sign-In Form -->
+                <h2>ورود</h2>
+                <form action="{{ path('app_login') }}" method="post">
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <!-- Error Message -->
+                    {% if error %}
+                        <div class="error">نام کاربری یا رمز ورود معتبر نمی‌باشد.</div>
+                    {% endif %}
+
+                    <!-- Username Field -->
+                    <div class="form-group">
+                        <label class="form-label">نام کاربری:</label>
+                        <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label">رمز عبور:</label>
+                        <input class="form-control" type="password" id="password" name="_password" required>
+                    </div>
+
+                    <!-- Accept Terms Checkbox -->
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+                            <label class="form-check-label" for="acceptTerms">
+                                قبول <a href="terms-conditions.html">شرایط خدمات</a> و 
+                                <a href="privacy-policy.html">حریم خصوصی</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group clearfix">
+                        <button type="submit" class="btn common-btn two">ورود</button>
+                    </div>
+
+                    <!-- Sign-Up Option -->
+                    <h4>حساب کاربری ندارید؟ <a href="{{ path('app_register') }}">ثبت نام</a></h4>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
