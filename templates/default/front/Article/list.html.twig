@@ -1,0 +1,80 @@
+{% extends "base.front.twig" %}
+{% block body %}
+    <div class="page-title-wrap">
+        <div class="page-title-area title-img-three">
+            <div class="title-shape">
+                <img src="{{ asset('assets/images/title/title-shape1.png') }}" alt="Shape">
+            </div>
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="title-content">
+                        <h2>Blog</h2>
+                        <ul>
+                            <li>
+                                <a href="{{ path('app_home') }}">Home</a>
+                            </li>
+                            <li>
+                                <span>Blog</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="blog-area four ptb-100">
+        <div class="container">
+            <div class="row">
+                {% for article in articles %}
+                <div class="col-sm-6 col-lg-4">
+                    <div class="blog-item">
+                        <div class="top">
+                            <span>{{ article.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</span>
+                            <a href="{{ path('article_show', {'url': article.url }) }}">
+                                <img src="{{ article.Image.path ~ '/570x300_' ~ article.image.name ~ '.webp' }}" alt="{{ article.title }}">
+                            </a>
+                        </div>
+                        <div class="bottom">
+                            <h3>
+                                <a href="{{ path('article_show', {'url': article.url }) }}">{{ article.title }}</a>
+                            </h3>
+                            <p>{{ article.metadesc }}</p> <!-- Display article summary -->
+                            <a class="blog-btn" href="{{ path('article_show', {'url': article.url }) }}">مشاهده بیشتر</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                    <p>No articles found.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination links -->
+            <div class="text-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if currentPage > 1 %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('articles_show', {'page': currentPage - 1}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for i in 1..totalPages %}
+                            <li class="page-item {% if i == currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('articles_show', {'page': i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if currentPage < totalPages %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('articles_show', {'page': currentPage + 1}) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+{% endblock %}

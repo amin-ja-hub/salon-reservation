@@ -46,7 +46,7 @@
                                     <li><img src="{{ item.Image.path ~ '/85x85_' ~ item.image.name ~ '.webp' }}" alt="Details"></li>
                                     <li>
                                         <span>{{ item.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</span>
-                                        <a href="{{ path('service_show', {'url': item.url }) }}">{{ item.title }}</a>
+                                        <a href="{{ path('article_show', {'url': item.url }) }}">{{ item.title }}</a>
                                     </li>
                                 </ul>
                             </div>           
@@ -68,20 +68,20 @@
             <!-- Blog Content -->
             <div class="col-lg-8">
                 <div class="details-head">
-                    <h2>{{ service.title }}</h2>
+                    <h2>{{ article.title }}</h2>
                     <div class="row">
                         <div class="col-sm-6 col-lg-6">
                             <div class="left">
                                 <ul>
                                     <li>ادمین سایت</li>
-                                    <li>{{ service.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</li>
+                                    <li>{{ article.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <img src="{{ service.Image.path ~ '/770x350_' ~ service.image.name ~ '.webp' }}" alt="Details">
+                    <img src="{{ article.Image.path ~ '/770x350_' ~ article.image.name ~ '.webp' }}" alt="Details">
                 </div>                
-                {{ service.text|raw }}
+                {{ article.text|raw }}
 
                 <!-- Share and Tags Section -->
                 <div class="details-tag">
@@ -101,7 +101,7 @@
                             <div class="right">
                                 <ul>
                                     <li><span>برجسب ها:</span></li>
-                                    {% for barchasb in service.Barchasbs %}
+                                    {% for barchasb in article.Barchasbs %}
                                         <li><a href="blog-details.html#">{{ barchasb.title }}</a></li>
 
                                     {% endfor %}
@@ -113,20 +113,20 @@
 
                 <!-- Related Articles Section -->
                 <div class="details-related">
-                    <h2>خدمات های مرتبط</h2>
+                    <h2>مقاله های مرتبط</h2>
                     <div class="row">
-                        {% for item in findEntitiesWithCriteria('App\\Entity\\Service',2, {'published': '1', 'type': '1', 'category': service.category.id}, 'id', 'DESC') %}
+                        {% for item in findEntitiesWithCriteria('App\\Entity\\Article',2, {'published': '1', 'type': '1', 'category': article.category.id}, 'id', 'DESC') %}
                             <div class="col-sm-6 col-lg-6">
                                 <div class="blog-item">
                                   <div class="top">
                                       <span>{{ item.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</span>
-                                      <a href="{{ path('service_show', {'url': item.url }) }}">
+                                      <a href="{{ path('article_show', {'url': item.url }) }}">
                                           <img src="{{ item.Image.path ~ '/770x350_' ~ item.image.name ~ '.webp' }}" alt="Blog">
                                       </a>
                                   </div>
                                   <div class="bottom">
-                                      <h3><a href="{{ path('service_show', {'url': item.url }) }}">{{ item.title }}</a></h3>
-                                      <a class="blog-btn" href="{{ path('service_show', {'url': item.url }) }}">مشاهده بیشتر</a>
+                                      <h3><a href="{{ path('article_show', {'url': item.url }) }}">{{ item.title }}</a></h3>
+                                      <a class="blog-btn" href="{{ path('article_show', {'url': item.url }) }}">مشاهده بیشتر</a>
                                   </div>
                               </div>
                             </div>                        
@@ -177,4 +177,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

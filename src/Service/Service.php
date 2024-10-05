@@ -162,6 +162,7 @@ class Service
 
         imagedestroy($image);
     }
+    
     public function findEntitiesWithCriteria(
         string $entityClass, 
         ?int $count = null, 
@@ -180,9 +181,14 @@ class Service
 
         // Add criteria to the query
         foreach ($criteria as $field => $value) {
-            if ($value === null) {
+            if ($value === 'IS NOT NULL') {
+                // Handle "IS NOT NULL"
+                $queryBuilder->andWhere("e.$field IS NOT NULL");
+            } elseif ($value === null) {
+                // Handle "IS NULL"
                 $queryBuilder->andWhere("e.$field IS NULL");
             } else {
+                // Handle normal criteria
                 $operator = strpos($field, ' !=') !== false ? '!=' : '=';
                 $actualField = str_replace(' !=', '', $field);
                 $queryBuilder->andWhere("e.$actualField $operator :$actualField")

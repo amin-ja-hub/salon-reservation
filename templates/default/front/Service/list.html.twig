@@ -1,0 +1,112 @@
+{% extends "base.front.twig" %}
+{% block body %}
+<div class="page-title-wrap">
+  <div class="page-title-area title-img-two">
+    <div class="title-shape">
+      <img src="{{ asset('front/assets/images/title/title-shape1.png') }}" alt="Shape">
+    </div>
+    <div class="d-table">
+      <div class="d-table-cell">
+        <div class="title-content">
+          <h2>Services</h2>
+          <ul>
+            <li><a href="{{ path('app_home') }}">Home</a></li>
+            <li><span>Services</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{#<section class="offer-area two three ptb-100">
+  <div class="offer-shape">
+    <img src="{{ asset('front/assets/images/offer/offer-shape1.png') }}" alt="Shape">
+  </div>
+  <div class="container">
+    <div class="section-title">
+      <h2>What We Offer</h2>
+    </div>
+    <div class="offer-slider owl-theme owl-carousel">
+      <div class="offer-item">
+        <img src="{{ asset('front/assets/images/offer/offer1.jpg') }}" alt="Offer">
+        <div class="inner">
+          <div class="d-table">
+            <div class="d-table-cell">
+              <h4>Makeup</h4>
+              <a href="">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Repeat for other items -->
+    </div>
+  </div>
+</section>#}
+
+<section class="services-area two pb-70">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Beauty Services</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quas adipisci earum? Aspernatur accusantium sit perferendis!</p>
+    </div>
+    <div class="row">
+        {% for item in findEntitiesWithCriteria('App\\Entity\\Service', null, {'published': '1', 'type': '1', 'parent': 'IS NOT NULL'}, 'parent', 'DESC') %}
+            <div class="col-sm-6 col-lg-3">
+              <div class="services-item">
+                <div class="inner">
+                  <img src="{{ item.Image.path ~ '/85x85_' ~ item.image.name ~ '.webp' }}" alt="Services">
+                  <h3><a href="">{{ item.title }}</a></h3>
+                  <p>    
+                    {{ item.metadesc }}                      
+                  </p>
+                  <a class="services-btn" href="">مشاهده بیشتر</a>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="get-area two">
+  <div class="container">
+    <div class="get-content">
+      <div class="get-shape">
+        <img src="{{ asset('front/assets/images/get-shape1.png') }}" alt="Shape">
+        <img src="{{ asset('front/assets/images/get-shape2.png') }}" alt="Shape">
+      </div>
+      <div class="section-title">
+          <h2>نیاز به راهنمایی بیشتر دارید؟<br>فرم تماس باما را در پر کنید.</h2>
+      </div>
+      <a class="common-btn two" href="">تماس با ما</a>
+    </div>
+  </div>
+</section>
+
+{#<section class="skin-area two pt-100 pb-70">
+  <div class="skin-shape">
+    <img src="{{ asset('front/assets/images/skin-shape2.png') }}" alt="Shape">
+  </div>
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="skin-content">
+          <div class="section-title">
+            <h2>Our New Skin Care Products For You</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonumy eirmod tempor invidunt ut labore.</p>
+          </div>
+          <a class="common-btn two" href="">Shop Now</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="skin-img">
+          <img src="{{ asset('front/assets/images/skin-main.jpg') }}" alt="Skin">
+          <img src="{{ asset('front/assets/images/skin-shape1.png') }}" alt="Shape">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>#}
+
+{% endblock %}
