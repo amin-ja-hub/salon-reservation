@@ -1,0 +1,148 @@
+{% extends "base.front.twig" %}
+{% block body %}
+<div class="page-title-wrap">
+    <div class="page-title-area title-img-five">
+        <div class="title-shape">
+            <img src="assets/images/title/title-shape1.png" alt="Shape">
+        </div>
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2>Contact</h2>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><span>Contact</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="contact-info-area pt-100 pb-70">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-6 col-lg-4">
+                <div class="contact-info-item">
+                    <h3>Address:</h3>
+                    <ul>
+                        <li><a href="contact.html#">3 Edgar Buildings, George Street, BA1 2FJ</a></li>
+                        <li><a href="contact.html#">23 Peel Street, Barlin Down, Washington DC</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="contact-info-item active">
+                    <h3>Phone No:</h3>
+                    <ul>
+                        <li><a href="tel:9905325968">+990 532 5968</a></li>
+                        <li><a href="tel:9905325969">+990 532 5969</a></li>
+                        <li><a href="tel:9905325965">+990 532 5965</a></li>
+                        <li><a href="tel:9905325966">+990 532 5966</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="contact-info-item">
+                    <h3>Email:</h3>
+                    <ul>
+                        <li>
+                            <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#a1c9c4cdcdcee1cbc4c4cd8fc2cecc">
+                                <span class="__cf_email__" data-cfemail="78101d14141738121d1d14561b1715">[email&#160;protected]</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#cca5a2aaa38ca6a9a9a0e2afa3a1">
+                                <span class="__cf_email__" data-cfemail="e980878f86a9838c8c85c78a8684">[email&#160;protected]</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#f981b9939c9c95d79a9694">
+                                <span class="__cf_email__" data-cfemail="4e360e242b2b22602d2123">[email&#160;protected]</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#bec7fed4dbdbd290ddd1d3">
+                                <span class="__cf_email__" data-cfemail="b7cef7ddd2d2db99d4d8da">[email&#160;protected]</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="contact-form-area pb-100">
+    <div class="container">
+        <div class="form-item">
+            <div class="contact-shape">
+                <img src="assets/images/contact-shape1.png" alt="Shape">
+                <img src="assets/images/contact-shape2.png" alt="Shape">
+            </div>
+            {{ form_start(form, {'attr': {'id': 'contactForm'}}) }}
+                <div class="section-title two">
+                    <h2>Get In Touch</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            {{ form_widget(form.fullName) }}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            {{ form_widget(form.email) }}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            {{ form_widget(form.mobile) }}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            {{ form_widget(form.subject) }}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            {{ form_widget(form.text) }}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="form-group">
+                            <div class="form-check agree-label">
+                                <input name="gridCheck" value="I agree to the terms and privacy policy." class="form-check-input" type="checkbox" id="gridCheck" required>
+                                <label class="form-check-label" for="gridCheck">
+                                    Accept <a href="terms-conditions.html">Terms of Services</a> and <a href="privacy-policy.html">Privacy Policy</a>
+                                </label>
+                                <div class="help-block with-errors gridCheck-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <button type="submit" class="btn common-btn two">Send Message</button>
+                            <div id="msgSubmit" class="h3 text-center hidden"></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<div class="map-area pb-100">
+    <div class="container">
+        <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59843174.53779285!2d62.17507173408571!3d23.728204508550363!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3663f18a24cbe857%3A0xa9416bfcd3a0f459!2sAsia!5e0!3m2!1sen!2sbd!4v1607262150019!5m2!1sen!2sbd" allowfullscreen aria-hidden="false" tabindex="0"></iframe>
+    </div>
+</div>
+
+{% endblock %}

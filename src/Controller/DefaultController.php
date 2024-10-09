@@ -24,26 +24,9 @@ class DefaultController extends AbstractController
     #[Route('/services', name: 'services_show')]
     public function Services(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $perPage = 20; // Define the number of items to display per page
-                
-        $page = max(1, $request->query->getInt('page', 1));
-        $query = $entityManager->getRepository(\App\Entity\Service::class)
-            ->createQueryBuilder('p')
-            ->where('p.published = 1')
-            ->andWhere('p.type = :type')
-            ->setParameter('type', 1)
-            ->setFirstResult(($page - 1) * $perPage)
-            ->setMaxResults($perPage)
-            ->getQuery();
-
-
-        $paginator = new Paginator($query, true);
-        $totalPages = ceil(count($paginator));
 
         return $this->render('default/front/Service/list.html.twig', [
-            'services' => $paginator, // Change 'paginator' to 'services'
-            'totalPages' => $totalPages,
-            'currentPage' => $page,
+
         ]);
     }
 
@@ -59,31 +42,42 @@ class DefaultController extends AbstractController
     #[Route('/articles', name: 'articles_show')]
     public function Articles(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $perPage = 20; // Define the number of items to display per page
-        $page = max(1, $request->query->getInt('page', 1)); // Ensure valid page number
+        $perPage = 20; // Number of items per page
+        $page = max(1, $request->query->getInt('page', 1)); // Get page number
+        $search = $request->query->get('search', ''); // Get search term
 
-        // Build query to get paginated articles
-        $query = $entityManager->getRepository(\App\Entity\Article::class)
+        // Build the query for articles
+        $queryBuilder = $entityManager->getRepository(\App\Entity\Article::class)
             ->createQueryBuilder('p')
             ->where('p.published = 1')
             ->andWhere('p.type = :type')
-            ->setParameter('type', 1)
-            ->setFirstResult(($page - 1) * $perPage) // Calculate offset
-            ->setMaxResults($perPage) // Set max results per page
-            ->getQuery();
+            ->setParameter('type', 1);
 
-        // Use Paginator to paginate results
+        // Add search filter if a term is provided
+        if (!empty($search)) {
+            $queryBuilder->andWhere('p.title LIKE :search')
+                         ->setParameter('search', '%' . $search . '%');
+        }
+
+        // Apply pagination
+        $queryBuilder->setFirstResult(($page - 1) * $perPage)
+                     ->setMaxResults($perPage);
+
+        // Get paginated results
+        $query = $queryBuilder->getQuery();
         $paginator = new Paginator($query, true);
-        $totalArticles = count($paginator); // Total number of articles
-        $totalPages = ceil($totalArticles / $perPage); // Calculate total pages
+        $totalArticles = count($paginator);
+        $totalPages = ceil($totalArticles / $perPage);
 
-        // Pass articles and pagination data to Twig template
+        // Render the template
         return $this->render('default/front/Article/list.html.twig', [
-            'articles' => $paginator, // Pass paginated articles
-            'totalPages' => $totalPages, // Total number of pages
-            'currentPage' => $page, // Current page number
+            'articles' => $paginator,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'search' => $search, // Pass search term to the template
         ]);
     }
+
     
     #[Route('/articles/{url}', name: 'article_show')]
     public function article(EntityManagerInterface $entityManager, string $url): Response
@@ -94,11 +88,32 @@ class DefaultController extends AbstractController
         return $this->render('default/front/Article/Show.html.twig', compact('article'));
     }      
     
-    #[Route('/about-me', name: 'app-about')]
+    #[Route('/about-me', name: 'app_about')]
     public function about(): Response
     {
         
         return $this->render('default/front/about.html.twig');
+    }
+    
+    #[Route('/contact', name: 'app_contact')]
+    public function contact(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $contact = new \App\Entity\ContactUs(); // Note the backslash at the beginning
+        
+        $form = $this->createForm(\App\Form\ContactUsType::class, $contact);
+        
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $request->request->all();
+
+            $entityManager->persist($contact);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_contact', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('default/front/contact.html.twig', [
+          'form' => $form->createView(),
+        ]);  
     }
     
 }
