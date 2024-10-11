@@ -94,6 +94,13 @@ class DefaultController extends AbstractController
         
         return $this->render('default/front/about.html.twig');
     }
+
+    #[Route('/faqs', name: 'app_faqs')]
+    public function faqs(): Response
+    {
+        
+        return $this->render('default/front/faqs.html.twig');
+    }
     
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request, EntityManagerInterface $entityManager): Response

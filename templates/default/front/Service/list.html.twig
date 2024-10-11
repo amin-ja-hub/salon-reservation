@@ -8,66 +8,80 @@
     <div class="d-table">
       <div class="d-table-cell">
         <div class="title-content">
-          <h2>Services</h2>
+          <h2>خدمات</h2>
           <ul>
-            <li><a href="{{ path('app_home') }}">Home</a></li>
-            <li><span>Services</span></li>
+            <li><a href="{{ path('app_home') }}">خانه</a></li>
+            <li><span>خدمات</span></li>
           </ul>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-{#<section class="offer-area two three ptb-100">
-  <div class="offer-shape">
-    <img src="{{ asset('front/assets/images/offer/offer-shape1.png') }}" alt="Shape">
-  </div>
-  <div class="container">
-    <div class="section-title">
-      <h2>What We Offer</h2>
-    </div>
-    <div class="offer-slider owl-theme owl-carousel">
-      <div class="offer-item">
-        <img src="{{ asset('front/assets/images/offer/offer1.jpg') }}" alt="Offer">
-        <div class="inner">
-          <div class="d-table">
-            <div class="d-table-cell">
-              <h4>Makeup</h4>
-              <a href="">View</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Repeat for other items -->
-    </div>
-  </div>
-</section>#}
-
+            
 <section class="services-area two pb-70">
   <div class="container">
     <div class="section-title">
-      <h2>Our Beauty Services</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quas adipisci earum? Aspernatur accusantium sit perferendis!</p>
+      <h2>خدمات زیبایی ما</h2>
+      <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
     </div>
-    <div class="row">
-        {% for item in findEntitiesWithCriteria('App\\Entity\\Service', null, {'published': '1', 'type': '1', 'parent': 'IS NOT NULL'}, 'parent', 'DESC') %}
+
+    <!-- Categories Tabs -->
+    <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-all" aria-selected="true">همه خدمات</button>
+      </li>
+      {% for category in findEntitiesWithCriteria('App\\Entity\\Service', null, {'published': '1', 'type': '1', 'parent': null}, 'id', 'DESC') %}
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-{{ category.id }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ category.id }}" type="button" role="tab" aria-controls="pills-{{ category.id }}" aria-selected="false">{{ category.title }}</button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <!-- Services Content -->
+    <div class="tab-content" id="pills-tabContent">
+      <!-- All Services Tab -->
+      <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+        <div class="row">
+          {% for service in findEntitiesWithCriteria('App\\Entity\\Service', null, {'published': '1', 'type': '1', 'parent': 'IS NOT NULL'}, 'parent', 'DESC') %}
             <div class="col-sm-6 col-lg-3">
               <div class="services-item">
                 <div class="inner">
-                  <img src="{{ item.Image.path ~ '/85x85_' ~ item.image.name ~ '.webp' }}" alt="Services">
-                  <h3><a href="">{{ item.title }}</a></h3>
-                  <p>    
-                    {{ item.metadesc }}                      
-                  </p>
-                  <a class="services-btn" href="">مشاهده بیشتر</a>
+                  <img src="{{ service.Image.path ~ '/85x85_' ~ service.image.name ~ '.webp' }}" alt="Service">
+                  <h3>{{ service.title }}</h3>
+                  <p>{{ service.metadesc }}</p>
+                  <a class="services-btn btn btn-secondary" href="{{ path('service_show' ,{url : service.url}) }}">مشاهده بیشتر</a>
                 </div>
               </div>
             </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Category-Specific Tabs -->
+      {% for category in findEntitiesWithCriteria('App\\Entity\\Service', null, {'published': '1', 'type': '1', 'parent': null}, 'id', 'DESC') %}
+        <div class="tab-pane fade" id="pills-{{ category.id }}" role="tabpanel" aria-labelledby="pills-{{ category.id }}-tab">
+          <div class="row">
+            {% for service in findEntitiesWithCriteria('App\\Entity\\Service', null, {'published': '1', 'type': '1', 'parent': category.id}, 'id', 'DESC') %}
+              <div class="col-sm-6 col-lg-3">
+                <div class="services-item">
+                  <div class="inner">
+                    <img src="{{ service.Image.path ~ '/85x85_' ~ service.image.name ~ '.webp' }}" alt="Service">
+                    <h3>{{ service.title }}</h3>
+                    <p>{{ service.metadesc }}</p>
+                    <a class="services-btn btn btn-secondary" href="{{ path('service_show' ,{url : service.url}) }}">مشاهده بیشتر</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
+
+
 
 <section class="get-area two">
   <div class="container">
