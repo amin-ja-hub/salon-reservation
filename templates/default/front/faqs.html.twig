@@ -1,0 +1,181 @@
+{% extends "base.front.twig" %}
+{% block body %}
+<!-- Page Title Section -->
+<div class="page-title-wrap">
+    <div class="page-title-area title-img-three">
+        <div class="title-shape">
+            <img src="assets/images/title/title-shape1.png" alt="Shape">
+        </div>
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2>Blog Details</h2>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><span>Blog Details</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blog Details Section -->
+<div class="blog-details-area ptb-100">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar Widgets -->
+            <div class="col-lg-4">
+                <div class="widget-area">
+                    <!-- Search Widget -->
+                    <div class="search widget-item">
+                        <form>
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button type="submit" class="btn">
+                                <i class="bx bx-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Recent Articles Widget -->
+                    <div class="articles widget-item">
+                        <h3>مقالات اخیر</h3>
+                        {% for item in findEntitiesWithCriteria('App\\Entity\\Article', 3, {'published': '1', 'type': '1'}, 'id', 'DESC') %}
+                            <div class="inner">
+                                <ul class="align-items-center">
+                                    <li><img src="{{ item.Image.path ~ '/85x85_' ~ item.image.name ~ '.webp' }}" alt="Details"></li>
+                                    <li>
+                                        <span>{{ item.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</span>
+                                        <a href="{{ path('article_show', {'url': item.url }) }}">{{ item.title }}</a>
+                                    </li>
+                                </ul>
+                            </div>           
+                        {% endfor %}
+                    </div>
+
+                    <!-- Categories Widget -->
+                    <div class="categories widget-item">
+                        <h3>دسته بندی ها</h3>
+                        <ul>
+                            {% for item in findEntitiesWithCriteria('App\\Entity\\Category', null, {'published': '1', 'type': '2'}, 'id', 'DESC') %}
+
+                                <li><a href="blog-details.html#">Beauty</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Blog Content -->
+            <div class="col-lg-8">
+                <div class="details-head">
+                    <h2>{{ article.title }}</h2>
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="left">
+                                <ul>
+                                    <li>ادمین سایت</li>
+                                    <li>{{ article.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="{{ article.Image.path ~ '/770x350_' ~ article.image.name ~ '.webp' }}" alt="Details">
+                </div>                
+                {{ article.text|raw }}
+
+                <!-- Share and Tags Section -->
+                <div class="details-tag">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="left">
+                                <ul>
+                                    <li><span>Share:</span></li>
+                                    <li><a href="blog-details.html#" target="_blank"><i class="bx bxl-facebook"></i></a></li>
+                                    <li><a href="blog-details.html#" target="_blank"><i class="bx bxl-twitter"></i></a></li>
+                                    <li><a href="blog-details.html#" target="_blank"><i class="bx bxl-pinterest-alt"></i></a></li>
+                                    <li><a href="blog-details.html#" target="_blank"><i class="bx bxl-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="right">
+                                <ul>
+                                    <li><span>برجسب ها:</span></li>
+                                    {% for barchasb in article.Barchasbs %}
+                                        <li><a href="blog-details.html#">{{ barchasb.title }}</a></li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Articles Section -->
+                <div class="details-related">
+                    <h2>مقاله های مرتبط</h2>
+                    <div class="row">
+                        {% for item in findEntitiesWithCriteria('App\\Entity\\Article',2, {'published': '1', 'type': '1', 'category': article.category.id}, 'id', 'DESC') %}
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="blog-item">
+                                  <div class="top">
+                                      <span>{{ item.cdate|localizeddatetr('custom', 'none', 'fa_IR@calendar=persian', 'Asia/Tehran', null) }}</span>
+                                      <a href="{{ path('article_show', {'url': item.url }) }}">
+                                          <img src="{{ item.Image.path ~ '/770x350_' ~ item.image.name ~ '.webp' }}" alt="Blog">
+                                      </a>
+                                  </div>
+                                  <div class="bottom">
+                                      <h3><a href="{{ path('article_show', {'url': item.url }) }}">{{ item.title }}</a></h3>
+                                      <a class="blog-btn" href="{{ path('article_show', {'url': item.url }) }}">مشاهده بیشتر</a>
+                                  </div>
+                              </div>
+                            </div>                        
+                        {% endfor %}
+                    </div>
+                </div>
+
+{#                <!-- Comments Section -->
+                <div class="details-comment">
+                    <h3>نظرات</h3>
+                    <ul>
+                        <li>
+                            <img src="assets/images/blog/comment1.jpg" alt="Details">
+                            <h4>Tom Henry</h4>
+                            <span>12th April, 2024</span>
+                            <p>Lorem ipsum dolor sit amet...</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Comment Form Section -->
+                <div class="details-form">
+                    <h3>Leave A Comment</h3>
+                    <form>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Your Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Your Email">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <textarea id="your-comment" rows="8" class="form-control" placeholder="Your Comment"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <button type="submit" class="btn common-btn two">Post A Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>#}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
